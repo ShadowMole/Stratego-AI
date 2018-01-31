@@ -43,4 +43,8 @@ public class Map extends JPanel{
             g.drawLine(0,i,width,i);
         }
     }
+
+    public Dimension getPreferredSize(){
+        return new Dimension(width,height);
+    }
 }

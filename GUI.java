@@ -32,7 +32,10 @@ public class GUI {
 
         contentPane.add(map, BorderLayout.CENTER);
 
-        frame.setPreferredSize(new Dimension(1000, 900));
+        SelectionPanel select = new SelectionPanel(600,800);
+        contentPane.add(select, BorderLayout.EAST);
+
+        frame.setPreferredSize(new Dimension(1300, 900));
         frame.pack();
         frame.setVisible(true);
     }
