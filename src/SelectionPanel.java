@@ -15,16 +15,26 @@ public class SelectionPanel extends JPanel {
         height = h;
         size = new Dimension(0, 0);
         army = a;
+        //this.setLayout(new GridLayout(8,5));
+        this.setLayout(null);
+        //this.setOpaque(true);
+        //this.setBackground(Color.WHITE);
     }
 
     @Override
     public void paintComponent(Graphics g){
-        int i = 0
+        int k = 0;
         for(int i = 0, h = 36; i < 8; i++ , h += 116){
             for(int j = 0, w = 30; j < 5; j++ , w += 95){
-                g.setColor(Color.yellow);
-                g.fillRect(w,h,60, 80);
-                i++;
+                //g.setColor(Color.black);
+               // g.fillRect(w,h,60, 80);
+                JLabel img = new JLabel();
+                img.setIcon(army[k].getImage());
+               //JLabel img = new JLabel("hi", JLabel.CENTER);//
+                img.setLocation(new Point(w,h));
+                img.setSize(60,80);
+                this.add(img);
+                k++;
             }
         }
     }
