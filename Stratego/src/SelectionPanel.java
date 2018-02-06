@@ -15,18 +15,23 @@ public class SelectionPanel extends JPanel {
         height = h;
         size = new Dimension(0, 0);
         army = a;
+        //this.setLayout(new GridLayout(8,5));
+        this.setLayout(new GridLayout(10,4));
+        //this.setOpaque(true);
+        //this.setBackground(Color.WHITE);
+        for(int i = 0; i < army.length; i++){
+            //g.setColor(Color.black);
+            // g.fillRect(w,h,60, 80);
+            JLabel img;
+            img = new JLabel(army[i].getImage());
+            //img = new JLabel("hi");//
+            this.add(img);
+        }
     }
 
     @Override
     public void paintComponent(Graphics g){
-        int i = 0
-        for(int i = 0, h = 36; i < 8; i++ , h += 116){
-            for(int j = 0, w = 30; j < 5; j++ , w += 95){
-                g.setColor(Color.yellow);
-                g.fillRect(w,h,60, 80);
-                i++;
-            }
-        }
+
     }
 
     public Dimension getPreferredSize(){
