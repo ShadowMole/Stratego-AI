@@ -9,8 +9,10 @@ public class GUI {
     private static JFrame frame;
     private static Container contentPane;
     private static Map map;
+    private Unit[][] armies;
 
-    public GUI() {
+    public GUI(Unit[][] a) {
+        armies = a;
         makeFrame();
     }
 
@@ -32,10 +34,10 @@ public class GUI {
 
         contentPane.add(map, BorderLayout.CENTER);
 
-        SelectionPanel select = new SelectionPanel(600,800);
+        SelectionPanel select = new SelectionPanel(240,800, armies[0]);
         contentPane.add(select, BorderLayout.EAST);
 
-        frame.setPreferredSize(new Dimension(1300, 900));
+        frame.setPreferredSize(new Dimension(1000, 900));
         frame.pack();
         frame.setVisible(true);
     }

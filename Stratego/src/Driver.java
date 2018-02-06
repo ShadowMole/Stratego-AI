@@ -43,6 +43,6 @@ public class Driver {
             armies[i][39] = new Unit(-1, "Flag", current);
         }
         Unit[][] board = new Unit[10][10];
-        GUI gui = new GUI();
+        GUI gui = new GUI(armies);
     }
 }
