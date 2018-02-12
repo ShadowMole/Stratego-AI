@@ -1,4 +1,4 @@
-Steven Bruman and Bill
+Steven Bruman and William Jacobs
 
 Stratego AI
 
@@ -7,8 +7,9 @@ We will be developing an AI that plays Stratego.  Stratego is a strategy board s
 to chess, but with some significant differnces.  The board is 10x10 and each player starts
 with 40 pieces.  These pieces have different values, meaning that some pieces will always
 beat others.  However, every piece has a counter which means that no piece is invincible at
-least to start with.  The main problem in creating a Stratego AI will be overcoming the 
-speed of the game and dealing with hidden information.
+least to start with. An encounter of pieces with identical value result in both pieces losing. 
+The main problem in creating a Stratego AI will be overcoming the speed of the game and dealing
+with hidden information.
 
 Most pieces can only move 1 piece at a time, but several cannot move at all and several can 
 move multiple spaces in one direction.  This means that games usually take many more turns 
@@ -26,8 +27,10 @@ that studied over 28,000 games to create comprehensive statistics about the game
 cover every possible starting configuration, it will help enough that it will allow us to solve the problem.
 
 In Stratgeo, there are 12 types of pieces:
-Piece: Attack Value, Number
+
+Piece: Attack Value, Quantity
 Special Abilities
+
 Marshall: 10, 1
 None
 General: 9, 1
@@ -79,8 +82,8 @@ Spy: 50
 Bomb: 40
 Flag: 1000
 
-These values would be for the start of the game and can change.  For instance, if you defeat the opponent's Spy, then your Marshall is invincible,
-except to bombs, and worth more.
+These values would be for the start of the game and can change.  For instance, if you defeat the opponent's Spy then your Marshall is invincible,
+except to bombs or opponent's Marshall, and worth more.
 
 In order to predict what each starting piece is,the program will take score that I give a piece type and multiply it by the number of wins for the 
 piece type in that space, divide it by the number of losses for the piece type in that space, then multiply it by the number of that type.  It will 
@@ -105,8 +108,47 @@ Hopefully, I can find a way to reduce the amount of work done here as I will pro
 
 3. Initial Setup
 
-The initial setup of the AI will be similar will utilize the statistics provided in the links from earlier.  The Initial Setups PDF analyzes several types
+The initial setup of the AI will utilize the statistics provided in the links from earlier.  The Initial Setups PDF analyzes several types
 of unit structures.  The AI will randomly select one the top performing structures and set up similar to that.  By selecting from say the top 20 performing 
 structures, it will stay relatively unpredictable so that a human player cannot predict its setup as easily.
 
-Additionally, after every game that it plays, it will updates the statistics which should help it to improve.
+Additionally, after every game that it plays, it will update the statistics which should help it to improve.
+
+William's Hueristic
+
+Many of the concepts here will be similar as breaking the problem up into three broad topics is the most efficient.
+
+1. Mapping the opponents army
+The ranking system in Steven's Hueristic seems reasonable but open to adjustment later if needed. Ideally this ranking system would be best not
+tampered with so we can assign each of the opponents pieces a probability of uncertainty that would attempt to predict which type each piece is
+based off of the opponents movements.
+
+The initial probability of uncertainty assignments would be determined based off of the Initial Setups PDF statistics and the opponents entire side will
+be estimated and adjusted as the game goes on. If a piece is to move more than one space at a time we can determine that it is definitely a scout, if a 
+piece does not move for a long period of the game we can assume it is most likely a bomb, or even if we think a cluster of peices are bombs we can
+determine that the flag is in the center of it. As pieces begin to interact we will gather more certainty about the opponents setup and be able to
+calculate a more accurate estimate about each piece.
+
+2. Making Big Moves
+Based off of the computers educated guesses it can make a decision about what it can do to maximize it's score and how likely it is for that score to be
+the outcome of a situation based off of the probability of uncertainty. This is how it will work; a guess on an opponent's piece will be made attributing
+a quantifying score to the piece, the guess will also come with a percentage of how certain we are that the piece is what we think it is, then it will use
+these two values as its Minmax variables and the computer will consider its options for every possible piece it can move and its possible effect on the
+score looking ahead to an interaction with whatever piece opponent's piece is closest.
+
+When altering the Minmax algorithm to fit our score and certainty value the tree structure will be divided in a strucutre of position. '&' represents a node
+that favors certainty and '@' represents a node favoring score.
+
+			Root Node, the best decision.			@
+								       / \
+Board Position; Left, Right, Center, and those with respect to	      /   \
+the AI and opponents side. 					     &     &
+					    			    / \   / \
+Nodes with the best scores					   @   @ @   @
+
+The last level shown on the tree here would just simply be all of possible moves that would eventually interact with the opponents piece.
+Somewhere in this tree the AI will also consider when it should be offensive or defensive with its movements in relevance to the opponent.
+
+3. Initial Positioning
+As far as Initial setup I do believe that we should use the Statistics PDF as much as possible but maybe just have a random shuffle restricting where certain
+pieces may be allowed to be placed. 
