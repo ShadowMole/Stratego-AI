@@ -12,13 +12,19 @@ public class Unit {
     private Players owner;
     private String character;
     private boolean placed;
+    private double score;
 
-    public Unit(int s, String n, String c, Players o) {
+    public Unit(int s, String n, String c, Players o, double sc) {
         strength = s;
         name = n;
         owner = o;
         character = c;
         placed = false;
+        score = sc;
+    }
+
+    public Unit(double sc){
+        score = sc;
     }
 
     public String getName(){
@@ -43,6 +49,14 @@ public class Unit {
 
     public void setPlaced(boolean p){
         placed = p;
+    }
+
+    public void setScore(double s){
+        score = s;
+    }
+
+    public double getScore(){
+        return score;
     }
 }
 
