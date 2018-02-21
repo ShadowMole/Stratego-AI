@@ -53,6 +53,8 @@ public class Driver {
 
         setupBoard(board, armies);
 
+        printBoard(board);
+
         int turn = Randomizer.getRgen(2);
         switch (turn){
             case 0:
@@ -95,34 +97,34 @@ public class Driver {
             }else{
                 current = Players.AI;
             }
-            armies[i][0][0] = new Unit(10, "Marshal", "10", current, 100);
-            armies[i][0][1] = new Unit(9, "General", "9", current, 90);
+            armies[i][0][0] = new Unit(10, "Marshal", "10", current, 100, PieceType.MARSHALL);
+            armies[i][0][1] = new Unit(9, "General", "9", current, 90, PieceType.GENERAL);
             for(int j = 2; j < 4; j++){
-                armies[i][0][j] = new Unit(8, "Colonel", "8", current, 75);
+                armies[i][0][j] = new Unit(8, "Colonel", "8", current, 75, PieceType.COLONEL);
             }
             for(int j = 4; j < 7; j++){
-                armies[i][0][j] = new Unit(7, "Major", "7", current, 50);
+                armies[i][0][j] = new Unit(7, "Major", "7", current, 50, PieceType.MAJOR);
             }
             for(int j = 7; j < 11; j++){
-                armies[i][0][j] = new Unit(6, "Captain", "6", current, 40);
+                armies[i][0][j] = new Unit(6, "Captain", "6", current, 40, PieceType.CAPTAIN);
             }
             for(int j = 11; j < 15; j++){
-                armies[i][0][j] = new Unit(5, "Lieutenant", "5", current, 20);
+                armies[i][0][j] = new Unit(5, "Lieutenant", "5", current, 20, PieceType.LIEUTENANT);
             }
             for(int j = 15; j < 19; j++){
-                armies[i][0][j] = new Unit(4, "Sergeant", "4", current, 10);
+                armies[i][0][j] = new Unit(4, "Sergeant", "4", current, 10, PieceType.SERJEANT);
             }
             for(int j = 19; j < 24; j++){
-                armies[i][0][j] = new Unit(3, "Miner", "3", current, 50);
+                armies[i][0][j] = new Unit(3, "Miner", "3", current, 50, PieceType.MINER);
             }
             for(int j = 24; j < 32; j++){
-                armies[i][0][j] = new Unit(2, "Scout", "2", current, 15);
+                armies[i][0][j] = new Unit(2, "Scout", "2", current, 15, PieceType.SCOUT);
             }
-            armies[i][0][32] = new Unit(0, "Spy", "S", current, 50);
+            armies[i][0][32] = new Unit(0, "Spy", "S", current, 50, PieceType.SPY);
             for(int j = 33; j < 39; j++){
-                armies[i][0][j] = new Unit(11, "Bomb", "B", current, 40);
+                armies[i][0][j] = new Unit(11, "Bomb", "B", current, 40, PieceType.BOMB);
             }
-            armies[i][0][39] = new Unit(-1, "Flag", "F", current, 1000);
+            armies[i][0][39] = new Unit(-1, "Flag", "F", current, 1000, PieceType.FLAG);
         }
     }
 
@@ -159,7 +161,7 @@ public class Driver {
 
     public static void playerChoosePiece(Unit[][] board, Unit[] army)throws IOException{
         int placed = 0;
-        while(placed != 40){
+        while(placed < 40){
             printBoard(board);
             System.out.println("You have have the following units left to place:\n");
             for(int i = 0; i < army.length; i++){
@@ -168,12 +170,20 @@ public class Driver {
                 }
             }
             int unit = Integer.parseInt(stdin.readLine());
+            if (unit > 40 || unit < 1) {
+                System.out.println("This is an invalid input!!!");
+                continue;
+            }
             if(!army[unit - 1].getPlaced()) {
                 if (playerChooseSpace(unit - 1, board, army)) {
                     placed++;
+                }else{
+                    System.out.println("This space is already taken!");
+                    continue;
                 }
             }else{
                 System.out.println("That unit has already been placed!");
+                continue;
             }
         }
     }
@@ -193,6 +203,14 @@ public class Driver {
         }
         k = 1;
         int spot = Integer.parseInt(stdin.readLine());
+        if (spot > 40 || spot < 1) {
+            System.out.println("This is an invalid input!!!\nPlease input another number");
+            spot = Integer.parseInt(stdin.readLine());
+            while(spot > 40 || spot < 1) {
+                System.out.println("This is an invalid input!!!\nPlease input another number");
+                spot = Integer.parseInt(stdin.readLine());
+            }
+        }
         for(int i = 6; i < board.length && x != i; i++){
             for(int j = 0; j < board[i].length && y != j; j++,k++){
                 if(board[i][j] == null){
@@ -203,18 +221,29 @@ public class Driver {
                 }
             }
         }
-        if(!army[unit].getPlaced()) {
+        if(board[x][y] == null) {
             board[x][y] = army[unit];
             army[unit].setPlaced(true);
             return true;
         }else{
-
             return false;
         }
     }
 
     public static void aiSetup(Unit[][] board, Unit[] army){
-        //for()
+        int placed = 0;
+        while(placed < 40){
+            int unit = Randomizer.getRgen(40);
+            if(!(army[unit].getPlaced())){
+                int x = Randomizer.getRgen(4);
+                int y = Randomizer.getRgen(10);
+                if(board[x][y] == null){
+                    board[x][y] = army[unit];
+                    army[unit].setPlaced(true);
+                    placed++;
+                }
+            }
+        }
     }
 
     /**

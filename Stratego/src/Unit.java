@@ -1,7 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import javax.swing.*;
-
 /**
  * Created by Mole on 1/30/2018.
  */
@@ -13,14 +9,16 @@ public class Unit {
     private String character;
     private boolean placed;
     private double score;
+    private PieceType type;
 
-    public Unit(int s, String n, String c, Players o, double sc) {
+    public Unit(int s, String n, String c, Players o, double sc, PieceType t) {
         strength = s;
         name = n;
         owner = o;
         character = c;
         placed = false;
         score = sc;
+        type = t;
     }
 
     public Unit(double sc){
@@ -57,6 +55,10 @@ public class Unit {
 
     public double getScore(){
         return score;
+    }
+
+    public PieceType getType(){
+        return type;
     }
 }
 
