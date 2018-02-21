@@ -155,8 +155,8 @@ public class Driver {
     public static void setupBoard(Unit[][] board, Unit[][][] armies){
         try {
             playerChoosePiece(board, armies[0][0]);
-            aiSetup(board, armies[1][0]);
         }catch(Exception e){}
+        aiSetup(board, armies[1][0]);
     }
 
     public static void playerChoosePiece(Unit[][] board, Unit[] army)throws IOException{
@@ -213,11 +213,9 @@ public class Driver {
         }
         for(int i = 6; i < board.length && x != i; i++){
             for(int j = 0; j < board[i].length && y != j; j++,k++){
-                if(board[i][j] == null){
-                    if(k == spot){
-                        x = i;
-                        y = j;
-                    }
+                if(k == spot){
+                    x = i;
+                    y = j;
                 }
             }
         }
