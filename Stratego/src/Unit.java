@@ -10,6 +10,7 @@ public class Unit {
     private boolean placed;
     private double score;
     private PieceType type;
+    private int[][] stats;
 
     public Unit(int s, String n, String c, Players o, double sc, PieceType t) {
         strength = s;
@@ -21,8 +22,10 @@ public class Unit {
         type = t;
     }
 
-    public Unit(double sc){
+    public Unit(double sc, Players o, int[][] s){
         score = sc;
+        owner = o;
+        stats = s;
     }
 
     public String getName(){
