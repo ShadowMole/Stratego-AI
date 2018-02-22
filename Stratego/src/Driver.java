@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * Created by Mole on 1/24/2018.
@@ -64,6 +62,14 @@ public class Driver {
             case 1:
                 System.out.println("The Computer goes first.");
                 break;
+        }
+
+        Unit[][] shadowBoard = new Unit[10][10];
+        Unit[] shadowArmy = new Unit[40];
+
+        buildShadowBoard(board, shadowBoard, shadowArmy);
+        for(int i = 0; i < shadowArmy.length; i++){
+            System.out.println(shadowArmy[i].getScore());
         }
 
         boolean end = false;
@@ -262,5 +268,136 @@ public class Driver {
      */
     public static void aiMove(Unit[][] board, Unit[][][] armies){
 
+    }
+
+    public static void buildShadowBoard(Unit[][] board, Unit[][] sb, Unit[] sa){
+        BufferedReader[] readers = new BufferedReader[12];
+        try{
+
+            ClassLoader classLoader = Driver.class.getClassLoader();
+            File file = new File(classLoader.getResource("MarshallStats.txt").getFile());
+            readers[0] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("GeneralStats.txt").getFile());
+            readers[1] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("ColonelStats.txt").getFile());
+            readers[2] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("MajorStats.txt").getFile());
+            readers[3] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("CaptainStats.txt").getFile());
+            readers[4] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("LieutenantStats.txt").getFile());
+            readers[5] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("SerjeantStats.txt").getFile());
+            readers[6] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("MinerStats.txt").getFile());
+            readers[7] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("ScoutStats.txt").getFile());
+            readers[8] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("SpyStats.txt").getFile());
+            readers[9] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("BombStats.txt").getFile());
+            readers[10] = new BufferedReader(new FileReader(file));
+            file = new File(classLoader.getResource("FlagStats.txt").getFile());
+            readers[11] = new BufferedReader(new FileReader(file));
+            try{
+                int count = 0;
+                for(int i = 0; i < board.length; i++){
+                    for(int j = 0; j < board[i].length; j++){
+                        if(board[i][j] != null){
+                            if(board[i][j].getOwner() == Players.AI){
+                                sb[i][j] = board[i][j];
+                            }else if (board[i][j].getOwner() == Players.PLAYER){
+                                int[][] info = new int[12][5];
+                                for(int k = 0; k < readers.length; k++){
+                                    String s = readers[k].readLine();
+                                    String[] tokenize = s.split(",");
+                                    for(int l = 0; l < tokenize.length; l++){
+                                        info[k][l] = Integer.parseInt(tokenize[l]);
+                                    }
+                                    switch(k){
+                                        case 0:
+                                            info[k][3] = 100;
+                                            info[k][4] = 1;
+                                            break;
+
+                                        case 1:
+                                            info[k][3] = 90;
+                                            info[k][4] = 1;
+                                            break;
+
+                                        case 2:
+                                            info[k][3] = 75;
+                                            info[k][4] = 2;
+                                            break;
+
+                                        case 3:
+                                            info[k][3] = 50;
+                                            info[k][4] = 3;
+                                            break;
+
+                                        case 4:
+                                            info[k][3] = 40;
+                                            info[k][4] = 4;
+                                            break;
+
+                                        case 5:
+                                            info[k][3] = 20;
+                                            info[k][4] = 4;
+                                            break;
+
+                                        case 6:
+                                            info[k][3] = 10;
+                                            info[k][4] = 4;
+                                            break;
+
+                                        case 7:
+                                            info[k][3] = 50;
+                                            info[k][4] = 5;
+                                            break;
+
+                                        case 8:
+                                            info[k][3] = 15;
+                                            info[k][4] = 8;
+                                            break;
+
+                                        case 9:
+                                            info[k][3] = 50;
+                                            info[k][4] = 1;
+                                            break;
+
+                                        case 10:
+                                            info[k][3] = 40;
+                                            info[k][4] = 6;
+                                            break;
+
+                                        case 11:
+                                            info[k][3] = 1000;
+                                            info[k][4] = 1;
+                                            break;
+                                    }
+                                }
+                                double score = 0;
+                                int num = 0;
+                                for(int k = 0; k < info.length; k++){
+                                    score += ((1.0 * info[k][0] * info[k][3] * info[k][4]) / (info[k][1] + info[k][2]));
+                                    num += info[k][4];
+                                }
+                                score /= num;
+                                sb[i][j] = new Unit(score, Players.PLAYER, info);
+                                sa[count] = sb[i][j];
+                                count++;
+                            }
+                        }
+                    }
+                }
+                for(int i = 0; i < readers.length; i++){
+                    readers[i].close();
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("file not found");
+        }
     }
 }
