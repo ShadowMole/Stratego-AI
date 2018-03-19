@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Mole on 1/24/2018.
@@ -311,7 +313,8 @@ public class Driver {
                              * If owned by the AI, print A to conceal it from
                              * the user's view.
                              */
-                            System.out.print("A" + "\t");
+                            //System.out.print("A" + "\t");
+                            System.out.print(board[i][j].getCharacter() + "\t");
                             break;  //Stops the switch statement
                     }   /*End switch statement*/
                 }else{
@@ -330,14 +333,16 @@ public class Driver {
      * @param armies The 3D array of Units that is divided (Player, AI), (Alive, Dead), actual pieces.
      */
     public static void setupBoard(Unit[][] board, Unit[][][] armies){
-        try {
+        aiSetup(board, armies[1][0]);
+        printBoard(board);
+       // try {
             /*
              * This is for input exceptions in playerChoosePiece()
              * and playerChooseSpace().
              */
-            playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
-        }catch(Exception e){}           /*End try-catch block*/
-        aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+           // playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
+        //}catch(Exception e){}           /*End try-catch block*/
+        //aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
     }   /*End setupBoard method*/
 
     /**
@@ -512,35 +517,169 @@ public class Driver {
      */
     public static void aiSetup(Unit[][] board, Unit[] army){
         int placed = 0;     /*Number of pieces that the user has placed*/
-        while(placed < 40){
-            /*
-             * There are 40 pieces per player, so as
-             * long as the AI has not placed 40
-             * pieces, this loop will continue to run.
-             */
-            int unit = Randomizer.getRgen(40);
-            /*
-             * Selects a random Unit.
-             */
-            if(!(army[unit].getPlaced())){
-                /*
-                 * If the Unit has not been placed, then
-                 * select a random x and y coordinate.
-                 */
-                int x = Randomizer.getRgen(4);
-                int y = Randomizer.getRgen(10);
-                if(board[x][y] == null){
-                    /*
-                     * If the space is empty, place the Unit, tell
-                     * the Unit that it was placed, and increment
-                     * placed.
-                     */
-                    board[x][y] = army[unit];
-                    army[unit].setPlaced(true);
-                    placed++;
-                }   /*End inner if statement*/
-            }   /*End outer if statement*/
-        }   /*End while loop*/
+        int opt;
+        int rand = Randomizer.getRgen(100);
+        if(rand >= 60){
+            opt = 1;
+        }else if(rand >= 20){
+            opt = 2;
+        }else if(rand >= 5){
+            opt = 3;
+        }else{
+            opt = 4;
+        }
+
+        String[] config = aiConfiguration(opt);
+
+        int flagSpace = Integer.parseInt(config[9]);
+        int k = 9;
+        boolean found = false;
+        for(int i = 0; !found && i < board.length; i++){
+            for(int j = 0; !found && j < board[i].length; j++){
+                if(k == flagSpace){
+                    for(int l = 0; l < army.length; l++){
+                        if(army[l].getType() == PieceType.FLAG){
+                            board[i][j] = army[l];
+                            army[l].setPlaced(true);
+                            placed++;
+                        }
+                    }
+                    if(config[10].equals("Y")){
+                        for(int l = 0; l < army.length; l++){
+                            if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                board[i][j+1] = army[l];
+                                army[l].setPlaced(true);
+                                placed++;
+                                break;
+                            }
+                        }
+                    }
+                    if(config[11].equals("Y")){
+                        for(int l = 0; l < army.length; l++){
+                            if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                board[i+1][j] = army[l];
+                                army[l].setPlaced(true);
+                                placed++;
+                                break;
+                            }
+                        }
+                    }
+                    if(config[12].equals("Y")){
+                        for(int l = 0; l < army.length; l++){
+                            if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                board[i][j-1] = army[l];
+                                army[l].setPlaced(true);
+                                placed++;
+                                break;
+                            }
+                        }
+                    }
+                    if(config[13].equals("Y")){
+                        for(int l = 0; l < army.length; l++){
+                            if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                board[i-1][j] = army[l];
+                                army[l].setPlaced(true);
+                                placed++;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(k % 10 == 0){
+                    k += 20;
+                }
+                k--;
+            }
+        }
+        String[][] teams = aiTeamSelect(config, opt);
+
+        while(teams == null){
+            placed = 0;
+            for(int i = 0; i < army.length; i++){
+                army[i].setPlaced(false);
+            }
+            for(int i = 0; i < 4; i++){
+                for(int j = 0; j < board[i].length; j++){
+                    board[i][j] = null;
+                }
+            }
+            rand = Randomizer.getRgen(100);
+            if(rand >= 60){
+                opt = 1;
+            }else if(rand >= 20){
+                opt = 2;
+            }else if(rand >= 5){
+                opt = 3;
+            }else{
+                opt = 4;
+            }
+
+            config = aiConfiguration(opt);
+
+            flagSpace = Integer.parseInt(config[9]);
+            k = 9;
+            found = false;
+            for(int i = 0; !found && i < board.length; i++){
+                for(int j = 0; !found && j < board[i].length; j++){
+                    if(k == flagSpace){
+                        for(int l = 0; l < army.length; l++){
+                            if(army[l].getType() == PieceType.FLAG){
+                                board[i][j] = army[l];
+                                army[l].setPlaced(true);
+                                placed++;
+                            }
+                        }
+                        if(config[10].equals("Y")){
+                            for(int l = 0; l < army.length; l++){
+                                if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                    board[i][j+1] = army[l];
+                                    army[l].setPlaced(true);
+                                    placed++;
+                                    break;
+                                }
+                            }
+                        }
+                        if(config[11].equals("Y")){
+                            for(int l = 0; l < army.length; l++){
+                                if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                    board[i+1][j] = army[l];
+                                    army[l].setPlaced(true);
+                                    placed++;
+                                    break;
+                                }
+                            }
+                        }
+                        if(config[12].equals("Y")){
+                            for(int l = 0; l < army.length; l++){
+                                if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                    board[i][j-1] = army[l];
+                                    army[l].setPlaced(true);
+                                    placed++;
+                                    break;
+                                }
+                            }
+                        }
+                        if(config[13].equals("Y")){
+                            for(int l = 0; l < army.length; l++){
+                                if(army[l].getType() == PieceType.BOMB && !(army[l].getPlaced())){
+                                    board[i-1][j] = army[l];
+                                    army[l].setPlaced(true);
+                                    placed++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(k % 10 == 0){
+                        k += 20;
+                    }
+                    k--;
+                }
+            }
+            teams = aiTeamSelect(config, opt);
+        }
+        printBoard(board);
+        placed = aiPlacement(teams, config, board, army, placed);
     }   /*End aiSetup method*/
 
     /**
@@ -866,4 +1005,614 @@ public class Driver {
             System.out.println("file not found");
         }   /*End outer try-catch block*/
     }   /*End buildShadowBoard method*/
+
+    public static String[] aiConfiguration(int opt){
+        try{
+            ClassLoader classLoader = Driver.class.getClassLoader();
+            /*
+             * This is used only to access the text files because of the way
+             * IntelliJ handles resources.
+             */
+            File file = new File(classLoader.getResource("InitialSetups.txt").getFile());
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            try{
+                ArrayList<String[]> configs = new ArrayList<>();
+                boolean end = false;
+                while(!end){
+                    String s = reader.readLine();
+                    if(s != null) {
+                        String[] array = s.split(",");
+                        configs.add(array);
+                    }else{
+                        end = true;
+                    }
+                }
+                reader.close();
+
+                double threshold;
+                switch(opt){
+                    case 1:
+                        threshold = 1.5;
+                        break;
+
+                    case 2:
+                        threshold = 1;
+                        break;
+
+                    case 3:
+                        threshold = .75;
+                        break;
+
+                    default:
+                        threshold = 0;
+                        break;
+                }
+
+                Iterator<String[]> it = configs.iterator();
+                while(it.hasNext()){
+                    String[] i = it.next();
+                    if(Double.parseDouble(i[0]) < threshold){
+                        it.remove();
+                    }
+                }
+                int rand = Randomizer.getRgen(configs.size());
+                return configs.get(rand);
+            }catch (IOException ioe){ioe.printStackTrace();
+                return null;
+            }
+        }catch (FileNotFoundException fnfe){
+            System.out.println("file not found");
+            return null;
+        }
+    }
+
+    public static String[][] aiTeamSelect(String[] config, int opt){
+        double threshold;
+        switch(opt){
+            case 1:
+                threshold = 1.5;
+                break;
+
+            case 2:
+                threshold = 1;
+                break;
+
+            case 3:
+                threshold = .75;
+                break;
+
+            default:
+                threshold = 0;
+                break;
+        }
+        String[][] teams = null;
+        if(config[2].equals("Y")){
+            teams = new String[1][];
+            String name = "";
+            switch(config[8]){
+                case "Middle":
+                    name = "BothMiddleTeams.txt";
+                    break;
+
+                case "Left":
+                    name = "BothLeftTeams.txt";
+                    break;
+
+                case "Right":
+                    name = "BothRightTeams.txt";
+                    break;
+            }
+            try{
+                ClassLoader classLoader = Driver.class.getClassLoader();
+            /*
+             * This is used only to access the text files because of the way
+             * IntelliJ handles resources.
+             */
+                File file = new File(classLoader.getResource(name).getFile());
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                try{
+                    ArrayList<String[]> posTeams= new ArrayList<>();
+                    boolean end = false;
+                    while(!end){
+                        String s = reader.readLine();
+                        if(s != null) {
+                            String[] array = s.split(",");
+                            posTeams.add(array);
+                        }else{
+                            end = true;
+                        }
+                    }
+                    reader.close();
+
+                    String gFront;
+                    String mFront;
+
+                    if(config[6].equals("Y")){
+                        mFront = "1";
+                    }else{
+                        mFront = "0";
+                    }
+
+                    if(config[7].equals("Y")){
+                        gFront = "1";
+                    }else{
+                        gFront = "0";
+                    }
+
+                    Iterator<String[]> it = posTeams.iterator();
+                    while(it.hasNext()){
+                        String[] i = it.next();
+                        if(Double.parseDouble(i[0]) < threshold || !(mFront.equals(i[1])) || !(gFront.equals(i[2]))){
+                            it.remove();
+                        }
+                    }
+                    if(posTeams.size() == 0){
+                        return null;
+                    }
+                    int rand = Randomizer.getRgen(posTeams.size());
+                    teams[0] = posTeams.get(rand);
+                }catch (IOException ioe){
+                    ioe.printStackTrace();
+                    return null;
+                }
+            }catch (FileNotFoundException fnfe){
+                System.out.println("file not found");
+                return null;
+            }
+        }else{
+            teams = new String[2][];
+            String name = "";
+            switch(config[8]) {
+                case "Middle":
+                    name = "MarshallMiddleTeams.txt";
+                    break;
+
+                case "Left":
+                    name = "MarshallLeftTeams.txt";
+                    break;
+
+                case "Right":
+                    name = "MarshallRightTeams.txt";
+                    break;
+            }
+
+            try{
+                ClassLoader classLoader = Driver.class.getClassLoader();
+            /*
+             * This is used only to access the text files because of the way
+             * IntelliJ handles resources.
+             */
+                File file = new File(classLoader.getResource(name).getFile());
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                try{
+                    ArrayList<String[]> posTeams= new ArrayList<>();
+                    boolean end = false;
+                    while(!end){
+                        String s = reader.readLine();
+                        if(s != null) {
+                            String[] array = s.split(",");
+                            posTeams.add(array);
+                        }else{
+                            end = true;
+                        }
+                    }
+                    reader.close();
+
+                    String mFront;
+
+                    if(config[6].equals("Y")){
+                        mFront = "1";
+                    }else{
+                        mFront = "0";
+                    }
+
+                    Iterator<String[]> it = posTeams.iterator();
+                    while(it.hasNext()){
+                        String[] i = it.next();
+                        if(Double.parseDouble(i[0]) < threshold || !(mFront.equals(i[1]))){
+                            it.remove();
+                        }
+                    }
+                    int rand = Randomizer.getRgen(posTeams.size());
+                    teams[0] = posTeams.get(rand);
+                }catch (IOException ioe){
+                    ioe.printStackTrace();
+                    return null;
+                }
+            }catch (FileNotFoundException fnfe){
+                System.out.println("file not found");
+                return null;
+            }
+
+            switch(config[9]) {
+                case "Middle":
+                    name = "GeneralMiddleTeams.txt";
+                    break;
+
+                case "Left":
+                    name = "GeneralLeftTeams.txt";
+                    break;
+
+                case "Right":
+                    name = "GeneralRightTeams.txt";
+                    break;
+            }
+
+            try{
+                ClassLoader classLoader = Driver.class.getClassLoader();
+            /*
+             * This is used only to access the text files because of the way
+             * IntelliJ handles resources.
+             */
+                File file = new File(classLoader.getResource(name).getFile());
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                try{
+                    ArrayList<String[]> posTeams= new ArrayList<>();
+                    boolean end = false;
+                    while(!end){
+                        String s = reader.readLine();
+                        if(s != null) {
+                            String[] array = s.split(",");
+                            posTeams.add(array);
+                        }else{
+                            end = true;
+                        }
+                    }
+                    reader.close();
+
+                    String gFront;
+
+                    if(config[7].equals("Y")){
+                        gFront = "1";
+                    }else{
+                        gFront = "0";
+                    }
+
+                    Iterator<String[]> it = posTeams.iterator();
+                    while(it.hasNext()){
+                        String[] i = it.next();
+                        if(Double.parseDouble(i[0]) < threshold || !(gFront.equals(i[2]))){
+                            it.remove();
+                        }
+                    }
+                    int rand = Randomizer.getRgen(posTeams.size());
+                    teams[1] = posTeams.get(rand);
+                }catch (IOException ioe){
+                    ioe.printStackTrace();
+                    return null;
+                }
+            }catch (FileNotFoundException fnfe){
+                System.out.println("file not found");
+                return null;
+            }
+        }
+        return teams;
+    }
+
+    public static int aiPlacement(String[][] teams, String[] config, Unit[][] board, Unit[] army, int placed){
+        if(teams.length == 1){
+            int[] positions;
+            switch(config[8]){
+                case "Middle":
+                    positions = new int[13];
+                    positions[0] = 8;
+                    positions[1] = 3;
+                    positions[2] = 6;
+                    positions[3] = 2;
+                    positions[4] = 3;
+                    positions[5] = 24;
+                    positions[6] = 25;
+                    positions[7] = 26;
+                    positions[8] = 27;
+                    positions[9] = 34;
+                    positions[10] = 35;
+                    positions[11] = 36;
+                    positions[12] = 37;
+                    break;
+
+                case "Left":
+                    positions = new int[11];
+                    positions[0] = 6;
+                    positions[1] = 7;
+                    positions[2] = 9;
+                    positions[3] = 2;
+                    positions[4] = 3;
+                    positions[5] = 28;
+                    positions[6] = 29;
+                    positions[7] = 30;
+                    positions[8] = 38;
+                    positions[9] = 39;
+                    positions[10] = 40;
+                    break;
+
+                default:
+                    positions = new int[11];
+                    positions[0] = 6;
+                    positions[1] = 0;
+                    positions[2] = 2;
+                    positions[3] = 2;
+                    positions[4] = 3;
+                    positions[5] = 21;
+                    positions[6] = 22;
+                    positions[7] = 23;
+                    positions[8] = 31;
+                    positions[9] = 32;
+                    positions[10] = 33;
+                    break;
+            }
+            aiPlacePieces(teams[0], positions, board, army, placed);
+            printBoard(board);
+        }else{
+            int[] positions1;
+            switch(config[8]){
+                case "Middle":
+                    positions1 = new int[13];
+                    positions1[0] = 8;
+                    positions1[1] = 3;
+                    positions1[2] = 6;
+                    positions1[3] = 2;
+                    positions1[4] = 3;
+                    positions1[5] = 24;
+                    positions1[6] = 25;
+                    positions1[7] = 26;
+                    positions1[8] = 27;
+                    positions1[9] = 34;
+                    positions1[10] = 35;
+                    positions1[11] = 36;
+                    positions1[12] = 37;
+                    break;
+
+                case "Left":
+                    positions1 = new int[11];
+                    positions1[0] = 6;
+                    positions1[1] = 7;
+                    positions1[2] = 9;
+                    positions1[3] = 2;
+                    positions1[4] = 3;
+                    positions1[5] = 28;
+                    positions1[6] = 29;
+                    positions1[7] = 30;
+                    positions1[8] = 38;
+                    positions1[9] = 39;
+                    positions1[10] = 40;
+                    break;
+
+               default:
+                   positions1 = new int[11];
+                   positions1[0] = 6;
+                   positions1[1] = 0;
+                   positions1[2] = 2;
+                   positions1[3] = 2;
+                   positions1[4] = 3;
+                   positions1[5] = 21;
+                   positions1[6] = 22;
+                   positions1[7] = 23;
+                   positions1[8] = 31;
+                   positions1[9] = 32;
+                   positions1[10] = 33;
+                    break;
+            }
+            aiPlacePieces(teams[0], positions1, board, army, placed);
+            printBoard(board);
+            int[] positions2;
+            switch(config[9]){
+                case "Middle":
+                    positions2 = new int[13];
+                    positions2[0] = 8;
+                    positions2[1] = 3;
+                    positions2[2] = 6;
+                    positions2[3] = 2;
+                    positions2[4] = 3;
+                    positions2[5] = 24;
+                    positions2[6] = 25;
+                    positions2[7] = 26;
+                    positions2[8] = 27;
+                    positions2[9] = 34;
+                    positions2[10] = 35;
+                    positions2[11] = 36;
+                    positions2[12] = 37;
+                    break;
+
+                case "Left":
+                    positions2 = new int[11];
+                    positions2[0] = 6;
+                    positions2[1] = 7;
+                    positions2[2] = 9;
+                    positions2[3] = 2;
+                    positions2[4] = 3;
+                    positions2[5] = 28;
+                    positions2[6] = 29;
+                    positions2[7] = 30;
+                    positions2[8] = 38;
+                    positions2[9] = 39;
+                    positions2[10] = 40;
+                    break;
+
+                default:
+                    positions2 = new int[11];
+                    positions2[0] = 6;
+                    positions2[1] = 0;
+                    positions2[2] = 2;
+                    positions2[3] = 2;
+                    positions2[4] = 3;
+                    positions2[5] = 21;
+                    positions2[6] = 22;
+                    positions2[7] = 23;
+                    positions2[8] = 31;
+                    positions2[9] = 32;
+                    positions2[10] = 33;
+                    break;
+            }
+            placed = aiPlacePieces(teams[1], positions2, board, army, placed);
+            printBoard(board);
+        }
+        return placed;
+    }
+
+    public static int aiPlacePieces(String[] team, int[] positions, Unit[][] board, Unit[] army, int placed) {
+        ArrayList<String> files = new ArrayList<>();
+        if (!(team[1].equals("0"))) {
+            files.add("MarshallStats.txt");
+        }
+        if (!(team[2].equals("0"))) {
+            files.add("GeneralStats.txt");
+        }
+        if (!(team[3].equals("0"))) {
+            files.add("ColonelStats.txt");
+        }
+        if (!(team[4].equals("0"))) {
+            files.add("MajorStats.txt");
+        }
+        if (!(team[5].equals("0"))) {
+            files.add("CaptainStats.txt");
+        }
+        if (!(team[6].equals("0"))) {
+            files.add("LieutenantStats.txt");
+        }
+        if (!(team[7].equals("0"))) {
+            files.add("SerjeantStats.txt");
+        }
+        if (!(team[8].equals("0"))) {
+            files.add("MinerStats.txt");
+        }
+        if (!(team[9].equals("0"))) {
+            files.add("ScoutStats.txt");
+        }
+        if (!(team[10].equals("0"))) {
+            files.add("SpyStats.txt");
+        }
+        if (!(team[11].equals("0"))) {
+            files.add("BombStats.txt");
+        }
+
+        BufferedReader[] readers = new BufferedReader[files.size()];
+        double[][] scores = new double[positions[0]][files.size()];
+        for (int i = 0; i < readers.length; i++) {
+            try {
+                ClassLoader classLoader = Driver.class.getClassLoader();
+            /*
+             * This is used only to access the text files because of the way
+             * IntelliJ handles resources.
+             */
+                File file = new File(classLoader.getResource(files.get(i)).getFile());
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                try {
+                    int line = 1;
+                    int found = 0;
+                    while (found < positions[0]) {
+                        String s = reader.readLine();
+                        boolean finished = false;
+                        for(int j = 5; !finished && j < positions.length; j++){
+                            if(line == positions[j]){
+                                String[] split = s.split(",");
+                                System.out.println(scores.length + "," + found + "," + scores[found].length + "," + i + "," + split.length);
+                                scores[found][i] = Double.parseDouble(split[0]) / (Double.parseDouble(split[1]) + Double.parseDouble(split[2]));
+                                found++;
+                                finished = true;
+                            }
+                        }
+                        line++;
+                    }
+                    reader.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            } catch (FileNotFoundException fnfe) {
+                System.out.println("file not found");
+            }
+        }
+        int[] pieceCount = new int[files.size()];
+        ArrayList<String> pieceNames = new ArrayList<>();
+        for(int i = 0, j = 1; i < pieceCount.length && j < team.length - 1; j++){
+            if(!(team[j].equals("0"))){
+                pieceCount[i] = Integer.parseInt(team[j]);
+                i++;
+            }
+        }
+        if (!(team[1].equals("0"))) {
+            pieceNames.add("Marshall");
+        }
+        if (!(team[2].equals("0"))) {
+            pieceNames.add("General");
+        }
+        if (!(team[3].equals("0"))) {
+            pieceNames.add("Colonel");
+        }
+        if (!(team[4].equals("0"))) {
+            pieceNames.add("Major");
+        }
+        if (!(team[5].equals("0"))) {
+            pieceNames.add("Captain");
+        }
+        if (!(team[6].equals("0"))) {
+            pieceNames.add("Lieutenant");
+        }
+        if (!(team[7].equals("0"))) {
+            pieceNames.add("Serjeant");
+        }
+        if (!(team[8].equals("0"))) {
+            pieceNames.add("Miner");
+        }
+        if (!(team[9].equals("0"))) {
+            pieceNames.add("Scout");
+        }
+        if (!(team[10].equals("0"))) {
+            pieceNames.add("Spy");
+        }
+        if (!(team[11].equals("0"))) {
+            pieceNames.add("Bomb");
+        }
+        int current = 0;
+        for(int i = positions[3]; i <= positions[4]; i++){
+            for(int j = positions[1]; j<= positions[2]; j++, current++){
+                if(board[i][j] == null){
+                    double high = 0;
+                    int num = -1;
+                    for(int k = 0; k < scores[current].length; k++){
+                        if(pieceCount[k] > 0 && scores[current][k] > high){
+                            high = scores[current][k];
+                            num = k;
+                        }
+                    }
+                    if(num != -1) {
+                        boolean found = false;
+                        for (int k = 0; !found && k < army.length; k++) {
+                            if (army[k].getName().equals(pieceNames.get(num)) && !(army[k].getPlaced())) {
+                                found = true;
+                                board[i][j] = army[k];
+                                army[k].setPlaced(true);
+                                pieceCount[num] = pieceCount[num] - 1;
+                                placed++;
+                            }
+                        }
+                        while (!found) {
+                            if (num != -1) {
+                                pieceCount[num] = 0;
+                            }
+                            high = 0;
+                            num = -1;
+                            for (int k = 0; k < scores[current].length; k++) {
+                                if (pieceCount[k] > 0 && scores[current][k] > high) {
+                                    high = scores[current][k];
+                                    num = k;
+                                }
+                            }
+                            if(num != -1) {
+                                for (int k = 0; !found && k < army.length; k++) {
+                                    if (army[k].getName().equals(pieceNames.get(num)) && !(army[k].getPlaced())) {
+                                        found = true;
+                                        board[i][j] = army[k];
+                                        army[k].setPlaced(true);
+                                        pieceCount[num] = pieceCount[num] - 1;
+                                        placed++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return placed;
+    }
 }   /*End Driver class*/
