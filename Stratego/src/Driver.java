@@ -1048,38 +1048,38 @@ public class Driver {
                 while(s != null){
                     String[] tokenize = s.split(",");
 
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
+                    double score = ((Math.random() * 2.1) + .4) * Double.parseDouble(tokenize[0]);
 
                     switch(tokenize[4]){
                         case "Y":
                             switch (tokenize[6]){
                                 case "Left":
-                                    values[0][39] *= score * ((Math.random() / 2) + .75);
-                                    values[0][38] *= score * ((Math.random() / 2) + .75);
-                                    values[0][37] *= score * ((Math.random() / 2) + .75);
-                                    values[0][29] *= score * ((Math.random() / 2) + .75);
-                                    values[0][28] *= score * ((Math.random() / 2) + .75);
-                                    values[0][27] *= score * ((Math.random() / 2) + .75);
+                                    values[0][39] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][38] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][37] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][29] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][28] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][27] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 case "Right":
-                                    values[0][32] *= score * ((Math.random() / 2) + .75);
-                                    values[0][31] *= score * ((Math.random() / 2) + .75);
-                                    values[0][30] *= score * ((Math.random() / 2) + .75);
-                                    values[0][22] *= score * ((Math.random() / 2) + .75);
-                                    values[0][21] *= score * ((Math.random() / 2) + .75);
-                                    values[0][20] *= score * ((Math.random() / 2) + .75);
+                                    values[0][32] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][31] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][30] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][22] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][21] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][20] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 default:
-                                    values[0][36] *= score * ((Math.random() / 2) + .75);
-                                    values[0][35] *= score * ((Math.random() / 2) + .75);
-                                    values[0][34] *= score * ((Math.random() / 2) + .75);
-                                    values[0][33] *= score * ((Math.random() / 2) + .75);
-                                    values[0][26] *= score * ((Math.random() / 2) + .75);
-                                    values[0][25] *= score * ((Math.random() / 2) + .75);
-                                    values[0][24] *= score * ((Math.random() / 2) + .75);
-                                    values[0][23] *= score * ((Math.random() / 2) + .75);
+                                    values[0][36] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][35] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][34] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][33] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][26] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][25] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][24] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][23] *= score * ((Math.random() * 2.1) + .4);
                                     break;
                             }
                             break;
@@ -1087,32 +1087,32 @@ public class Driver {
                         default:
                             switch (tokenize[6]){
                                 case "Left":
-                                    values[0][19] *= score * ((Math.random() / 2) + .75);
-                                    values[0][18] *= score * ((Math.random() / 2) + .75);
-                                    values[0][17] *= score * ((Math.random() / 2) + .75);
-                                    values[0][9] *= score * ((Math.random() / 2) + .75);
-                                    values[0][8] *= score * ((Math.random() / 2) + .75);
-                                    values[0][7] *= score * ((Math.random() / 2) + .75);
+                                    values[0][19] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][18] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][17] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][9] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][8] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][7] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 case "Right":
-                                    values[0][12] *= score * ((Math.random() / 2) + .75);
-                                    values[0][11] *= score * ((Math.random() / 2) + .75);
-                                    values[0][10] *= score * ((Math.random() / 2) + .75);
-                                    values[0][2] *= score * ((Math.random() / 2) + .75);
-                                    values[0][1] *= score * ((Math.random() / 2) + .75);
-                                    values[0][0] *= score * ((Math.random() / 2) + .75);
+                                    values[0][12] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][11] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][10] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][2] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][1] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][0] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 default:
-                                    values[0][16] *= score * ((Math.random() / 2) + .75);
-                                    values[0][15] *= score * ((Math.random() / 2) + .75);
-                                    values[0][14] *= score * ((Math.random() / 2) + .75);
-                                    values[0][13] *= score * ((Math.random() / 2) + .75);
-                                    values[0][6] *= score * ((Math.random() / 2) + .75);
-                                    values[0][5] *= score * ((Math.random() / 2) + .75);
-                                    values[0][4] *= score * ((Math.random() / 2) + .75);
-                                    values[0][3] *= score * ((Math.random() / 2) + .75);
+                                    values[0][16] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][15] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][14] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][13] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][6] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][5] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][4] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][3] *= score * ((Math.random() * 2.1) + .4);
                                     break;
                             }
                             break;
@@ -1122,32 +1122,32 @@ public class Driver {
                         case "Y":
                             switch (tokenize[7]){
                                 case "Left":
-                                    values[1][39] *= score * ((Math.random() / 2) + .75);
-                                    values[1][38] *= score * ((Math.random() / 2) + .75);
-                                    values[1][37] *= score * ((Math.random() / 2) + .75);
-                                    values[1][29] *= score * ((Math.random() / 2) + .75);
-                                    values[1][28] *= score * ((Math.random() / 2) + .75);
-                                    values[1][27] *= score * ((Math.random() / 2) + .75);
+                                    values[1][39] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][38] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][37] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][29] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][28] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][27] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 case "Right":
-                                    values[1][32] *= score * ((Math.random() / 2) + .75);
-                                    values[1][31] *= score * ((Math.random() / 2) + .75);
-                                    values[1][30] *= score * ((Math.random() / 2) + .75);
-                                    values[1][22] *= score * ((Math.random() / 2) + .75);
-                                    values[1][21] *= score * ((Math.random() / 2) + .75);
-                                    values[1][20] *= score * ((Math.random() / 2) + .75);
+                                    values[1][32] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][31] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][30] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][22] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][21] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][20] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 default:
-                                    values[1][36] *= score * ((Math.random() / 2) + .75);
-                                    values[1][35] *= score * ((Math.random() / 2) + .75);
-                                    values[1][34] *= score * ((Math.random() / 2) + .75);
-                                    values[1][33] *= score * ((Math.random() / 2) + .75);
-                                    values[1][26] *= score * ((Math.random() / 2) + .75);
-                                    values[1][25] *= score * ((Math.random() / 2) + .75);
-                                    values[1][24] *= score * ((Math.random() / 2) + .75);
-                                    values[1][23] *= score * ((Math.random() / 2) + .75);
+                                    values[1][36] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][35] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][34] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][33] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][26] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][25] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][24] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][23] *= score * ((Math.random() * 2.1) + .4);
                                     break;
                             }
                             break;
@@ -1155,32 +1155,32 @@ public class Driver {
                         default:
                             switch (tokenize[7]){
                                 case "Left":
-                                    values[1][19] *= score * ((Math.random() / 2) + .75);
-                                    values[1][18] *= score * ((Math.random() / 2) + .75);
-                                    values[1][17] *= score * ((Math.random() / 2) + .75);
-                                    values[1][9] *= score * ((Math.random() / 2) + .75);
-                                    values[1][8] *= score * ((Math.random() / 2) + .75);
-                                    values[1][7] *= score * ((Math.random() / 2) + .75);
+                                    values[1][19] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][18] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][17] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][9] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][8] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][7] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 case "Right":
-                                    values[1][12] *= score * ((Math.random() / 2) + .75);
-                                    values[1][11] *= score * ((Math.random() / 2) + .75);
-                                    values[1][10] *= score * ((Math.random() / 2) + .75);
-                                    values[1][2] *= score * ((Math.random() / 2) + .75);
-                                    values[1][1] *= score * ((Math.random() / 2) + .75);
-                                    values[1][0] *= score * ((Math.random() / 2) + .75);
+                                    values[1][12] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][11] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][10] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][2] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][1] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][0] *= score * ((Math.random() * 2.1) + .4);
                                     break;
 
                                 default:
-                                    values[1][16] *= score * ((Math.random() / 2) + .75);
-                                    values[1][15] *= score * ((Math.random() / 2) + .75);
-                                    values[1][14] *= score * ((Math.random() / 2) + .75);
-                                    values[1][13] *= score * ((Math.random() / 2) + .75);
-                                    values[1][6] *= score * ((Math.random() / 2) + .75);
-                                    values[1][5] *= score * ((Math.random() / 2) + .75);
-                                    values[1][4] *= score * ((Math.random() / 2) + .75);
-                                    values[1][3] *= score * ((Math.random() / 2) + .75);
+                                    values[1][16] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][15] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][14] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][13] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][6] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][5] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][4] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][3] *= score * ((Math.random() * 2.1) + .4);
                                     break;
                             }
                             break;
@@ -1193,18 +1193,18 @@ public class Driver {
                     for(int i = 0; !found && i < 4; i++) {
                         for (int j = 0; !found && j < 10; j++) {
                             if (k == flagSpace) {
-                                values[11][k] *= score * ((Math.random() / 2) + .75);
+                                values[11][k] *= score * ((Math.random() * 2.1) + .4);
                                 if(tokenize[10].equals("Y")){
-                                    values[10][k - 1] *= score * ((Math.random() / 2) + .75);
+                                    values[10][k - 1] *= score * ((Math.random() * 2.1) + .4);
                                 }
                                 if(tokenize[11].equals("Y")){
-                                    values[10][k + 10] *= score * ((Math.random() / 2) + .75);
+                                    values[10][k + 10] *= score * ((Math.random() * 2.1) + .4);
                                 }
                                 if(tokenize[12].equals("Y")){
-                                    values[10][k + 1] *= score * ((Math.random() / 2) + .75);
+                                    values[10][k + 1] *= score * ((Math.random() * 2.1) + .4);
                                 }
                                 if(tokenize[13].equals("Y")){
-                                    values[10][k - 10] *= score * ((Math.random() / 2) + .75);
+                                    values[10][k - 10] *= score * ((Math.random() * 2.1) + .4);
                                 }
                             }
                         }
@@ -1232,6 +1232,7 @@ public class Driver {
     }
 
     public static void aiTeam(double[][] values){
+        BufferedReader[] readers = new BufferedReader[9];
         try{
             /*
              * Initializes each of the BufferedReader with a different text file.
@@ -1246,543 +1247,268 @@ public class Driver {
              * IntelliJ handles resources.
              */
             File file = new File(classLoader.getResource("BothLeftTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            readers[0] = new BufferedReader(new FileReader(file));
 
-            try{
-                String s = reader.readLine();
+            file = new File(classLoader.getResource("BothMiddleTeams.txt").getFile());
+            readers[1] = new BufferedReader(new FileReader(file));
 
-                while(s != null){
-                    String[] tokenize = s.split(",");
+            file = new File(classLoader.getResource("BothRightTeams.txt").getFile());
+            readers[2] = new BufferedReader(new FileReader(file));
 
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
+            file = new File(classLoader.getResource("MarshallLeftTeams.txt").getFile());
+            readers[3] = new BufferedReader(new FileReader(file));
 
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][39] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][38] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][37] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][29] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][28] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][27] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 0){
-                            values[i - 1][19] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][18] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][17] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][9] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][8] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][7] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 1){
-                            values[i - 1][19] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][18] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][17] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][9] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][8] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][7] *= score * ((Math.random() / 2) + .75);
+            file = new File(classLoader.getResource("MarshallMiddleTeams.txt").getFile());
+            readers[4] = new BufferedReader(new FileReader(file));
+
+            file = new File(classLoader.getResource("MarshallRightTeams.txt").getFile());
+            readers[5] = new BufferedReader(new FileReader(file));
+
+            file = new File(classLoader.getResource("GeneralLeftTeams.txt").getFile());
+            readers[6] = new BufferedReader(new FileReader(file));
+
+            file = new File(classLoader.getResource("GeneralMiddleTeams.txt").getFile());
+            readers[7] = new BufferedReader(new FileReader(file));
+
+            file = new File(classLoader.getResource("GeneralRightTeams.txt").getFile());
+            readers[8] = new BufferedReader(new FileReader(file));
+
+            for(int i = 0; i < readers.length; i++){
+                try{
+                    String s = readers[i].readLine();
+
+                    while(s != null){
+                        String[] tokenize = s.split(",");
+
+                        double score = ((Math.random() * 2.1) + .4) * Double.parseDouble(tokenize[0]);
+
+                        switch(i){
+                            case 0:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][39] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][38] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][37] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][29] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][28] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][27] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 0){
+                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 1){
+                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 1:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][36] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][35] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][34] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][33] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][26] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][25] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][24] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][23] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 0){
+                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 1){
+                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 2:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][32] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][31] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][30] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][22] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][21] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][20] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 0){
+                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 1){
+                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 3:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][39] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][38] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][37] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][29] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][28] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][27] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 0){
+                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 4:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][36] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][35] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][34] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][33] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][26] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][25] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][24] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][23] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 0){
+                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 5:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][32] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][31] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][30] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][22] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][21] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][20] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 0){
+                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 6:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][39] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][38] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][37] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][29] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][28] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][27] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 1){
+                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 7:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][36] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][35] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][34] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][33] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][26] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][25] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][24] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][23] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 1){
+                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
+
+                            case 8:
+                                for(int j = 1; j < tokenize.length; j++){
+                                    if(!(tokenize[j].equals("0"))){
+                                        values[j - 1][32] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][31] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][30] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][22] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][21] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][20] *= score * ((Math.random() * 2.1) + .4);
+                                    }else if(j == 1){
+                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                    }
+                                }
+                                break;
                         }
-                    }
 
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
+                        s = readers[i].readLine();
+                    }
+                    readers[i].close();
+                } catch (IOException ioe) {
                 /*
                  * Catch input error exception.
                  */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("BothMiddleTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][36] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][35] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][34] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][33] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][26] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][25] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][24] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][23] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 0){
-                            values[i - 1][16] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][15] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][14] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][13] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][6] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][5] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][4] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][3] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 1){
-                            values[i - 1][16] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][15] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][14] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][13] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][6] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][5] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][4] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][3] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("BothRightTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][32] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][31] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][30] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][22] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][21] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][20] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 0){
-                            values[i - 1][12] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][11] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][10] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][2] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][1] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][0] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 1){
-                            values[i - 1][12] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][11] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][10] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][2] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][1] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][0] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("MarshallLeftTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][39] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][38] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][37] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][29] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][28] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][27] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 0){
-                            values[i - 1][19] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][18] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][17] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][9] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][8] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][7] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("MarshallMiddleTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][36] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][35] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][34] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][33] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][26] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][25] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][24] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][23] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 0){
-                            values[i - 1][16] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][15] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][14] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][13] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][6] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][5] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][4] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][3] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("MarshallRightTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][32] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][31] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][30] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][22] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][21] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][20] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 0){
-                            values[i - 1][12] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][11] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][10] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][2] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][1] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][0] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("GeneralLeftTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][39] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][38] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][37] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][29] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][28] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][27] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 1){
-                            values[i - 1][19] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][18] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][17] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][9] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][8] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][7] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("GeneralMiddleTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][36] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][35] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][34] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][33] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][26] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][25] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][24] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][23] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 1){
-                            values[i - 1][16] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][15] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][14] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][13] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][6] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][5] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][4] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][3] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
-        } catch (FileNotFoundException fnfe) {
-            /*
-             * Catch file not found exception.
-             */
-            System.out.println("file not found");
-        }
-
-        try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
-            ClassLoader classLoader = Driver.class.getClassLoader();
-            /*
-             * This is used only to access the text files because of the way
-             * IntelliJ handles resources.
-             */
-            File file = new File(classLoader.getResource("GeneralRightTeams.txt").getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            try{
-                String s = reader.readLine();
-
-                while(s != null){
-                    String[] tokenize = s.split(",");
-
-                    double score = ((Math.random() / 2) + .75) * Double.parseDouble(tokenize[0]);
-
-                    for(int i = 1; i < tokenize.length; i++){
-                        if(!(tokenize[i].equals("0"))){
-                            values[i - 1][32] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][31] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][30] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][22] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][21] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][20] *= score * ((Math.random() / 2) + .75);
-                        }else if(i == 1){
-                            values[i - 1][12] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][11] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][10] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][2] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][1] *= score * ((Math.random() / 2) + .75);
-                            values[i - 1][0] *= score * ((Math.random() / 2) + .75);
-                        }
-                    }
-
-                    s = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException ioe) {
-                /*
-                 * Catch input error exception.
-                 */
-                ioe.printStackTrace();
-            }   /*End inner try-catch block*/
+                    ioe.printStackTrace();
+                }   /*End inner try-catch block*/
+            }
         } catch (FileNotFoundException fnfe) {
             /*
              * Catch file not found exception.
