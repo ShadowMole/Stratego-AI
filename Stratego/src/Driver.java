@@ -315,8 +315,7 @@ public class Driver {
                              * If owned by the AI, print A to conceal it from
                              * the user's view.
                              */
-                            //System.out.print("A" + "\t");
-                            System.out.print(board[i][j].getCharacter() + "\t");
+                            System.out.print("A" + "\t");
                             break;  //Stops the switch statement
                     }   /*End switch statement*/
                 }else{
