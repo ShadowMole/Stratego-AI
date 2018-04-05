@@ -335,16 +335,15 @@ public class Driver {
      * @param armies The 3D array of Units that is divided (Player, AI), (Alive, Dead), actual pieces.
      */
     public static void setupBoard(Unit[][] board, Unit[][][] armies){
-        aiSetup(board, armies[1][0]);
-        //printBoard(board);
-       // try {
+        printBoard(board);
+        try {
             /*
              * This is for input exceptions in playerChoosePiece()
              * and playerChooseSpace().
              */
-           // playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
-        //}catch(Exception e){}           /*End try-catch block*/
-        //aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+            playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
+        }catch(Exception e){}           /*End try-catch block*/
+        aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
     }   /*End setupBoard method*/
 
     /**
@@ -521,29 +520,8 @@ public class Driver {
         int placed = 0;     /*Number of pieces that the user has placed*/
         double[][] values = new double[12][40];
         aiInitialValues(values);
-        for(int i = 0; i < values.length; i++){
-            for(int j = 0; j < values[i].length; j++){
-                System.out.print(values[i][j] + ",");
-            }
-            System.out.println("");
-        }
         aiConfig(values);
-        System.out.println("");
-        for(int i = 0; i < values.length; i++){
-            for(int j = 0; j < values[i].length; j++){
-                System.out.print(values[i][j] + ",");
-            }
-            System.out.println("");
-        }
         aiTeam(values);
-        System.out.println("");
-        for(int i = 0; i < values.length; i++){
-            for(int j = 0; j < values[i].length; j++){
-                System.out.print(values[i][j] + ",");
-            }
-            System.out.println("");
-        }
-
         aiPlaceUnits(values, board, army);
     }   /*End aiSetup method*/
 
@@ -1537,82 +1515,74 @@ public class Driver {
                 }
             }
             if(unit != -1){
-            String name = "";
-            switch (unit) {
-                case 0:
-                    name = "Marshall";
-                    break;
+                String name = "";
+                switch (unit) {
+                    case 0:
+                        name = "Marshall";
+                        break;
 
-                case 1:
-                    name = "General";
-                    break;
+                    case 1:
+                        name = "General";
+                        break;
 
-                case 2:
-                    name = "Colonel";
-                    break;
+                    case 2:
+                        name = "Colonel";
+                        break;
 
-                case 3:
-                    name = "Major";
-                    break;
+                    case 3:
+                        name = "Major";
+                        break;
 
-                case 4:
-                    name = "Captain";
-                    break;
+                    case 4:
+                        name = "Captain";
+                        break;
 
-                case 5:
-                    name = "Lieutenant";
-                    break;
+                    case 5:
+                        name = "Lieutenant";
+                        break;
 
-                case 6:
-                    name = "Serjeant";
-                    break;
+                    case 6:
+                        name = "Serjeant";
+                        break;
 
-                case 7:
-                    name = "Miner";
-                    break;
+                    case 7:
+                        name = "Miner";
+                        break;
 
-                case 8:
-                    name = "Scout";
-                    break;
+                    case 8:
+                        name = "Scout";
+                        break;
 
-                case 9:
-                    name = "Spy";
-                    break;
+                    case 9:
+                        name = "Spy";
+                        break;
 
-                case 10:
-                    name = "Bomb";
-                    break;
+                    case 10:
+                        name = "Bomb";
+                        break;
 
-                case 11:
-                    name = "Flag";
-                    break;
-            }
-            System.out.println("\n" + name + "," + x + "," + y+ "\n");
-            boolean flag = false;
-            for (int i = 0; !flag && i < army.length; i++) {
-                if (army[i].getName().equals(name) && !army[i].getPlaced()) {
-                    board[y][x] = army[i];
-                    army[i].setPlaced(true);
-                    placed++;
-                    for (int j = 0; j < values.length; j++) {
-                        values[j][place] = -2;
+                    case 11:
+                        name = "Flag";
+                        break;
+                }
+                boolean flag = false;
+                for (int i = 0; !flag && i < army.length; i++) {
+                    if (army[i].getName().equals(name) && !army[i].getPlaced()) {
+                        board[y][x] = army[i];
+                        army[i].setPlaced(true);
+                        placed++;
+                        for (int j = 0; j < values.length; j++) {
+                            values[j][place] = -2;
+                        }
+                        flag = true;
                     }
-                    flag = true;
                 }
-            }
-            if (!flag) {
-                for (int i = 0; i < values[unit].length; i++) {
-                    values[unit][i] = -2;
-                }
-            }
-            printBoard(board);
-                for(int i = 0; i < values.length; i++){
-                    for(int j = 0; j < values[i].length; j++){
-                        System.out.print(values[i][j] + ",");
+                if (!flag) {
+                    for (int i = 0; i < values[unit].length; i++) {
+                        values[unit][i] = -2;
                     }
-                    System.out.println("");
                 }
-        }
+            }
         }
     }
 }   /*End Driver class*/
