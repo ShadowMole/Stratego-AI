@@ -23,9 +23,9 @@ public class SelectionPanel extends JPanel {
             //g.setColor(Color.black);
             // g.fillRect(w,h,60, 80);
             JLabel img;
-            img = new JLabel(army[i].getImage());
+            //img = new JLabel(army[i].getImage());
             //img = new JLabel("hi");//
-            this.add(img);
+            //this.add(img);
         }
     }
 
