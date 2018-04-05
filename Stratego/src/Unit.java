@@ -36,7 +36,7 @@ public class Unit {
         return strength;
     }
 
-    public Players getOwner(){
+    public Players getOwner() {
         return owner;
     }
 

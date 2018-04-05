@@ -525,26 +525,6 @@ public class Driver {
     }   /*End aiSetup method*/
 
     /**
-     * Bill this is the method that let's the player make a move.
-     * @param Unit[][] board The current state of the board.
-     * @param Unit[][][] armies
-     * @return boolean Whether the game has ended or not
-     */
-    public static void playerMove(Unit[][] board, Unit[][][] armies){
-
-    }
-
-    /**
-     * Bill this is the method that let's the player make a move.
-     * @param Unit[][] board The current state of the board.
-     * @param Unit[][][] armies
-     * @return boolean Whether the game has ended or not
-     */
-    public static void aiMove(Unit[][] board, Unit[][][] armies){
-
-    }
-
-    /**
      * This method creates the AI's imperfect and statistical view of the game.
      * @param board The 2D Unit array that represents (X,Y) locations on the board.
      * @param sb (shadowBoard) The 2D array of Units that represents AI's view of the board.
@@ -1584,4 +1564,154 @@ public class Driver {
             }
         }
     }
+  
+    /**
+     * Lets the player make a move.
+     * @param board 2 dimensional Unit object, The current state of the board.
+     * @param armies 3 dimensional Unit object, [owner][y][x]
+     * @return boolean Whether the game has ended or not
+     */
+    public static void playerMove(Unit[][] board, Unit[][][] armies) throws IOException {
+        Moves[] options = moveFilter(board, Players.PLAYER);
+        int choice = Integer.parseInt(stdin.readLine());
+        Moves piece = options[choice-1];
+        Moves[] moves = piece.generateMoves();
+        int x = piece.getX();
+        int y = piece.getY();
+        System.out.println("These are the moves you can make with your "+piece.getPiece().getName()+"("+(y+1)
+                +", "+(x+1)+")"+" :");
+        for(int i=0; moves[i] != null; i++) {
+            Moves current = moves[i];
+            System.out.println(i+1+". ("+(current.getY()+1)+", "+(current.getX()+1)+")");
+        }
+        choice = Integer.parseInt(stdin.readLine());
+        Moves move = moves[choice-1];
+        if(move.getPiece() == null) {
+            board[move.getY()][move.getX()] = piece.getPiece();
+        } else {
+            Moves current = ruleBook(piece, move);
+            if(current == null) {
+                board[y][x] = null;
+                board[move.getY()][move.getX()] = null;
+            }
+            else board[move.getY()][move.getX()] = current.getPiece();
+        }
+        board[y][x] = null;
+        printBoard(board);
+    }
+
+    /**
+     * Lets the AI make a move.
+     * @param Unit[][] board The current state of the board.
+     * @param Unit[][][] armies
+     * @return boolean Whether the game has ended or not
+     */
+    public static void aiMove(Unit[][] board, Unit[][][] armies) {
+
+    }
+
+    public static Moves[] moveFilter(Unit[][] board, Players player) throws IOException {
+        int index = 0;
+        Moves[] options = new Moves[40];
+
+        System.out.println("Pieces you can move : ");
+        for (int i = 0; i < board.length; i++) // Iterate through X coordinates of Board.
+        {
+            for(int j = 0; j < board[i].length; j++) // Iterate through Y coordinates of Board.
+            {
+                Unit current = board[i][j];
+                if(current != null && current.getOwner() == player) // Is this the players piece?
+                {   // Is this a piece that moves?
+                    if(current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB) {
+                        // Can this piece move/fight? If so add piece to options and print to user.
+                        // Checks for movement in the Right direction.
+                        if ( i < 9 && (board[i + 1][j] == null || board[i + 1][j].getOwner() != player)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options[index] = new Moves(board, i, j);// Count incremented below
+                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                            } // Else just store move and increment count.
+                            else {
+                                options[index] = new Moves(board, i, j);
+                                index++;
+                            }
+                        }
+                        // Checks for movement in the Left direction.
+                        else if (i > 0 && (board[i - 1][j] == null || board[i - 1][j].getOwner() != player)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options[index] = new Moves(board, i, j);// Count incremented below
+                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                            } // Else just store move and increment count.
+                            else {
+                                options[index] = new Moves(board, i, j);
+                                index++;
+                            }
+                        }
+                        // Checks for movement in the Up direction.
+                        else if (j < 9 && (board[i][j + 1] == null || board[i][j + 1].getOwner() != player)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options[index] = new Moves(board, i, j);// Count incremented below
+                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                            } // Else just store move and increment count.
+                            else {
+                                options[index] = new Moves(board, i, j);
+                                index++;
+                            }
+                        }
+                        // Checks for movement in the Down direction.
+                        else if (j > 0 && (board[i][j - 1] == null || board[i][j - 1].getOwner() != player)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options[index] = new Moves(board, i, j);// Count incremented below
+                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                            } // Else just store move and increment count.
+                            else {
+                                options[index] = new Moves(board, i, j);
+                                index++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return options;
+    }
+
+    /**
+     * ruleBook() serves to simplify the process of which pieces will occupy a space on the board at a given time.
+     *
+     * @param offense - a Moves object wishing to dominate defense for a space on the board.
+     * @param defense - a Moves object which offense wishes to overtake on the board.
+     * @return winner - the Moves object which dominates, null if both pieces strength's match.
+     */
+    public static Moves ruleBook(Moves offense, Moves defense) {
+        Moves winner = null;
+        switch(defense.getPiece().getType()) {
+            case BOMB:
+                if(offense.getPiece().getType() == PieceType.MINER) {
+                    winner = offense;
+                }
+                else winner = defense;
+                break;
+            case MARSHALL:
+                if(offense.getPiece().getType() == PieceType.SPY) {
+                    winner = offense;
+                } else winner = defense;
+                break;
+            case SPY:
+                winner = offense;
+                break;
+            case FLAG:
+                winner = offense;
+                break;
+            default:
+                if(defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
+                    winner = null;
+                }
+                else if(defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
+                    winner = offense;
+                }
+                else winner = defense;
+        }
+        return winner;
+    }
 }   /*End Driver class*/
+
