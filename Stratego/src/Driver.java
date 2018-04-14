@@ -1810,7 +1810,7 @@ public class Driver {
             }
         }
     }
-  
+
     /**
      * Lets the player make a move.
      * @param board 2 dimensional Unit object, The current state of the board.
@@ -1948,21 +1948,12 @@ public class Driver {
                 Unit current = board[i][j];
                 if(current != null && current.getOwner() == player) // Is this the players piece?
                 {   // Is this a piece that moves?
+                        // Is this piece next to a lake?
                     if(current.getType() == null || (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
-                        // Checks for movement in the Right direction.
-                        if ( i < 9 && (board[i + 1][j] == null || board[i + 1][j].getOwner() != player)) {
-                            if (player == Players.PLAYER) { // If it's players turn print message.
-                                options[index] = new Moves(board, i, j);// Count incremented below
-                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                            } // Else just store move and increment count.
-                            else {
-                                options[index] = new Moves(board, i, j);
-                                index++;
-                            }
-                        }
-                        // Checks for movement in the Left direction.
-                        else if (i > 0 && (board[i - 1][j] == null || board[i - 1][j].getOwner() != player)) {
+                        // Checks for movement in the Down direction.
+                        if ( i < 9 && (i == 3 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 3) &&
+                                (board[i + 1][j] == null || board[i + 1][j].getOwner() != player)) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options[index] = new Moves(board, i, j);// Count incremented below
                                 System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
@@ -1973,7 +1964,8 @@ public class Driver {
                             }
                         }
                         // Checks for movement in the Up direction.
-                        else if (j < 9 && (board[i][j + 1] == null || board[i][j + 1].getOwner() != player)) {
+                        else if (i > 0 && (i == 6 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 6) &&
+                                (board[i - 1][j] == null || board[i - 1][j].getOwner() != player)) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options[index] = new Moves(board, i, j);// Count incremented below
                                 System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
@@ -1983,8 +1975,21 @@ public class Driver {
                                 index++;
                             }
                         }
-                        // Checks for movement in the Down direction.
-                        else if (j > 0 && (board[i][j - 1] == null || board[i][j - 1].getOwner() != player)) {
+                        // Checks for movement in the Right direction.
+                        else if (j < 9 && ((i == 5 || i == 4) && (j != 1 && j != 5) || (i != 5 && i != 4)) &&
+                                (board[i][j + 1] == null || board[i][j + 1].getOwner() != player)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options[index] = new Moves(board, i, j);// Count incremented below
+                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                            } // Else just store move and increment count.
+                            else {
+                                options[index] = new Moves(board, i, j);
+                                index++;
+                            }
+                        }
+                        // Checks for movement in the Left direction.
+                        else if (j > 0 && (i == 5 || i == 4 && (j != 4 && j != 8) || (i != 5 && i != 4)) &&
+                                (board[i][j - 1] == null || board[i][j - 1].getOwner() != player)) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options[index] = new Moves(board, i, j);// Count incremented below
                                 System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
@@ -2008,7 +2013,7 @@ public class Driver {
      * @param defense - a Moves object which offense wishes to overtake on the board.
      * @return winner - the Moves object which dominates, null if both pieces strength's match.
      */
-    public static Moves ruleBook(Moves offense, Moves defense) {
+    private static Moves ruleBook(Moves offense, Moves defense) {
         Moves winner = null;
         switch(defense.getPiece().getType()) {
             case BOMB:
