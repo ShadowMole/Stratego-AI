@@ -128,12 +128,12 @@ public class Driver {
             switch (turn){
                 case 0:
                     try {
-                        playerMove(board, armies);
-                    } catch(IOException x){}
+                        playerMove(board, armies, shadowBoard, shadowArmy);
+                    }catch (IOException ioe){}
                     break;  //Stops the switch statement
 
                 case 1:
-                    aiMove(board, armies);
+                    aiMove(board, armies, shadowBoard, shadowArmy);
                     break;  //Stops the switch statement
             }   /*End switch statement*/
         }   /*End for loop*/
@@ -317,7 +317,8 @@ public class Driver {
                              * If owned by the AI, print A to conceal it from
                              * the user's view.
                              */
-                            System.out.print("A" + "\t");
+                            //System.out.print("A" + "\t");
+                            System.out.print(board[i][j].getCharacter() + "\t");
                             break;  //Stops the switch statement
                     }   /*End switch statement*/
                 }else{
@@ -336,6 +337,8 @@ public class Driver {
      * @param armies The 3D array of Units that is divided (Player, AI), (Alive, Dead), actual pieces.
      */
     public static void setupBoard(Unit[][] board, Unit[][][] armies){
+        aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+
         printBoard(board);
         try {
             /*
@@ -344,7 +347,7 @@ public class Driver {
              */
             playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
         }catch(Exception e){}           /*End try-catch block*/
-        aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+        //aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
     }   /*End setupBoard method*/
 
     /**
@@ -520,9 +523,20 @@ public class Driver {
     public static void aiSetup(Unit[][] board, Unit[] army){
         int placed = 0;     /*Number of pieces that the user has placed*/
         double[][] values = new double[12][40];
+        double[][] modified = new double[12][40];
+        for(int i = 0; i < modified.length; i++){
+            for(int j = 0; j < modified[i].length; j++){
+                modified[i][j] = 1;
+            }
+        }
         aiInitialValues(values);
-        aiConfig(values);
-        aiTeam(values);
+        aiConfig(values, modified);
+        aiTeam(values, modified);
+        for(int i = 0; i < values.length; i++){
+            for (int j = 0; j < values[i].length; j++){
+                values[i][j] /= modified[i][j];
+            }
+        }
         aiPlaceUnits(values, board, army);
     }   /*End aiSetup method*/
 
@@ -984,7 +998,7 @@ public class Driver {
         }   /*End outer try-catch block*/
     }
 
-    public static void aiConfig(double[][] values){
+    public static void aiConfig(double[][] values, double[][] modified){
         try{
             /*
              * Initializes each of the BufferedReader with a different text file.
@@ -1007,38 +1021,56 @@ public class Driver {
                 while(s != null){
                     String[] tokenize = s.split(",");
 
-                    double score = ((Math.random() * 2.1) + .4) * Double.parseDouble(tokenize[0]);
-
                     switch(tokenize[4]){
                         case "Y":
                             switch (tokenize[6]){
                                 case "Left":
-                                    values[0][39] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][38] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][37] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][29] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][28] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][27] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][39] += 1;
+                                    values[0][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][38] += 1;
+                                    values[0][37] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][37] += 1;
+                                    values[0][29] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][29] += 1;
+                                    values[0][28] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][28] += 1;
+                                    values[0][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][27] += 1;
                                     break;
 
                                 case "Right":
-                                    values[0][32] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][31] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][30] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][22] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][21] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][20] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][32] += 1;
+                                    values[0][31]+= (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][31] += 1;
+                                    values[0][30] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][30] += 1;
+                                    values[0][22] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][22] += 1;
+                                    values[0][21] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][21] += 1;
+                                    values[0][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][20] += 1;
                                     break;
 
                                 default:
-                                    values[0][36] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][35] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][34] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][33] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][26] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][25] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][24] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][23] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][36] += 1;
+                                    values[0][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][35] += 1;
+                                    values[0][34] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][34] += 1;
+                                    values[0][33] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][33] += 1;
+                                    values[0][26] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][26] += 1;
+                                    values[0][25] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][25] += 1;
+                                    values[0][24] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][24] += 1;
+                                    values[0][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][23] += 1;
                                     break;
                             }
                             break;
@@ -1046,32 +1078,52 @@ public class Driver {
                         default:
                             switch (tokenize[6]){
                                 case "Left":
-                                    values[0][19] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][18] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][17] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][9] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][8] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][7] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][19] += 1;
+                                    values[0][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][19] += 1;
+                                    values[0][17] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][19] += 1;
+                                    values[0][9] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][9] += 1;
+                                    values[0][8] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][9] += 1;
+                                    values[0][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][9] += 1;
                                     break;
 
                                 case "Right":
-                                    values[0][12] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][11] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][10] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][2] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][1] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][0] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][12] += 1;
+                                    values[0][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][11] += 1;
+                                    values[0][10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][10] += 1;
+                                    values[0][2] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][2] += 1;
+                                    values[0][1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][1] += 1;
+                                    values[0][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][0] += 1;
                                     break;
 
                                 default:
-                                    values[0][16] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][15] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][14] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][13] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][6] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][5] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][4] *= score * ((Math.random() * 2.1) + .4);
-                                    values[0][3] *= score * ((Math.random() * 2.1) + .4);
+                                    values[0][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][16] += 1;
+                                    values[0][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][15] += 1;
+                                    values[0][14] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][14] += 1;
+                                    values[0][13] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][13] += 1;
+                                    values[0][6] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][6] += 1;
+                                    values[0][5] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][5] += 1;
+                                    values[0][4] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][4] += 1;
+                                    values[0][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[0][3] += 1;
                                     break;
                             }
                             break;
@@ -1081,32 +1133,52 @@ public class Driver {
                         case "Y":
                             switch (tokenize[7]){
                                 case "Left":
-                                    values[1][39] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][38] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][37] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][29] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][28] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][27] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][39] += 1;
+                                    values[1][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][38] += 1;
+                                    values[1][37] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][37] += 1;
+                                    values[1][29] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][29] += 1;
+                                    values[1][28] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][28] += 1;
+                                    values[1][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][27] += 1;
                                     break;
 
                                 case "Right":
-                                    values[1][32] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][31] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][30] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][22] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][21] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][20] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][32] += 1;
+                                    values[1][31] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][31] += 1;
+                                    values[1][30] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][30] += 1;
+                                    values[1][22] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][22] += 1;
+                                    values[1][21] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][21] += 1;
+                                    values[1][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][20] += 1;
                                     break;
 
                                 default:
-                                    values[1][36] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][35] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][34] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][33] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][26] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][25] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][24] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][23] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][36] += 1;
+                                    values[1][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][35] += 1;
+                                    values[1][34] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][34] += 1;
+                                    values[1][33] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][33] += 1;
+                                    values[1][26] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][26] += 1;
+                                    values[1][25] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][25] += 1;
+                                    values[1][24] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][24] += 1;
+                                    values[1][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][23] += 1;
                                     break;
                             }
                             break;
@@ -1114,32 +1186,52 @@ public class Driver {
                         default:
                             switch (tokenize[7]){
                                 case "Left":
-                                    values[1][19] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][18] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][17] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][9] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][8] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][7] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][19] += 1;
+                                    values[1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][18] += 1;
+                                    values[1][17] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][17] += 1;
+                                    values[1][9] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][9] += 1;
+                                    values[1][8] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][8] += 1;
+                                    values[1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][7] += 1;
                                     break;
 
                                 case "Right":
-                                    values[1][12] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][11] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][10] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][2] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][1] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][0] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][12] += 1;
+                                    values[1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][11] += 1;
+                                    values[1][10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][10] += 1;
+                                    values[1][2] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][2] += 1;
+                                    values[1][1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][1] += 1;
+                                    values[1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][0] += 1;
                                     break;
 
                                 default:
-                                    values[1][16] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][15] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][14] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][13] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][6] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][5] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][4] *= score * ((Math.random() * 2.1) + .4);
-                                    values[1][3] *= score * ((Math.random() * 2.1) + .4);
+                                    values[1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][16] += 1;
+                                    values[1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][15] += 1;
+                                    values[1][14] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][14] += 1;
+                                    values[1][13] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][13] += 1;
+                                    values[1][6] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][6] += 1;
+                                    values[1][5] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][5] += 1;
+                                    values[1][4] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][4] += 1;
+                                    values[1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[1][3] += 1;
                                     break;
                             }
                             break;
@@ -1152,18 +1244,23 @@ public class Driver {
                     for(int i = 0; !found && i < 4; i++) {
                         for (int j = 0; !found && j < 10; j++) {
                             if (k == flagSpace) {
-                                values[11][k] *= score * ((Math.random() * 2.1) + .4);
+                                values[11][k] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                modified[11][k] += 1;
                                 if(tokenize[10].equals("Y")){
-                                    values[10][k - 1] *= score * ((Math.random() * 2.1) + .4);
+                                    values[10][k - 1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[10][k - 1] += 1;
                                 }
                                 if(tokenize[11].equals("Y")){
-                                    values[10][k + 10] *= score * ((Math.random() * 2.1) + .4);
+                                    values[10][k + 10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[10][k + 10] += 1;
                                 }
                                 if(tokenize[12].equals("Y")){
-                                    values[10][k + 1] *= score * ((Math.random() * 2.1) + .4);
+                                    values[10][k + 1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[10][k + 1] += 1;
                                 }
                                 if(tokenize[13].equals("Y")){
-                                    values[10][k - 10] *= score * ((Math.random() * 2.1) + .4);
+                                    values[10][k - 10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                    modified[10][k - 1] += 1;
                                 }
                             }
                         }
@@ -1190,7 +1287,7 @@ public class Driver {
         }   /*End outer try-catch block*/
     }
 
-    public static void aiTeam(double[][] values){
+    public static void aiTeam(double[][] values, double[][] modified){
         BufferedReader[] readers = new BufferedReader[9];
         try{
             /*
@@ -1239,32 +1336,48 @@ public class Driver {
                     while(s != null){
                         String[] tokenize = s.split(",");
 
-                        double score = ((Math.random() * 2.1) + .4) * Double.parseDouble(tokenize[0]);
-
                         switch(i){
                             case 0:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][39] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][38] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][37] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][29] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][28] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][27] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 0){
-                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][38] += 1;
+                                        values[j - 1][37] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][37] += 1;
+                                        values[j - 1][29] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][29] += 1;
+                                        values[j - 1][28] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][28] += 1;
+                                        values[j - 1][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][27] += 1;
                                     }else if(j == 1){
-                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][19] += 1;
+                                        values[j - 1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][18] += 1;
+                                        values[j - 1][17] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][17] += 1;
+                                        values[j - 1][9] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][9] += 1;
+                                        values[j - 1][8] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][8] += 1;
+                                        values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][7] += 1;
+                                    }else if(j == 2){
+                                        values[j - 1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][19] += 1;
+                                        values[j - 1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][18] += 1;
+                                        values[j - 1][17] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][17] += 1;
+                                        values[j - 1][9] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][9] += 1;
+                                        values[j - 1][8] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][8] += 1;
+                                        values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][7] += 1;
                                     }
                                 }
                                 break;
@@ -1272,32 +1385,56 @@ public class Driver {
                             case 1:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][36] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][35] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][34] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][33] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][26] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][25] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][24] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][23] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 0){
-                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][36] += 1;
+                                        values[j - 1][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][35] += 1;
+                                        values[j - 1][34] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][34] += 1;
+                                        values[j - 1][33] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][33] += 1;
+                                        values[j - 1][26] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][26] += 1;
+                                        values[j - 1][25] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][25] += 1;
+                                        values[j - 1][24] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][24] += 1;
+                                        values[j - 1][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][23] += 1;
                                     }else if(j == 1){
-                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][16] += 1;
+                                        values[j - 1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][15] += 1;
+                                        values[j - 1][14] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][14] += 1;
+                                        values[j - 1][13] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][13] += 1;
+                                        values[j - 1][6] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][6] += 1;
+                                        values[j - 1][5] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][5] += 1;
+                                        values[j - 1][4] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][4] += 1;
+                                        values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][3] += 1;
+                                    }else if(j == 2){
+                                        values[j - 1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][16] += 1;
+                                        values[j - 1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][15] += 1;
+                                        values[j - 1][14] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][14] += 1;
+                                        values[j - 1][13] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][13] += 1;
+                                        values[j - 1][6] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][6] += 1;
+                                        values[j - 1][5] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][5] += 1;
+                                        values[j - 1][4] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][4] += 1;
+                                        values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][3] += 1;
                                     }
                                 }
                                 break;
@@ -1305,26 +1442,44 @@ public class Driver {
                             case 2:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][32] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][31] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][30] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][22] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][21] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][20] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 0){
-                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][32] += 1;
+                                        values[j - 1][31] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][31] += 1;
+                                        values[j - 1][30] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][30] += 1;
+                                        values[j - 1][22] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][22] += 1;
+                                        values[j - 1][21] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][21] += 1;
+                                        values[j - 1][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][20] += 1;
                                     }else if(j == 1){
-                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][12] += 1;
+                                        values[j - 1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][11] += 1;
+                                        values[j - 1][10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][10] += 1;
+                                        values[j - 1][2] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][2] += 1;
+                                        values[j - 1][1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][1] += 1;
+                                        values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][0] += 1;
+                                    }else if(j == 2){
+                                        values[j - 1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][12] += 1;
+                                        values[j - 1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][11] += 1;
+                                        values[j - 1][10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][10] += 1;
+                                        values[j - 1][2] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][2] += 1;
+                                        values[j - 1][1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][1] += 1;
+                                        values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][0] += 1;
                                     }
                                 }
                                 break;
@@ -1332,19 +1487,31 @@ public class Driver {
                             case 3:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][39] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][38] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][37] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][29] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][28] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][27] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 0){
-                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][37] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][29] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][28] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                    }else if(j == 1){
+                                        values[j - 1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][19] += 1;
+                                        values[j - 1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][18] += 1;
+                                        values[j - 1][17] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][17] += 1;
+                                        values[j - 1][9] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][9] += 1;
+                                        values[j - 1][8] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][8] += 1;
+                                        values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][7] += 1;
                                     }
                                 }
                                 break;
@@ -1352,23 +1519,39 @@ public class Driver {
                             case 4:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][36] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][35] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][34] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][33] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][26] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][25] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][24] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][23] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 0){
-                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][36] += 1;
+                                        values[j - 1][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][35] += 1;
+                                        values[j - 1][34] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][34] += 1;
+                                        values[j - 1][33] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][33] += 1;
+                                        values[j - 1][26] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][26] += 1;
+                                        values[j - 1][25] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][25] += 1;
+                                        values[j - 1][24] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][24] += 1;
+                                        values[j - 1][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][23] += 1;
+                                    }else if(j == 1){
+                                        values[j - 1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][16] += 1;
+                                        values[j - 1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][15] += 1;
+                                        values[j - 1][14] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][14] += 1;
+                                        values[j - 1][13] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][13] += 1;
+                                        values[j - 1][6] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][6] += 1;
+                                        values[j - 1][5] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][5] += 1;
+                                        values[j - 1][4] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][4] += 1;
+                                        values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][3] += 1;
                                     }
                                 }
                                 break;
@@ -1376,19 +1559,31 @@ public class Driver {
                             case 5:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][32] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][31] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][30] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][22] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][21] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][20] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 0){
-                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][32] += 1;
+                                        values[j - 1][31] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][31] += 1;
+                                        values[j - 1][30] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][30] += 1;
+                                        values[j - 1][22] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][22] += 1;
+                                        values[j - 1][21] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][21] += 1;
+                                        values[j - 1][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][20] += 1;
+                                    }else if(j == 1){
+                                        values[j - 1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][12] += 1;
+                                        values[j - 1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][11] += 1;
+                                        values[j - 1][10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][10] += 1;
+                                        values[j - 1][2] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][2] += 1;
+                                        values[j - 1][1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][1] += 1;
+                                        values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][0] += 1;
                                     }
                                 }
                                 break;
@@ -1396,19 +1591,31 @@ public class Driver {
                             case 6:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][39] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][38] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][37] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][29] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][28] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][27] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 1){
-                                        values[j - 1][19] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][18] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][17] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][9] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][8] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][7] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][39] += 1;
+                                        values[j - 1][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][38] += 1;
+                                        values[j - 1][37] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][37] += 1;
+                                        values[j - 1][29] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][29] += 1;
+                                        values[j - 1][28] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][28] += 1;
+                                        values[j - 1][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][27] += 1;
+                                    }else if(j == 2){
+                                        values[j - 1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][19] += 1;
+                                        values[j - 1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][18] += 1;
+                                        values[j - 1][17] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][17] += 1;
+                                        values[j - 1][9] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][9] += 1;
+                                        values[j - 1][8] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][8] += 1;
+                                        values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][7] += 1;
                                     }
                                 }
                                 break;
@@ -1416,23 +1623,39 @@ public class Driver {
                             case 7:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][36] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][35] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][34] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][33] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][26] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][25] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][24] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][23] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 1){
-                                        values[j - 1][16] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][15] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][14] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][13] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][6] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][5] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][4] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][3] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][36] += 1;
+                                        values[j - 1][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][35] += 1;
+                                        values[j - 1][34] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][34] += 1;
+                                        values[j - 1][33] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][33] += 1;
+                                        values[j - 1][26] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][26] += 1;
+                                        values[j - 1][25] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][25] += 1;
+                                        values[j - 1][24] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][24] += 1;
+                                        values[j - 1][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][23] += 1;
+                                    }else if(j == 2){
+                                        values[j - 1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][16] += 1;
+                                        values[j - 1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][15] += 1;
+                                        values[j - 1][14] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][14] += 1;
+                                        values[j - 1][13] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][13] += 1;
+                                        values[j - 1][6] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][6] += 1;
+                                        values[j - 1][5] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][5] += 1;
+                                        values[j - 1][4] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][4] += 1;
+                                        values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][3] += 1;
                                     }
                                 }
                                 break;
@@ -1440,19 +1663,31 @@ public class Driver {
                             case 8:
                                 for(int j = 1; j < tokenize.length; j++){
                                     if(!(tokenize[j].equals("0"))){
-                                        values[j - 1][32] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][31] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][30] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][22] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][21] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][20] *= score * ((Math.random() * 2.1) + .4);
-                                    }else if(j == 1){
-                                        values[j - 1][12] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][11] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][10] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][2] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][1] *= score * ((Math.random() * 2.1) + .4);
-                                        values[j - 1][0] *= score * ((Math.random() * 2.1) + .4);
+                                        values[j - 1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][32] += 1;
+                                        values[j - 1][31] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][31] += 1;
+                                        values[j - 1][30] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][30] += 1;
+                                        values[j - 1][22] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][22] += 1;
+                                        values[j - 1][21] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][21] += 1;
+                                        values[j - 1][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][20] += 1;
+                                    }else if(j == 2){
+                                        values[j - 1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][12] += 1;
+                                        values[j - 1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][11] += 1;
+                                        values[j - 1][10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][10] += 1;
+                                        values[j - 1][2] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][2] += 1;
+                                        values[j - 1][1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][1] += 1;
+                                        values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
+                                        modified[j - 1][0] += 1;
                                     }
                                 }
                                 break;
@@ -1479,6 +1714,14 @@ public class Driver {
     public static void aiPlaceUnits(double[][] values, Unit[][] board, Unit[] army){
         int placed = 0;
         while(placed != 40) {
+            printBoard(board);
+            for(int i = 0; i < values.length; i++){
+                for(int j = 0; j < values[i].length; j++){
+                    System.out.print(values[i][j] + ",");
+                }
+                System.out.print("\n");
+            }
+            System.out.print("\n\n\n");
             double high = -1;
             int y = -1;
             int x = -1;
@@ -1546,6 +1789,7 @@ public class Driver {
                         name = "Flag";
                         break;
                 }
+                System.out.print("\n" + name + "," + (x-1) + "," + (y-1) + "," + high + "\n");
                 boolean flag = false;
                 for (int i = 0; !flag && i < army.length; i++) {
                     if (army[i].getName().equals(name) && !army[i].getPlaced()) {
@@ -1573,7 +1817,7 @@ public class Driver {
      * @param armies 3 dimensional Unit object, [owner][y][x]
      * @return boolean Whether the game has ended or not
      */
-    public static void playerMove(Unit[][] board, Unit[][][] armies) throws IOException {
+    public static void playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) throws IOException {
         Moves[] options = moveFilter(board, Players.PLAYER);
         int choice = Integer.parseInt(stdin.readLine());
         Moves piece = options[choice-1];
@@ -1590,15 +1834,52 @@ public class Driver {
         Moves move = moves[choice-1];
         if(move.getPiece() == null) {
             board[move.getY()][move.getX()] = piece.getPiece();
+            shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
         } else {
+
+            //Updating the AI's knowledge
+            if(shadowBoard[y][x].getName() == null){
+                shadowBoard[y][x] = new Unit(board[y][x].getStrength(), board[y][x].getName(), board[y][x].getCharacter(), board[y][x].getOwner(), board[y][x].getScore(), board[y][x].getType());
+                for(int i = 0; i < shadowArmy.length; i++){
+                    if(shadowArmy[i].getName() == null){
+                        shadowArmy[i].setAmount(shadowArmy[i].getAmount(board[y][x].getType()) - 1, board[y][x].getType());
+                    }
+                }
+            }
+            //Finished updating the AI's knowledge
+
             Moves current = ruleBook(piece, move);
             if(current == null) {
                 board[y][x] = null;
                 board[move.getY()][move.getX()] = null;
+                shadowBoard[y][x] = null;
+                shadowBoard[move.getY()][move.getX()] = null;
             }
-            else board[move.getY()][move.getX()] = current.getPiece();
+            else {
+                board[move.getY()][move.getX()] = current.getPiece();
+                shadowBoard[move.getY()][move.getX()] = shadowBoard[current.getY()][current.getX()];
+            }
         }
         board[y][x] = null;
+        shadowBoard[y][x] = null;
+
+        //Updating the AI's knowledge
+        if(shadowBoard[move.getX()][move.getX()].getName() == null) {
+            if (!shadowBoard[move.getX()][move.getX()].getHasMoved()) {
+                shadowBoard[move.getX()][move.getX()].moved();
+            }
+            if(!(piece.getX()+piece.getY() == (piece.getX()+piece.getY()-1) ||
+                    piece.getX()+piece.getY() == (piece.getX()+piece.getY()+1))){
+                shadowBoard[move.getX()][move.getX()] = new Unit(2, "Scout", "S", Players.AI, 15, PieceType.SCOUT);
+                for(int i = 0; i < shadowArmy.length; i++) {
+                    if (shadowArmy[i].getName() == null) {
+                        shadowArmy[i].setAmount(shadowArmy[i].getAmount(PieceType.SCOUT) - 1, PieceType.SCOUT);
+                    }
+                }
+            }
+        }
+        //Finished updating the AI's knowledge
+
         printBoard(board);
     }
 
@@ -1608,11 +1889,54 @@ public class Driver {
      * @param Unit[][][] armies
      * @return boolean Whether the game has ended or not
      */
-    public static void aiMove(Unit[][] board, Unit[][][] armies) {
+    public static void aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) {
+        State root = new State(shadowBoard, 0, 20);
+        int best = (int) root.getBestMove();
+        int a = best / root.getMoveable().length;
+        int b = best % root.getMoves()[a].length;
+        Moves piece = root.getMoveable()[a];
+        Moves move = root.getMoves()[a][b];
 
+        int x = piece.getX();
+        int y = piece.getY();
+        if(move.getPiece() == null) {
+            board[move.getY()][move.getX()] = piece.getPiece();
+            shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
+        } else {
+
+            //Updating the AI's knowledge
+            if(shadowBoard[move.getY()][move.getX()].getName() == null){
+                shadowBoard[move.getY()][move.getX()] = new Unit(board[move.getY()][move.getX()].getStrength(),
+                        board[move.getY()][move.getX()].getName(),
+                        board[move.getY()][move.getX()].getCharacter(),
+                        board[move.getY()][move.getX()].getOwner(),
+                        board[move.getY()][move.getX()].getScore(),
+                        board[move.getY()][move.getX()].getType());
+                for(int i = 0; i < shadowArmy.length; i++){
+                    if(shadowArmy[i].getName() == null){
+                        shadowArmy[i].setAmount(shadowArmy[i].getAmount(board[move.getY()][move.getX()].getType()) - 1, board[move.getY()][move.getX()].getType());
+                    }
+                }
+            }
+            //Finished updating the AI's knowledge
+
+            Moves current = ruleBook(piece, move);
+            if(current == null) {
+                board[y][x] = null;
+                board[move.getY()][move.getX()] = null;
+                shadowBoard[y][x] = null;
+                shadowBoard[move.getY()][move.getX()] = null;
+            }
+            else {
+                board[move.getY()][move.getX()] = current.getPiece();
+                shadowBoard[move.getY()][move.getX()] = shadowBoard[current.getY()][current.getX()];
+            }
+        }
+        board[y][x] = null;
+        shadowBoard[y][x] = null;
     }
 
-    public static Moves[] moveFilter(Unit[][] board, Players player) throws IOException {
+    public static Moves[] moveFilter(Unit[][] board, Players player){
         int index = 0;
         Moves[] options = new Moves[40];
 
@@ -1624,8 +1948,8 @@ public class Driver {
                 Unit current = board[i][j];
                 if(current != null && current.getOwner() == player) // Is this the players piece?
                 {   // Is this a piece that moves?
-                    if(current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB) {
                         // Is this piece next to a lake?
+                    if(current.getType() == null || (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
                         // Checks for movement in the Down direction.
                         if ( i < 9 && (i == 3 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 3) &&
