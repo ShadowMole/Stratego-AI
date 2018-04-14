@@ -11,6 +11,7 @@ public class Unit {
     private double score;
     private PieceType type;
     private int[][] stats;
+    private boolean hasMoved;
 
     public Unit(int s, String n, String c, Players o, double sc, PieceType t) {
         strength = s;
@@ -26,6 +27,7 @@ public class Unit {
         score = sc;
         owner = o;
         stats = s;
+        hasMoved = false;
     }
 
     public String getName(){
@@ -165,6 +167,49 @@ public class Unit {
             reCalculateScore();
         }
     }
+
+    public int getAmount(PieceType p){
+        if (stats != null) {
+            switch (p) {
+                case MARSHALL:
+                    return stats[0][4];
+
+                case GENERAL:
+                    return stats[1][4];
+
+                case COLONEL:
+                    return stats[2][4];
+
+                case MAJOR:
+                    return stats[3][4];
+
+                case CAPTAIN:
+                    return stats[4][4];
+
+                case LIEUTENANT:
+                    return stats[5][4];
+
+                case SERJEANT:
+                    return stats[6][4];
+
+                case MINER:
+                    return stats[7][4];
+
+                case SCOUT:
+                    return stats[8][4];
+
+                case SPY:
+                    return stats[9][4];
+
+                case BOMB:
+                    return stats[10][4];
+
+                case FLAG:
+                    return stats[11][4];
+            }
+        }
+        return 0;
+    }
     
     public void reCalculateScore(){
         if(stats != null){
@@ -182,8 +227,61 @@ public class Unit {
         return score;
     }
 
+    public int getScore(PieceType p){
+        if (stats != null) {
+            switch (p) {
+                case MARSHALL:
+                    return stats[0][3];
+
+                case GENERAL:
+                    return stats[1][3];
+
+                case COLONEL:
+                    return stats[2][3];
+
+                case MAJOR:
+                    return stats[3][3];
+
+                case CAPTAIN:
+                    return stats[4][3];
+
+                case LIEUTENANT:
+                    return stats[5][3];
+
+                case SERJEANT:
+                    return stats[6][3];
+
+                case MINER:
+                    return stats[7][3];
+
+                case SCOUT:
+                    return stats[8][3];
+
+                case SPY:
+                    return stats[9][3];
+
+                case BOMB:
+                    return stats[10][3];
+
+                case FLAG:
+                    return stats[11][3];
+            }
+        }
+        return 0;
+    }
+
     public PieceType getType(){
         return type;
+    }
+
+    public boolean getHasMoved(){
+        return hasMoved;
+    }
+
+    public void moved(){
+        hasMoved = true;
+        setAmount(0,PieceType.FLAG);
+        setAmount(0,PieceType.BOMB);
     }
 }
 
