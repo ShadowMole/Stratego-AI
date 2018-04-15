@@ -118,7 +118,7 @@ public class Driver {
         Unit[] shadowArmy = new Unit[40];
 
         buildShadowBoard(board, shadowBoard, shadowArmy);
-        for(int i = 0; i < shadowArmy.length; i++){
+        /*for(int i = 0; i < shadowArmy.length; i++){
             System.out.println(shadowArmy[i].getScore());
         }   /*End for loop*/
 
@@ -317,8 +317,8 @@ public class Driver {
                              * If owned by the AI, print A to conceal it from
                              * the user's view.
                              */
-                            //System.out.print("A" + "\t");
-                            System.out.print(board[i][j].getCharacter() + "\t");
+                            System.out.print("A" + "\t");
+                            //System.out.print(board[i][j].getCharacter() + "\t");
                             break;  //Stops the switch statement
                     }   /*End switch statement*/
                 }else{
@@ -337,7 +337,7 @@ public class Driver {
      * @param armies The 3D array of Units that is divided (Player, AI), (Alive, Dead), actual pieces.
      */
     public static void setupBoard(Unit[][] board, Unit[][][] armies){
-        aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+        //aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
 
         printBoard(board);
         try {
@@ -347,7 +347,7 @@ public class Driver {
              */
             playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
         }catch(Exception e){}           /*End try-catch block*/
-        //aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+        aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
     }   /*End setupBoard method*/
 
     /**
@@ -1810,7 +1810,7 @@ public class Driver {
             }
         }
     }
-  
+
     /**
      * Lets the player make a move.
      * @param board 2 dimensional Unit object, The current state of the board.
@@ -1818,20 +1818,20 @@ public class Driver {
      * @return boolean Whether the game has ended or not
      */
     public static void playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) throws IOException {
-        Moves[] options = moveFilter(board, Players.PLAYER);
+        ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true);
         int choice = Integer.parseInt(stdin.readLine());
-        Moves piece = options[choice-1];
-        Moves[] moves = piece.generateMoves();
+        Moves piece = options.get(choice-1);
+        ArrayList<Moves> moves = piece.generateMoves();
         int x = piece.getX();
         int y = piece.getY();
         System.out.println("These are the moves you can make with your "+piece.getPiece().getName()+"("+(y+1)
                 +", "+(x+1)+")"+" :");
-        for(int i=0; moves[i] != null; i++) {
-            Moves current = moves[i];
+        for(int i=0; i < moves.size(); i++) {
+            Moves current = moves.get(i);
             System.out.println(i+1+". ("+(current.getY()+1)+", "+(current.getX()+1)+")");
         }
         choice = Integer.parseInt(stdin.readLine());
-        Moves move = moves[choice-1];
+        Moves move = moves.get(choice-1);
         if(move.getPiece() == null) {
             board[move.getY()][move.getX()] = piece.getPiece();
             shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
@@ -1848,7 +1848,7 @@ public class Driver {
             }
             //Finished updating the AI's knowledge
 
-            Moves current = ruleBook(piece, move);
+            Moves current = ruleBook(piece, move, Players.PLAYER, true);
             if(current == null) {
                 board[y][x] = null;
                 board[move.getY()][move.getX()] = null;
@@ -1890,12 +1890,11 @@ public class Driver {
      * @return boolean Whether the game has ended or not
      */
     public static void aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) {
-        State root = new State(shadowBoard, 0, 20);
+        State root = new State(shadowBoard, 0, 6);
         int best = (int) root.getBestMove();
-        int a = best / root.getMoveable().length;
-        int b = best % root.getMoves()[a].length;
-        Moves piece = root.getMoveable()[a];
-        Moves move = root.getMoves()[a][b];
+        int a = root.getOrigial();
+        Moves piece = root.getMoveable().get(a);
+        Moves move = root.getAllMoves().get(best);
 
         int x = piece.getX();
         int y = piece.getY();
@@ -1920,7 +1919,7 @@ public class Driver {
             }
             //Finished updating the AI's knowledge
 
-            Moves current = ruleBook(piece, move);
+            Moves current = ruleBook(piece, move, Players.AI, true);
             if(current == null) {
                 board[y][x] = null;
                 board[move.getY()][move.getX()] = null;
@@ -1936,11 +1935,12 @@ public class Driver {
         shadowBoard[y][x] = null;
     }
 
-    public static Moves[] moveFilter(Unit[][] board, Players player){
+    public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print){
         int index = 0;
-        Moves[] options = new Moves[40];
-
-        System.out.println("Pieces you can move : ");
+        ArrayList<Moves> options = new ArrayList<>();
+        if(print) {
+            System.out.println("Pieces you can move : ");
+        }
         for (int i = 0; i < board.length; i++) // Iterate through X coordinates of Board.
         {
             for(int j = 0; j < board[i].length; j++) // Iterate through Y coordinates of Board.
@@ -1948,49 +1948,59 @@ public class Driver {
                 Unit current = board[i][j];
                 if(current != null && current.getOwner() == player) // Is this the players piece?
                 {   // Is this a piece that moves?
-                    if(current.getType() == null || (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
+                        // Is this piece next to a lake?
+                    if((current.getType() == null && current.getScore() != 11)|| (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
-                        // Checks for movement in the Right direction.
-                        if ( i < 9 && (board[i + 1][j] == null || board[i + 1][j].getOwner() != player)) {
-                            if (player == Players.PLAYER) { // If it's players turn print message.
-                                options[index] = new Moves(board, i, j);// Count incremented below
-                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                            } // Else just store move and increment count.
+                        // Checks for movement in the Down direction.
+                        if ( i < 9 && (i == 3 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 3) &&
+                                (board[i + 1][j] == null || board[i + 1][j].getOwner() != player)) {
+                            if (player == Players.PLAYER && current.getName() != null) { // If it's players turn print message.
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }                            } // Else just store move and increment count.
                             else {
-                                options[index] = new Moves(board, i, j);
-                                index++;
-                            }
-                        }
-                        // Checks for movement in the Left direction.
-                        else if (i > 0 && (board[i - 1][j] == null || board[i - 1][j].getOwner() != player)) {
-                            if (player == Players.PLAYER) { // If it's players turn print message.
-                                options[index] = new Moves(board, i, j);// Count incremented below
-                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                            } // Else just store move and increment count.
-                            else {
-                                options[index] = new Moves(board, i, j);
+                                options.add(new Moves(board, i, j));
                                 index++;
                             }
                         }
                         // Checks for movement in the Up direction.
-                        else if (j < 9 && (board[i][j + 1] == null || board[i][j + 1].getOwner() != player)) {
+                        else if (i > 0 && (i == 6 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 6) &&
+                                (board[i - 1][j] == null || board[i - 1][j].getOwner() != player)) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
-                                options[index] = new Moves(board, i, j);// Count incremented below
-                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                            } // Else just store move and increment count.
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }                            } // Else just store move and increment count.
                             else {
-                                options[index] = new Moves(board, i, j);
+                                options.add(new Moves(board, i, j));
                                 index++;
                             }
                         }
-                        // Checks for movement in the Down direction.
-                        else if (j > 0 && (board[i][j - 1] == null || board[i][j - 1].getOwner() != player)) {
+                        // Checks for movement in the Right direction.
+                        else if (j < 9 && ((i == 5 || i == 4) && (j != 1 && j != 5) || (i != 5 && i != 4)) &&
+                                (board[i][j + 1] == null || board[i][j + 1].getOwner() != player)) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
-                                options[index] = new Moves(board, i, j);// Count incremented below
-                                System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }                            } // Else just store move and increment count.
+                            else {
+                                options.add(new Moves(board, i, j));
+                                index++;
+                            }
+                        }
+                        // Checks for movement in the Left direction.
+                        else if (j > 0 && (i == 5 || i == 4 && (j != 4 && j != 8) || (i != 5 && i != 4)) &&
+                                (board[i][j - 1] == null || board[i][j - 1].getOwner() != player)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }
                             } // Else just store move and increment count.
                             else {
-                                options[index] = new Moves(board, i, j);
+                                options.add(new Moves(board, i, j));
                                 index++;
                             }
                         }
@@ -2008,34 +2018,90 @@ public class Driver {
      * @param defense - a Moves object which offense wishes to overtake on the board.
      * @return winner - the Moves object which dominates, null if both pieces strength's match.
      */
-    public static Moves ruleBook(Moves offense, Moves defense) {
+    public static Moves ruleBook(Moves offense, Moves defense, Players p, boolean print) {
         Moves winner = null;
-        switch(defense.getPiece().getType()) {
-            case BOMB:
-                if(offense.getPiece().getType() == PieceType.MINER) {
-                    winner = offense;
-                }
-                else winner = defense;
-                break;
-            case MARSHALL:
-                if(offense.getPiece().getType() == PieceType.SPY) {
-                    winner = offense;
-                } else winner = defense;
-                break;
-            case SPY:
+        String s = "";
+        if(print) {
+            if (p == Players.PLAYER) {
+                s = "Your ";
+            } else {
+                s = "The AI's ";
+            }
+            s += offense.getPiece().getName() + " attacks ";
+            if (p == Players.PLAYER) {
+                s = "the AI's ";
+            } else {
+                s = "your ";
+            }
+            s += defense.getPiece().getName();
+        }
+        if(defense.getPiece().getType() == null || offense.getPiece().getType() == null){
+            if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
+                winner = null;
+            } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
                 winner = offense;
-                break;
-            case FLAG:
-                winner = offense;
-                break;
-            default:
-                if(defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
-                    winner = null;
-                }
-                else if(defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
+            } else winner = defense;
+        }else {
+            switch (defense.getPiece().getType()) {
+                case BOMB:
+                    if (offense.getPiece().getType() == PieceType.MINER) {
+                        winner = offense;
+                        if(print){
+                            s += " and wins!";
+                        }
+                    } else {
+                        winner = defense;
+                        if(print){
+                            s += " and loses.";
+                        }
+                    }
+                    break;
+                case MARSHALL:
+                    if (offense.getPiece().getType() == PieceType.SPY) {
+                        winner = offense;
+                        if(print){
+                            s += " and wins!";
+                        }
+                    } else {
+                        winner = defense;
+                        if(print){
+                            s += " and loses.";
+                        }
+                    }
+                    break;
+                case SPY:
                     winner = offense;
-                }
-                else winner = defense;
+                    if(print){
+                        s += " and wins!";
+                    }
+                    break;
+                case FLAG:
+                    winner = offense;
+                    if(print){
+                        s += " and wins!";
+                    }
+                    break;
+                default:
+                    if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
+                        winner = null;
+                        if(print){
+                            s += " and both die.";
+                        }
+                    } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
+                        winner = offense;
+                        if(print){
+                            s += " and wins!";
+                        }
+                    } else {
+                        winner = defense;
+                        if(print){
+                            s += " and loses.";
+                        }
+                    }
+            }
+        }
+        if(print){
+            System.out.println(s);
         }
         return winner;
     }

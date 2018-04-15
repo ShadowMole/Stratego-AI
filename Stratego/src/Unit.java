@@ -28,6 +28,7 @@ public class Unit {
         owner = o;
         stats = s;
         hasMoved = false;
+        predictStrength();
     }
 
     public String getName(){
@@ -213,17 +214,47 @@ public class Unit {
     
     public void reCalculateScore(){
         if(stats != null){
-            double score = 0;
+            score = 0;
             int num = 0;
             for(int k = 0; k < stats.length; k++){
                 score += ((1.0 * stats[k][0] * stats[k][3] * stats[k][4]) / (stats[k][1] + stats[k][2]));
                 num += stats[k][4];
             }
             score /= num;
+            predictStrength();
         }
     }
 
-    public double getScore(){
+    public void predictStrength() {
+        if(score >= 95) { // MARSHALL Strength
+            strength = 10;
+        }
+        else if(score >= 80) { // GENERAL Strength
+            strength = 9;
+        }
+        else if(score >= 65) { // COLONEL Strength
+            strength = 8;
+        }
+        else if(score >= 45) { // MAJOR Strength
+            strength = 7;
+        }
+        else if(score >= 30) {
+            if(hasMoved) { // CAPTAIN Strength
+                strength = 6;
+            }
+            else strength = 11; // BOMB Strength
+        }
+        else if(score >= 18) { // LIEUTENANT Strength
+            strength = 5;
+        }
+        else if(score >= 12.5) { // SCOUT Strength
+            strength = 2;
+        }
+        else strength = 4; // SERGEANT Strength
+
+    }
+
+    public double getScore() {
         return score;
     }
 
