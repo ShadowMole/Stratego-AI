@@ -28,6 +28,7 @@ public class Unit {
         owner = o;
         stats = s;
         hasMoved = false;
+        predictStrength();
     }
 
     public String getName(){

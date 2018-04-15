@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class Moves {
     private int x;
     private int y;
@@ -22,9 +23,9 @@ public class Moves {
         return board[y][x];
     }
 
-    public Moves[] generateMoves()
+    public ArrayList<Moves> generateMoves()
     {
-        Moves moves[] = new Moves[40];
+        ArrayList<Moves> moves = new ArrayList();
         int count = 0; /* Variable coordinates to check board for acceptable moves; i is the offset.
                         * count used for array to store board coordinates in moves.
                         */
@@ -38,14 +39,14 @@ public class Moves {
                                 (board[y][x+i] == null || board[y][x+i].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
                             if(board[y][x+i] == null && ((y == 5 || y == 4) && (x != 1 && x != 5) || (y != 5 && y != 4))) { // Eager Advancing, space is unoccupied AND isn't a Lake.
-                                moves[count] = new Moves(board, y, x+i);
+                                moves.add(new Moves(board, y, x+i));
                                 count++;
                                 i++;
                             }
                             else { // If Scout encounters an enemy
                                 guard = true;
                                 if(i == 1) { // Used to determine if the scout can attack the enemy piece.
-                                    moves[count] = new Moves(board, y, x+i);
+                                    moves.add(new Moves(board, y, x+i));
                                     count++;
                                     i++;
                                 }
@@ -60,14 +61,14 @@ public class Moves {
                                 (board[y][x-i] == null || board[y][x-i].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
                             if (board[y][x-i] == null && (y == 5 || y == 4 && (x != 4 && x != 8) || (y != 5 && y != 4))) { // Eager Advancing, space is unoccupied AND isn't a Lake.
-                                moves[count] = new Moves(board, y, x-i);
+                                moves.add(new Moves(board, y, x-i));
                                 count++;
                                 i++;
                             }
                             else { // If Scout encounters an enemy
                                 guard = true;
                                 if(i == 1) { // Used to determine if the scout can attack the enemy piece.
-                                    moves[count] = new Moves(board, y, x-i);
+                                    moves.add(new Moves(board, y, x-i));
                                     count++;
                                     i++;
                                 }
@@ -82,14 +83,14 @@ public class Moves {
                                 (board[y+i][x] == null || board[y+i][x].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
                             if (board[y+i][x] == null && (y == 6 && (x != 2 && x!= 3 && x!= 6 && x!= 7) || y != 6)) { // Eager Advancing, space is unoccupied AND isn't a Lake.
-                                moves[count] = new Moves(board, y+i, x);
+                                moves.add(new Moves(board, y+i, x));
                                 count++;
                                 i++;
                             }
                             else { // If Scout encounters an enemy
                                 guard = true;
                                 if(i == 1) { // Used to determine if the scout can attack the enemy piece.
-                                    moves[count] = new Moves(board, y+i, x);
+                                    moves.add(new Moves(board, y+i, x));
                                     count++;
                                     i++;
                                 }
@@ -104,13 +105,13 @@ public class Moves {
                                 (board[y-i][x] == null || board[y-i][x].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
                             if (board[y-i][x] == null && (y == 3 && (x != 2 && x!= 3 && x!= 6 && x!= 7) || y != 3)) { // Eager Advancing, space is unoccupied AND isn't a Lake.
-                                moves[count] = new Moves(board, y-i, x);
+                                moves.add(new Moves(board, y-i, x));
                                 count++;
                                 i++;
                             } else { // If Scout encounters an enemy
                                 guard = true;
                                 if(i == 1) { // Used to determine if the scout can attack the enemy piece.
-                                    moves[count] = new Moves(board, y-i, x);
+                                    moves.add(new Moves(board, y-i, x));
                                     count++;
                                     i++;
                                 }
@@ -120,25 +121,25 @@ public class Moves {
                     // Searching for a potential move in the Right direction.
                     if (((x+1) < 10) && ((y == 5 || y == 4) && (x != 1 && x != 5) || (y != 5 && y != 4)) &&
                             (board[y][x+1] == null || board[y][x+1].getOwner() != board[y][x].getOwner())) {
-                        moves[count] = new Moves(board, y, x+1);
+                        moves.add(new Moves(board, y, x+1));
                         count++;
                     }
                     // Searching for a potential move in the Left direction.
                     if (((x-1) > -1) && (y == 5 || y == 4 && (x != 4 && x != 8) || (y != 5 && y != 4)) &&
                             (board[y][x-1] == null || board[y][x-1].getOwner() != board[y][x].getOwner())) {
-                        moves[count] = new Moves(board, y, x-1);
+                        moves.add(new Moves(board, y, x-1));
                         count++;
                     }
                     // Searching for a potential move in the Up direction.
                     if (((y+1) < 10) && (y == 6 && (x != 2 && x!= 3 && x!= 6 && x!= 7) || y != 6) &&
                             (board[y+1][x] == null || board[y+1][x].getOwner() != board[y][x].getOwner())) {
-                        moves[count] = new Moves(board,y+1, x);
+                        moves.add(new Moves(board,y+1, x));
                         count++;
                     }
                     // Searching for a potential move in the Down direction.
                     if (((y-1) > -1) && (y == 3 && (x != 2 && x!= 3 && x!= 6 && x!= 7) || y != 3) &&
                             (board[y-1][x] == null || board[y-1][x].getOwner() != board[y][x].getOwner())) {
-                        moves[count] = new Moves(board,y-1, x);
+                        moves.add(new Moves(board,y-1, x));
                         count++;
                     }
                 }
