@@ -1714,14 +1714,14 @@ public class Driver {
     public static void aiPlaceUnits(double[][] values, Unit[][] board, Unit[] army){
         int placed = 0;
         while(placed != 40) {
-            printBoard(board);
+            /*printBoard(board);
             for(int i = 0; i < values.length; i++){
                 for(int j = 0; j < values[i].length; j++){
                     System.out.print(values[i][j] + ",");
                 }
                 System.out.print("\n");
             }
-            System.out.print("\n\n\n");
+            System.out.print("\n\n\n");*/
             double high = -1;
             int y = -1;
             int x = -1;
@@ -1789,7 +1789,7 @@ public class Driver {
                         name = "Flag";
                         break;
                 }
-                System.out.print("\n" + name + "," + (x-1) + "," + (y-1) + "," + high + "\n");
+                //System.out.print("\n" + name + "," + (x-1) + "," + (y-1) + "," + high + "\n");
                 boolean flag = false;
                 for (int i = 0; !flag && i < army.length; i++) {
                     if (army[i].getName().equals(name) && !army[i].getPlaced()) {
@@ -1848,6 +1848,22 @@ public class Driver {
             }
             //Finished updating the AI's knowledge
 
+            //Updating the AI's knowledge
+            if(shadowBoard[piece.getX()][piece.getX()].getName() == null) {
+                if (!shadowBoard[piece.getX()][piece.getX()].getHasMoved()) {
+                    shadowBoard[piece.getX()][piece.getX()].moved();
+                }
+                if(!(piece.getX()+piece.getY() == (move.getX()+move.getY()-1) ||
+                        piece.getX()+piece.getY() == (move.getX()+move.getY()+1))){
+                    shadowBoard[piece.getX()][piece.getX()] = new Unit(2, "Scout", "S", Players.AI, 15, PieceType.SCOUT);
+                    for(int i = 0; i < shadowArmy.length; i++) {
+                        if (shadowArmy[i].getName() == null) {
+                            shadowArmy[i].setAmount(shadowArmy[i].getAmount(PieceType.SCOUT) - 1, PieceType.SCOUT);
+                        }
+                    }
+                }
+            }
+            //Finished updating the AI's knowledge
             Moves current = ruleBook(piece, move, Players.PLAYER, true);
             if(current == null) {
                 board[y][x] = null;
@@ -1862,23 +1878,6 @@ public class Driver {
         }
         board[y][x] = null;
         shadowBoard[y][x] = null;
-
-        //Updating the AI's knowledge
-        if(shadowBoard[move.getX()][move.getX()].getName() == null) {
-            if (!shadowBoard[move.getX()][move.getX()].getHasMoved()) {
-                shadowBoard[move.getX()][move.getX()].moved();
-            }
-            if(!(piece.getX()+piece.getY() == (piece.getX()+piece.getY()-1) ||
-                    piece.getX()+piece.getY() == (piece.getX()+piece.getY()+1))){
-                shadowBoard[move.getX()][move.getX()] = new Unit(2, "Scout", "S", Players.AI, 15, PieceType.SCOUT);
-                for(int i = 0; i < shadowArmy.length; i++) {
-                    if (shadowArmy[i].getName() == null) {
-                        shadowArmy[i].setAmount(shadowArmy[i].getAmount(PieceType.SCOUT) - 1, PieceType.SCOUT);
-                    }
-                }
-            }
-        }
-        //Finished updating the AI's knowledge
 
         printBoard(board);
     }
@@ -1933,6 +1932,7 @@ public class Driver {
         }
         board[y][x] = null;
         shadowBoard[y][x] = null;
+        printBoard(board);
     }
 
     public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print){
@@ -2029,9 +2029,9 @@ public class Driver {
             }
             s += offense.getPiece().getName() + " attacks ";
             if (p == Players.PLAYER) {
-                s = "the AI's ";
+                s += "the AI's ";
             } else {
-                s = "your ";
+                s += "your ";
             }
             s += defense.getPiece().getName();
         }
