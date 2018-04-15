@@ -124,18 +124,23 @@ public class Driver {
 
         boolean end = false;
 
-        for(;!end; turn = (turn + 1) % 2){
+        while(!end){
             switch (turn){
                 case 0:
+                    System.out.println("Your turn:");
                     try {
                         playerMove(board, armies, shadowBoard, shadowArmy);
                     }catch (IOException ioe){}
+                    System.out.print("\n\n\n");
                     break;  //Stops the switch statement
 
                 case 1:
+                    System.out.println("The computer's turn:");
                     aiMove(board, armies, shadowBoard, shadowArmy);
+                    System.out.print("\n\n\n");
                     break;  //Stops the switch statement
             }   /*End switch statement*/
+            turn = (turn + 1) % 2;
         }   /*End for loop*/
     }   /*End playGame method*/
 
