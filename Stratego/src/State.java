@@ -178,23 +178,22 @@ public class State {
             double best = -1;
             moveable = Driver.moveFilter(board, player, false);
             moves = new ArrayList<>();
-            for (int i = 0; i < moveable.size(); i++) {
-                moves.add(moveable.get(i).generateMoves());
-            }
             ArrayList<State> states = new ArrayList<>();
             boolean stop = false;
-            for (int i = 0, k = 0; !stop && i < moves.size(); i++) {
+            for (int i = 0, k = 0; !stop && i < moveable.size(); i++) {
+                moves.add(moveable.get(i).generateMoves());
+
                 for (int j = 0; !stop && j < moves.get(i).size(); j++, k++) {
                     if (j > 0 && level < maxLevel) {
                         if (player == Players.PLAYER) {
                             for (int m = 0; !stop && m < level; m += 2) {
-                                if (prune[m] != -1 && best < prune[m]) {
+                                if (prune[m] != -1 && best >= prune[m]) {
                                     stop = true;
                                 }
                             }
                         } else {
                             for (int m = 1; !stop && m < level; m += 2) {
-                                if (prune[m] != -1 && best > prune[m]) {
+                                if (prune[m] != -1 && best <= prune[m]) {
                                     stop = true;
                                 }
                             }
