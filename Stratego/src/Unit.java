@@ -31,6 +31,10 @@ public class Unit {
         predictStrength();
     }
 
+    public Unit(Players o){
+        owner = o;
+    }
+
     public String getName(){
         return name;
     }

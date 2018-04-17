@@ -38,7 +38,7 @@ public class Moves {
                         while (((x+i) < 10) &&
                                 (board[y][x+i] == null || board[y][x+i].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
-                            if(board[y][x+i] == null && ((y == 5 || y == 4) && (x != 1 && x != 5) || (y != 5 && y != 4))) { // Eager Advancing, space is unoccupied AND isn't a Lake.
+                            if(board[y][x+i] == null && board[y][x+i].getOwner() != Players.LAKE) { // Eager Advancing, space is unoccupied AND isn't a Lake.
                                 moves.add(new Moves(board, y, x+i));
                                 count++;
                                 i++;
@@ -60,7 +60,7 @@ public class Moves {
                         while (((x-i) > -1) &&
                                 (board[y][x-i] == null || board[y][x-i].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
-                            if (board[y][x-i] == null && (y == 5 || y == 4 && (x != 4 && x != 8) || (y != 5 && y != 4))) { // Eager Advancing, space is unoccupied AND isn't a Lake.
+                            if (board[y][x-i] == null && board[y][x-i].getOwner() != Players.LAKE) { // Eager Advancing, space is unoccupied AND isn't a Lake.
                                 moves.add(new Moves(board, y, x-i));
                                 count++;
                                 i++;
@@ -82,7 +82,7 @@ public class Moves {
                         while (((y+i) < 10) &&
                                 (board[y+i][x] == null || board[y+i][x].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
-                            if (board[y+i][x] == null && (y == 6 && (x != 2 && x!= 3 && x!= 6 && x!= 7) || y != 6)) { // Eager Advancing, space is unoccupied AND isn't a Lake.
+                            if (board[y+i][x] == null && board[y+i][x].getOwner() != Players.LAKE) { // Eager Advancing, space is unoccupied AND isn't a Lake.
                                 moves.add(new Moves(board, y+i, x));
                                 count++;
                                 i++;
@@ -104,7 +104,7 @@ public class Moves {
                         while (((y-i) > -1) &&
                                 (board[y-i][x] == null || board[y-i][x].getOwner() != board[y][x].getOwner()) &&
                                 guard == false) {
-                            if (board[y-i][x] == null && (y == 3 && (x != 2 && x!= 3 && x!= 6 && x!= 7) || y != 3)) { // Eager Advancing, space is unoccupied AND isn't a Lake.
+                            if (board[y-i][x] == null  && board[y-i][x].getOwner() != Players.LAKE) { // Eager Advancing, space is unoccupied AND isn't a Lake.
                                 moves.add(new Moves(board, y-i, x));
                                 count++;
                                 i++;
