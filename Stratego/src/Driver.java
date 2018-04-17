@@ -126,18 +126,18 @@ public class Driver {
 
         while(!end){
             switch (turn){
-                case 0:
+                case 0:     //Player's turn
                     System.out.println("Your turn:");
                     try {
                         playerMove(board, armies, shadowBoard, shadowArmy);
                     }catch (IOException ioe){}
-                    System.out.print("\n\n\n");
+                    System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
 
-                case 1:
+                case 1:     //AI's turn
                     System.out.println("The computer's turn:");
                     aiMove(board, armies, shadowBoard, shadowArmy);
-                    System.out.print("\n\n\n");
+                    System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
             }   /*End switch statement*/
             turn = (turn + 1) % 2;
@@ -353,6 +353,14 @@ public class Driver {
             playerChoosePiece(board, armies[0][0]);     /*Allows the user to set up their pieces*/
         }catch(Exception e){}           /*End try-catch block*/
         aiSetup(board, armies[1][0]);   /*Sets up the AI's pieces*/
+        board[4][2]= new Unit(Players.LAKE);
+        board[4][3]= new Unit(Players.LAKE);
+        board[4][6]= new Unit(Players.LAKE);
+        board[4][7]= new Unit(Players.LAKE);
+        board[5][2]= new Unit(Players.LAKE);
+        board[5][3]= new Unit(Players.LAKE);
+        board[5][6]= new Unit(Players.LAKE);
+        board[5][7]= new Unit(Players.LAKE);
     }   /*End setupBoard method*/
 
     /**
@@ -526,23 +534,45 @@ public class Driver {
      * @param army The array of Units that represents the pieces of the AI.
      */
     public static void aiSetup(Unit[][] board, Unit[] army){
-        int placed = 0;     /*Number of pieces that the user has placed*/
         double[][] values = new double[12][40];
+        /*
+         * Is used to hold the scores that the AI will use to set up
+         */
         double[][] modified = new double[12][40];
+        /*
+         * Counts the number of times each value is the values 2D array
+         * is modified. Will be used to normalize those values.
+         */
         for(int i = 0; i < modified.length; i++){
             for(int j = 0; j < modified[i].length; j++){
                 modified[i][j] = 1;
-            }
-        }
+            } //End inner for loop
+        }   //End outer for loop
+
         aiInitialValues(values);
+        /*
+         * Generates the initial values for the AI to use to place
+         * pieces.
+         */
         aiConfig(values, modified);
+        /*
+         * Modifies the values based on win rates of
+         * different starting configurations
+         */
         aiTeam(values, modified);
+        /*
+         * Modifies the values based on the win rates of
+         * different team setups
+         */
         for(int i = 0; i < values.length; i++){
             for (int j = 0; j < values[i].length; j++){
                 values[i][j] /= modified[i][j];
-            }
-        }
+            }   //End inner for loop
+        }   //End outer for loop
         aiPlaceUnits(values, board, army);
+        /*
+         * Actually places the AI's units on the board
+         */
     }   /*End aiSetup method*/
 
     /**
@@ -849,6 +879,12 @@ public class Driver {
         }   /*End outer try-catch block*/
     }   /*End buildShadowBoard method*/
 
+    /**
+     * This method generates the initial values that the AI will use to setup.  This is
+     * similar to the buildShadowBoard method, but the values generated here will be
+     * modified and slightly randomized in other methods.
+     * @param values The 2D array that the AI will use to store the win rates of every piece in every starting spot
+     */
     public static void aiInitialValues(double[][] values){
         BufferedReader[] readers = new BufferedReader[12];
         /*
@@ -979,8 +1015,8 @@ public class Driver {
                                          * in the correct index int the info[][].
                                          */
 
-                    }   /*End second-level for loop*/
-                }   /*End first-level for loop*/
+                    }   /*End inner for loop*/
+                }   /*End outer for loop*/
 
                 for(int i = 0; i < readers.length; i++){
                     /*
@@ -1001,17 +1037,16 @@ public class Driver {
              */
             System.out.println("file not found");
         }   /*End outer try-catch block*/
-    }
+    }   //End aiInitialValues method
 
+    /**
+     * This method will modify the values in the values array based on the
+     * slightly randomized win rates of different starting configurations.
+     * @param values The 2D array that the AI will use to store the win rates of every piece in every starting spot
+     * @param modified The 2D array that counts the number of times each value in the values array was modified
+     */
     public static void aiConfig(double[][] values, double[][] modified){
         try{
-            /*
-             * Initializes each of the BufferedReader with a different text file.
-             * These files contains the win,loss,draw statistics for each piece
-             * on each starting space of the board.  There is 1 file per piece, and
-             * there are 12 different pieces.  This means 12 BufferedReaders are
-             * needed.
-             */
             ClassLoader classLoader = Driver.class.getClassLoader();
             /*
              * This is used only to access the text files because of the way
@@ -1019,6 +1054,10 @@ public class Driver {
              */
             File file = new File(classLoader.getResource("InitialSetups.txt").getFile());
             BufferedReader reader = new BufferedReader(new FileReader(file));
+            /*
+             * Initializes the BufferedReader to read the text file.
+             *
+             */
 
             try{
                 String s = reader.readLine();
@@ -1042,7 +1081,7 @@ public class Driver {
                                     modified[0][28] += 1;
                                     values[0][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][27] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 case "Right":
                                     values[0][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1057,7 +1096,7 @@ public class Driver {
                                     modified[0][21] += 1;
                                     values[0][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][20] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 default:
                                     values[0][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1076,9 +1115,9 @@ public class Driver {
                                     modified[0][24] += 1;
                                     values[0][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][23] += 1;
-                                    break;
-                            }
-                            break;
+                                    break;  //Stops the switch statement
+                            }   //End inner switch statement
+                            break;  //Stops the switch statement
 
                         default:
                             switch (tokenize[6]){
@@ -1095,7 +1134,7 @@ public class Driver {
                                     modified[0][9] += 1;
                                     values[0][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][9] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 case "Right":
                                     values[0][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1110,7 +1149,7 @@ public class Driver {
                                     modified[0][1] += 1;
                                     values[0][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][0] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 default:
                                     values[0][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1129,10 +1168,10 @@ public class Driver {
                                     modified[0][4] += 1;
                                     values[0][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][3] += 1;
-                                    break;
-                            }
-                            break;
-                    }
+                                    break;  //Stops the switch statement
+                            }   //End inner switch statement
+                            break;  //Stops the switch statement
+                    }   //End first outer switch statement
 
                     switch(tokenize[5]){
                         case "Y":
@@ -1150,7 +1189,7 @@ public class Driver {
                                     modified[1][28] += 1;
                                     values[1][27] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][27] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 case "Right":
                                     values[1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1165,7 +1204,7 @@ public class Driver {
                                     modified[1][21] += 1;
                                     values[1][20] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][20] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 default:
                                     values[1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1184,9 +1223,9 @@ public class Driver {
                                     modified[1][24] += 1;
                                     values[1][23] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][23] += 1;
-                                    break;
-                            }
-                            break;
+                                    break;  //Stops the switch statement
+                            }   //End inner switch statement
+                            break;  //Stops the switch statement
 
                         default:
                             switch (tokenize[7]){
@@ -1203,7 +1242,7 @@ public class Driver {
                                     modified[1][8] += 1;
                                     values[1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][7] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 case "Right":
                                     values[1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1218,7 +1257,7 @@ public class Driver {
                                     modified[1][1] += 1;
                                     values[1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][0] += 1;
-                                    break;
+                                    break;  //Stops the switch statement
 
                                 default:
                                     values[1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1237,11 +1276,10 @@ public class Driver {
                                     modified[1][4] += 1;
                                     values[1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][3] += 1;
-                                    break;
-                            }
-                            break;
-                    }
-
+                                    break;  //Stops the switch statement
+                            }   //End inner switch statement
+                            break;  //Stops the switch statement
+                    }   //End second outer switch statement
 
                     int flagSpace = Integer.parseInt(tokenize[9]);
                     int k = 9;
@@ -1254,29 +1292,29 @@ public class Driver {
                                 if(tokenize[10].equals("Y")){
                                     values[10][k - 1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[10][k - 1] += 1;
-                                }
+                                }   //End first inner if statement
                                 if(tokenize[11].equals("Y")){
                                     values[10][k + 10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[10][k + 10] += 1;
-                                }
+                                }   //End second inner if statement
                                 if(tokenize[12].equals("Y")){
                                     values[10][k + 1] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[10][k + 1] += 1;
-                                }
+                                }   //End third inner if statement
                                 if(tokenize[13].equals("Y")){
                                     values[10][k - 10] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[10][k - 1] += 1;
-                                }
-                            }
-                        }
+                                }   //End fourth inner if statement
+                            }   //End outer if statement
+                        }   //End inner for loop
                         if (k % 10 == 0) {
                             k += 20;
-                        }
+                        }   //End if statement
                         k--;
-                    }
+                    }   //End outer for loop
 
                     s = reader.readLine();
-                }
+                }   //End while loop
             reader.close();
             } catch (IOException ioe) {
                 /*
@@ -1290,7 +1328,7 @@ public class Driver {
              */
             System.out.println("file not found");
         }   /*End outer try-catch block*/
-    }
+    }   //End aiConfig method
 
     public static void aiTeam(double[][] values, double[][] modified){
         BufferedReader[] readers = new BufferedReader[9];
@@ -1383,9 +1421,9 @@ public class Driver {
                                         modified[j - 1][8] += 1;
                                         values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][7] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 1:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1440,9 +1478,9 @@ public class Driver {
                                         modified[j - 1][4] += 1;
                                         values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][3] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 2:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1485,9 +1523,9 @@ public class Driver {
                                         modified[j - 1][1] += 1;
                                         values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][0] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 3:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1517,9 +1555,9 @@ public class Driver {
                                         modified[j - 1][8] += 1;
                                         values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][7] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 4:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1557,9 +1595,9 @@ public class Driver {
                                         modified[j - 1][4] += 1;
                                         values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][3] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 5:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1589,9 +1627,9 @@ public class Driver {
                                         modified[j - 1][1] += 1;
                                         values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][0] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 6:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1621,9 +1659,9 @@ public class Driver {
                                         modified[j - 1][8] += 1;
                                         values[j - 1][7] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][7] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 7:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1661,9 +1699,9 @@ public class Driver {
                                         modified[j - 1][4] += 1;
                                         values[j - 1][3] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][3] += 1;
-                                    }
-                                }
-                                break;
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
 
                             case 8:
                                 for(int j = 1; j < tokenize.length; j++){
@@ -1693,13 +1731,13 @@ public class Driver {
                                         modified[j - 1][1] += 1;
                                         values[j - 1][0] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                         modified[j - 1][0] += 1;
-                                    }
-                                }
-                                break;
-                        }
+                                    }   //End if-else statement
+                                }   //End for loop
+                                break;  //Stops the switch statement
+                        }   //End switch statement
 
                         s = readers[i].readLine();
-                    }
+                    }   //End while loop
                     readers[i].close();
                 } catch (IOException ioe) {
                 /*
@@ -1707,26 +1745,18 @@ public class Driver {
                  */
                     ioe.printStackTrace();
                 }   /*End inner try-catch block*/
-            }
+            }   //End for loop
         } catch (FileNotFoundException fnfe) {
             /*
              * Catch file not found exception.
              */
             System.out.println("file not found");
-        }
-    }
+        }   //End outer try-catch block
+    }   //End aiTeam method
 
     public static void aiPlaceUnits(double[][] values, Unit[][] board, Unit[] army){
         int placed = 0;
         while(placed != 40) {
-            /*printBoard(board);
-            for(int i = 0; i < values.length; i++){
-                for(int j = 0; j < values[i].length; j++){
-                    System.out.print(values[i][j] + ",");
-                }
-                System.out.print("\n");
-            }
-            System.out.print("\n\n\n");*/
             double high = -1;
             int y = -1;
             int x = -1;
@@ -1740,61 +1770,60 @@ public class Driver {
                         x = j % 10;
                         unit = i;
                         place = j;
-                    }
-                }
-            }
+                    }   //End if statement
+                }   //End inner for loop
+            }   //End outer for loop
             if(unit != -1){
                 String name = "";
                 switch (unit) {
                     case 0:
                         name = "Marshall";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 1:
                         name = "General";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 2:
                         name = "Colonel";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 3:
                         name = "Major";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 4:
                         name = "Captain";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 5:
                         name = "Lieutenant";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 6:
                         name = "Serjeant";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 7:
                         name = "Miner";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 8:
                         name = "Scout";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 9:
                         name = "Spy";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 10:
                         name = "Bomb";
-                        break;
+                        break;  //Stops the switch statement
 
                     case 11:
                         name = "Flag";
-                        break;
-                }
-                //System.out.print("\n" + name + "," + (x-1) + "," + (y-1) + "," + high + "\n");
+                        break;  //Stops the switch statement
+                }   //End switch statement
                 boolean flag = false;
                 for (int i = 0; !flag && i < army.length; i++) {
                     if (army[i].getName().equals(name) && !army[i].getPlaced()) {
@@ -1803,18 +1832,18 @@ public class Driver {
                         placed++;
                         for (int j = 0; j < values.length; j++) {
                             values[j][place] = -2;
-                        }
+                        }   //End inner for loop
                         flag = true;
-                    }
-                }
+                    }   //End if statement
+                }   //End outer for loop
                 if (!flag) {
                     for (int i = 0; i < values[unit].length; i++) {
                         values[unit][i] = -2;
-                    }
-                }
-            }
-        }
-    }
+                    }   //End for loop
+                }   //End if statement
+            }   //End the if statement
+        }   //End the for loop
+    }   //End aiPlaceUnits method
 
     /**
      * Lets the player make a move.
@@ -1834,7 +1863,7 @@ public class Driver {
         for(int i=0; i < moves.size(); i++) {
             Moves current = moves.get(i);
             System.out.println(i+1+". ("+(current.getY()+1)+", "+(current.getX()+1)+")");
-        }
+        }   //End for loop
         choice = Integer.parseInt(stdin.readLine());
         Moves move = moves.get(choice-1);
         if(move.getPiece() == null) {
@@ -1848,26 +1877,26 @@ public class Driver {
                 for(int i = 0; i < shadowArmy.length; i++){
                     if(shadowArmy[i].getName() == null){
                         shadowArmy[i].setAmount(shadowArmy[i].getAmount(board[y][x].getType()) - 1, board[y][x].getType());
-                    }
-                }
-            }
+                    }   //End inner if statement
+                }   //End for loop
+            }   //End outer if statement
             //Finished updating the AI's knowledge
 
             //Updating the AI's knowledge
             if(shadowBoard[piece.getX()][piece.getX()].getName() == null) {
                 if (!shadowBoard[piece.getX()][piece.getX()].getHasMoved()) {
                     shadowBoard[piece.getX()][piece.getX()].moved();
-                }
+                }   //End inner if statement
                 if(!(piece.getX()+piece.getY() == (move.getX()+move.getY()-1) ||
                         piece.getX()+piece.getY() == (move.getX()+move.getY()+1))){
                     shadowBoard[piece.getX()][piece.getX()] = new Unit(2, "Scout", "S", Players.AI, 15, PieceType.SCOUT);
                     for(int i = 0; i < shadowArmy.length; i++) {
                         if (shadowArmy[i].getName() == null) {
                             shadowArmy[i].setAmount(shadowArmy[i].getAmount(PieceType.SCOUT) - 1, PieceType.SCOUT);
-                        }
-                    }
-                }
-            }
+                        }   //End inner if statement
+                    }   //End for loop
+                }   //End inner if statement
+            }   //End outer if statement
             //Finished updating the AI's knowledge
             Moves current = ruleBook(piece, move, Players.PLAYER, true);
             if(current == null) {
@@ -1875,17 +1904,16 @@ public class Driver {
                 board[move.getY()][move.getX()] = null;
                 shadowBoard[y][x] = null;
                 shadowBoard[move.getY()][move.getX()] = null;
-            }
-            else {
+            } else {
                 board[move.getY()][move.getX()] = current.getPiece();
                 shadowBoard[move.getY()][move.getX()] = shadowBoard[current.getY()][current.getX()];
-            }
-        }
+            }   //End inner if-else statement
+        }   //End outer if-else statement
         board[y][x] = null;
         shadowBoard[y][x] = null;
 
         printBoard(board);
-    }
+    }   //End playerMove method
 
     /**
      * Lets the AI make a move.
@@ -1918,9 +1946,9 @@ public class Driver {
                 for(int i = 0; i < shadowArmy.length; i++){
                     if(shadowArmy[i].getName() == null){
                         shadowArmy[i].setAmount(shadowArmy[i].getAmount(board[move.getY()][move.getX()].getType()) - 1, board[move.getY()][move.getX()].getType());
-                    }
-                }
-            }
+                    }   //End inner if statement
+                }   //End for loop
+            }   //End outer fi statement
             //Finished updating the AI's knowledge
 
             Moves current = ruleBook(piece, move, Players.AI, true);
@@ -1929,23 +1957,22 @@ public class Driver {
                 board[move.getY()][move.getX()] = null;
                 shadowBoard[y][x] = null;
                 shadowBoard[move.getY()][move.getX()] = null;
-            }
-            else {
+            } else {
                 board[move.getY()][move.getX()] = current.getPiece();
                 shadowBoard[move.getY()][move.getX()] = shadowBoard[current.getY()][current.getX()];
-            }
-        }
+            }   //End inner if-else statement
+        }   //End outer if-else statement
         board[y][x] = null;
         shadowBoard[y][x] = null;
         printBoard(board);
-    }
+    }   //End aiMove method
 
     public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print){
         int index = 0;
         ArrayList<Moves> options = new ArrayList<>();
         if(print) {
             System.out.println("Pieces you can move : ");
-        }
+        }   //End if statement
         for (int i = 0; i < board.length; i++) // Iterate through X coordinates of Board.
         {
             for(int j = 0; j < board[i].length; j++) // Iterate through Y coordinates of Board.
@@ -1957,64 +1984,67 @@ public class Driver {
                     if((current.getType() == null && current.getScore() != 11)|| (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
                         // Checks for movement in the Down direction.
-                        if ( i < 9 && (i == 3 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 3) &&
-                                (board[i + 1][j] == null || board[i + 1][j].getOwner() != player)) {
+                        if ( i < 9 &&
+                                (board[i + 1][j] == null || board[i + 1][j].getOwner() != player || board[i + 1][j].getOwner() != Players.LAKE)) {
                             if (player == Players.PLAYER && current.getName() != null) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
                                     System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                                }                            } // Else just store move and increment count.
-                            else {
-                                options.add(new Moves(board, i, j));
-                                index++;
-                            }
-                        }
-                        // Checks for movement in the Up direction.
-                        else if (i > 0 && (i == 6 && (j != 2 && j!= 3 && j!= 6 && j!= 7) || i != 6) &&
-                                (board[i - 1][j] == null || board[i - 1][j].getOwner() != player)) {
-                            if (player == Players.PLAYER) { // If it's players turn print message.
-                                options.add(new Moves(board, i, j));// Count incremented below
-                                if(print) {
-                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                                }                            } // Else just store move and increment count.
-                            else {
-                                options.add(new Moves(board, i, j));
-                                index++;
-                            }
-                        }
-                        // Checks for movement in the Right direction.
-                        else if (j < 9 && ((i == 5 || i == 4) && (j != 1 && j != 5) || (i != 5 && i != 4)) &&
-                                (board[i][j + 1] == null || board[i][j + 1].getOwner() != player)) {
-                            if (player == Players.PLAYER) { // If it's players turn print message.
-                                options.add(new Moves(board, i, j));// Count incremented below
-                                if(print) {
-                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                                }                            } // Else just store move and increment count.
-                            else {
-                                options.add(new Moves(board, i, j));
-                                index++;
-                            }
-                        }
-                        // Checks for movement in the Left direction.
-                        else if (j > 0 && (i == 5 || i == 4 && (j != 4 && j != 8) || (i != 5 && i != 4)) &&
-                                (board[i][j - 1] == null || board[i][j - 1].getOwner() != player)) {
-                            if (player == Players.PLAYER) { // If it's players turn print message.
-                                options.add(new Moves(board, i, j));// Count incremented below
-                                if(print) {
-                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
-                                }
+                                }   //End inner if statement
                             } // Else just store move and increment count.
                             else {
                                 options.add(new Moves(board, i, j));
                                 index++;
-                            }
+                            }   //End inner if-else statement
                         }
-                    }
-                }
-            }
-        }
+                        // Checks for movement in the Up direction.
+                        else if (i > 0 &&
+                                (board[i - 1][j] == null || board[i - 1][j].getOwner() != player  || board[i - 1][j].getOwner() != Players.LAKE)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }   //End inner if statement
+                            } // Else just store move and increment count.
+                            else {
+                                options.add(new Moves(board, i, j));
+                                index++;
+                            }   //End inner if-else statement
+                        }
+                        // Checks for movement in the Right direction.
+                        else if (j < 9 &&
+                                (board[i][j + 1] == null || board[i][j + 1].getOwner() != player || board[i][j + 1].getOwner() != Players.LAKE)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }   //End inner if statement
+                            } // Else just store move and increment count.
+                            else {
+                                options.add(new Moves(board, i, j));
+                                index++;
+                            }   //End inner if-else statement
+                        }
+                        // Checks for movement in the Left direction.
+                        else if (j > 0 && (board[i][j - 1] == null ||
+                                board[i][j - 1].getOwner() != player || board[i][j - 1].getOwner() != Players.LAKE)) {
+                            if (player == Players.PLAYER) { // If it's players turn print message.
+                                options.add(new Moves(board, i, j));// Count incremented below
+                                if(print) {
+                                    System.out.println(++index + ". " + current.getName() + "(" + (i + 1) + ", " + (j + 1) + ")");
+                                }   //End inner if statement
+                            } // Else just store move and increment count.
+                            else {
+                                options.add(new Moves(board, i, j));
+                                index++;
+                            }   //End inner if-else statement
+                        }   //End outer if-else statement
+                    }   //End inner if statement
+                }   //End outer if statement
+            }   //End inner for loop
+        }   //End outer for loop
         return options;
-    }
+    }   //End moveFilter method
 
     /**
      * ruleBook() serves to simplify the process of which pieces will occupy a space on the board at a given time.
@@ -2031,13 +2061,13 @@ public class Driver {
                 s = "Your ";
             } else {
                 s = "The AI's ";
-            }
+            }   //End inner if-else statement
             s += offense.getPiece().getName() + " attacks ";
             if (p == Players.PLAYER) {
                 s += "the AI's ";
             } else {
                 s += "your ";
-            }
+            }   //End inner if-else statement
             s += defense.getPiece().getName();
         }
         if(defense.getPiece().getType() == null || offense.getPiece().getType() == null){
@@ -2047,7 +2077,9 @@ public class Driver {
                 winner = null;
             } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
                 winner = offense;
-            } else winner = defense;
+            } else {
+                winner = defense;
+            }   //End inner if-else statement
         }else {
             switch (defense.getPiece().getType()) {
                 case BOMB:
@@ -2055,62 +2087,62 @@ public class Driver {
                         winner = offense;
                         if(print){
                             s += " and wins!";
-                        }
+                        }   //End if statement
                     } else {
                         winner = defense;
                         if(print){
                             s += " and loses.";
-                        }
-                    }
+                        }   //End if statement
+                    }   //End inner if-else statement
                     break;
                 case MARSHALL:
                     if (offense.getPiece().getType() == PieceType.SPY) {
                         winner = offense;
                         if(print){
                             s += " and wins!";
-                        }
+                        }   //End if statement
                     } else {
                         winner = defense;
                         if(print){
                             s += " and loses.";
-                        }
-                    }
+                        }   //End if statement
+                    }   //End inner if-else statement
                     break;
                 case SPY:
                     winner = offense;
                     if(print){
                         s += " and wins!";
-                    }
+                    }   //End if statement
                     break;
                 case FLAG:
                     winner = offense;
                     if(print){
                         s += " and wins!";
-                    }
+                    }   //End if statement
                     break;
                 default:
                     if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
                         winner = null;
                         if(print){
                             s += " and both die.";
-                        }
+                        }   //End if statement
                     } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
                         winner = offense;
                         if(print){
                             s += " and wins!";
-                        }
+                        }   //End if statement
                     } else {
                         winner = defense;
                         if(print){
                             s += " and loses.";
-                        }
-                    }
-            }
-        }
+                        }   //End if statement
+                    }   //End inner if-else statement
+            }   //End switch statement
+        }   //End outer if-else statement
         if(print){
             System.out.println(s);
-        }
+        }   //End if statement
         return winner;
-    }
+    }   //End ruleBook method
 }   /*End Driver class*/
 
