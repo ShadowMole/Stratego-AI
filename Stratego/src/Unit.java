@@ -242,10 +242,13 @@ public class Unit {
             strength = 8;
         }
         else if(score >= 45) { // MAJOR Strength
-            if(Math.random() > .5) {
-                strength = 7;
-            }else{
+            int rng = Randomizer.getRgen(12);
+            if(rng == 0) {
+                strength = 1;
+            }else if(rng > 0 && rng < 7){
                 strength = 3;
+            }else{
+                strength = 7;
             }
         }
         else if(score >= 30) {

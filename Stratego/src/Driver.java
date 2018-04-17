@@ -877,6 +877,14 @@ public class Driver {
              */
             System.out.println("file not found");
         }   /*End outer try-catch block*/
+        sb[4][2]= new Unit(Players.LAKE);
+        sb[4][3]= new Unit(Players.LAKE);
+        sb[4][6]= new Unit(Players.LAKE);
+        sb[4][7]= new Unit(Players.LAKE);
+        sb[5][2]= new Unit(Players.LAKE);
+        sb[5][3]= new Unit(Players.LAKE);
+        sb[5][6]= new Unit(Players.LAKE);
+        sb[5][7]= new Unit(Players.LAKE);
     }   /*End buildShadowBoard method*/
 
     /**
@@ -1883,13 +1891,13 @@ public class Driver {
             //Finished updating the AI's knowledge
 
             //Updating the AI's knowledge
-            if(shadowBoard[piece.getX()][piece.getX()].getName() == null) {
-                if (!shadowBoard[piece.getX()][piece.getX()].getHasMoved()) {
-                    shadowBoard[piece.getX()][piece.getX()].moved();
+            if(shadowBoard[piece.getY()][piece.getX()].getName() == null) {
+                if (!shadowBoard[piece.getY()][piece.getX()].getHasMoved()) {
+                    shadowBoard[piece.getY()][piece.getX()].moved();
                 }   //End inner if statement
                 if(!(piece.getX()+piece.getY() == (move.getX()+move.getY()-1) ||
                         piece.getX()+piece.getY() == (move.getX()+move.getY()+1))){
-                    shadowBoard[piece.getX()][piece.getX()] = new Unit(2, "Scout", "S", Players.AI, 15, PieceType.SCOUT);
+                    shadowBoard[piece.getY()][piece.getX()] = new Unit(2, "Scout", "S", Players.AI, 15, PieceType.SCOUT);
                     for(int i = 0; i < shadowArmy.length; i++) {
                         if (shadowArmy[i].getName() == null) {
                             shadowArmy[i].setAmount(shadowArmy[i].getAmount(PieceType.SCOUT) - 1, PieceType.SCOUT);
@@ -1922,7 +1930,7 @@ public class Driver {
      * @return boolean Whether the game has ended or not
      */
     public static void aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) {
-        State root = new State(shadowBoard, 0, 10);
+        State root = new State(shadowBoard, 0, 8);
         int best = (int) root.getBestMove();
         int a = root.getOrigial();
         Moves piece = root.getMoveable().get(a);
@@ -1984,8 +1992,7 @@ public class Driver {
                     if((current.getType() == null && current.getScore() != 11)|| (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
                         // Checks for movement in the Down direction.
-                        if ( i < 9 &&
-                                (board[i + 1][j] == null || board[i + 1][j].getOwner() != player || board[i + 1][j].getOwner() != Players.LAKE)) {
+                        if ( i < 9 && (board[i + 1][j] == null || (board[i + 1][j].getOwner() != player && board[i + 1][j].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER && current.getName() != null) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -1999,7 +2006,7 @@ public class Driver {
                         }
                         // Checks for movement in the Up direction.
                         else if (i > 0 &&
-                                (board[i - 1][j] == null || board[i - 1][j].getOwner() != player  || board[i - 1][j].getOwner() != Players.LAKE)) {
+                                (board[i - 1][j] == null || (board[i - 1][j].getOwner() != player  && board[i - 1][j].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -2013,7 +2020,7 @@ public class Driver {
                         }
                         // Checks for movement in the Right direction.
                         else if (j < 9 &&
-                                (board[i][j + 1] == null || board[i][j + 1].getOwner() != player || board[i][j + 1].getOwner() != Players.LAKE)) {
+                                (board[i][j + 1] == null || (board[i][j + 1].getOwner() != player && board[i][j + 1].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -2026,8 +2033,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Left direction.
-                        else if (j > 0 && (board[i][j - 1] == null ||
-                                board[i][j - 1].getOwner() != player || board[i][j - 1].getOwner() != Players.LAKE)) {
+                        else if (j > 0 && (board[i][j - 1] == null || (board[i][j - 1].getOwner() != player && board[i][j - 1].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -2073,6 +2079,10 @@ public class Driver {
         if(defense.getPiece().getType() == null || offense.getPiece().getType() == null){
             if(offense.getPiece().getType() == null && offense.getPiece().getStrength() == 3 && defense.getPiece().getType() == PieceType.BOMB){
                 winner = offense;
+            }else if(offense.getPiece().getType() == null && offense.getPiece().getStrength() == 1 && defense.getPiece().getType() == PieceType.MARSHALL){
+                winner = offense;
+            }else if (defense.getPiece().getType() == null && defense.getPiece().getStrength() == 10 && offense.getPiece().getType() == PieceType.SPY){
+
             }else if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
                 winner = null;
             } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
