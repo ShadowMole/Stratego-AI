@@ -226,7 +226,9 @@ public class Unit {
     }
 
     public void predictStrength() {
-        if(score >= 95) { // MARSHALL Strength
+        if(!hasMoved && score >= 200){
+            strength = -1;
+        }else if(score >= 95) { // MARSHALL Strength
             strength = 10;
         }
         else if(score >= 80) { // GENERAL Strength
@@ -236,7 +238,11 @@ public class Unit {
             strength = 8;
         }
         else if(score >= 45) { // MAJOR Strength
-            strength = 7;
+            if(Math.random() > .5) {
+                strength = 7;
+            }else{
+                strength = 3;
+            }
         }
         else if(score >= 30) {
             if(hasMoved) { // CAPTAIN Strength

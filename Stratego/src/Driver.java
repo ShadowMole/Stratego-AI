@@ -241,7 +241,7 @@ public class Driver {
                  */
             }   /*End inner for loop*/
 
-            armies[i][0][39] = new Unit(-1, "Flag", "F", current, 1000, PieceType.FLAG);
+            armies[i][0][39] = new Unit(-1, "Flag", "F", current, 2000, PieceType.FLAG);
             /*
              * Creates 1 Flag Unit
              */
@@ -767,7 +767,7 @@ public class Driver {
                                             break;  //Stops the switch statement
 
                                         case 11:    //Flag
-                                            info[k][3] = 1000;
+                                            info[k][3] = 2000;
                                             info[k][4] = 1;
                                             break;  //Stops the switch statement
                                     }   /*End switch statement*/
@@ -1894,7 +1894,7 @@ public class Driver {
      * @return boolean Whether the game has ended or not
      */
     public static void aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) {
-        State root = new State(shadowBoard, 0, 6);
+        State root = new State(shadowBoard, 0, 10);
         int best = (int) root.getBestMove();
         int a = root.getOrigial();
         Moves piece = root.getMoveable().get(a);
@@ -2041,7 +2041,9 @@ public class Driver {
             s += defense.getPiece().getName();
         }
         if(defense.getPiece().getType() == null || offense.getPiece().getType() == null){
-            if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
+            if(offense.getPiece().getType() == null && offense.getPiece().getStrength() == 3 && defense.getPiece().getType() == PieceType.BOMB){
+                winner = offense;
+            }else if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
                 winner = null;
             } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
                 winner = offense;
