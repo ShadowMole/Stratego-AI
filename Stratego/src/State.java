@@ -17,8 +17,10 @@ public class State {
     private double[] prune;
     private ArrayList<Moves> allMoves;
     private int origial;
+    private ArrayList<Moves> memoryAI;
+    private ArrayList<Moves> memoryP;
 
-    public State(Unit[][] b, int l, int m){
+    public State(Unit[][] b, int l, int m, ArrayList<Moves> memA, ArrayList<Moves> memP){
         board = new Unit[b.length][b[0].length];
         for(int i = 0; i < b.length; i++){
             for(int j = 0; j < b[i].length; j++){
@@ -32,9 +34,17 @@ public class State {
         for(int i = 0; i < prune.length; i++){
             prune[i] = -1;
         }
+        memoryAI = new ArrayList<>();
+        for(int i = 0; i < memA.size(); i++){
+            memoryAI.add(memA.get(i));
+        }
+        memoryP = new ArrayList<>();
+        for(int i = 0; i < memP.size(); i++){
+            memoryP.add(memP.get(i));
+        }
     }
 
-    public State(Unit[][] b, int l, int m, Moves old, Moves knew, double[] p){
+    public State(Unit[][] b, int l, int m, Moves old, Moves knew, double[] p, ArrayList<Moves> memA, ArrayList<Moves> memP){
         board = new Unit[b.length][b[0].length];
         for(int i = 0; i < b.length; i++){
             for(int j = 0; j < b[i].length; j++){
@@ -63,6 +73,25 @@ public class State {
             }
         }
         board[y][x] = null;
+        memoryAI = new ArrayList<>();
+        for(int i = 0; i < memA.size(); i++){
+            memoryAI.add(memA.get(i));
+        }
+        memoryP = new ArrayList<>();
+        for(int i = 0; i < memP.size(); i++){
+            memoryP.add(memP.get(i));
+        }
+        if(level % 2 == 0){
+            if(memoryAI.size() > 1) {
+                memoryAI.remove(0);
+            }
+            memoryAI.add(old);
+        }else{
+            if(memoryP.size() > 1) {
+                memoryP.remove(0);
+            }
+            memoryP.add(old);
+        }
     }
 
     public Moves getMove(){
@@ -117,17 +146,20 @@ public class State {
             return score;
         }else if(level == 0){
             Players player;
+            ArrayList<Moves> currentMem;
             if (level % 2 == 0) {
                 player = Players.AI;
+                currentMem = memoryAI;
             } else {
                 player = Players.PLAYER;
+                currentMem = memoryP;
             }
             double best = -1;
             double index = -1;
-            moveable = Driver.moveFilter(board, player, false);
+            moveable = Driver.moveFilter(board, player, false, currentMem);
             moves = new ArrayList<>();
             for (int i = 0; i < moveable.size(); i++) {
-                moves.add(moveable.get(i).generateMoves());
+                moves.add(moveable.get(i).generateMoves(currentMem));
             }
             allMoves = new ArrayList<>();
             for(int i = 0; i < moves.size(); i++){
@@ -138,7 +170,7 @@ public class State {
             ArrayList<State> states = new ArrayList<>();
             for (int i = 0, k = 0; i < moves.size(); i++) {
                 for (int j = 0; j < moves.get(i).size(); j++, k++) {
-                    State st = new State(board, level + 1, maxLevel, moveable.get(i), moves.get(i).get(j), prune);
+                    State st = new State(board, level + 1, maxLevel, moveable.get(i), moves.get(i).get(j), prune, memoryAI, memoryP);
                     states.add(st);
                     double s = st.getBestMove();
                     if (best == -1) {
@@ -170,18 +202,22 @@ public class State {
             return index;
         }else {
             Players player;
+            ArrayList<Moves> currentMem;
             if (level % 2 == 0) {
                 player = Players.AI;
+                currentMem = memoryAI;
+
             } else {
                 player = Players.PLAYER;
+                currentMem = memoryP;
             }
             double best = -1;
-            moveable = Driver.moveFilter(board, player, false);
+            moveable = Driver.moveFilter(board, player, false, currentMem);
             moves = new ArrayList<>();
             ArrayList<State> states = new ArrayList<>();
             boolean stop = false;
             for (int i = 0, k = 0; !stop && i < moveable.size(); i++) {
-                moves.add(moveable.get(i).generateMoves());
+                moves.add(moveable.get(i).generateMoves(currentMem));
 
                 for (int j = 0; !stop && j < moves.get(i).size(); j++, k++) {
                     if (j > 0 && level < maxLevel) {
@@ -200,7 +236,7 @@ public class State {
                         }
                     }
                     if (!stop) {
-                        State st = new State(board, level + 1, maxLevel, moveable.get(i), moves.get(i).get(j), prune);
+                        State st = new State(board, level + 1, maxLevel, moveable.get(i), moves.get(i).get(j), prune, memoryAI, memoryP);
                         states.add(st);
                         double s = st.getBestMove();
                         if (best == -1) {
