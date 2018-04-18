@@ -1878,7 +1878,6 @@ public class Driver {
         int x = piece.getX();
         int y = piece.getY();
         boolean valid = true;
-        do {
         ArrayList<Moves> moves = piece.generateMoves(memory);
         System.out.println("These are the moves you can make with your "+piece.getPiece().getName()+"("+(y+1)
                 +", "+(x+1)+")"+" :");
@@ -1888,21 +1887,6 @@ public class Driver {
         }   //End for loop
         choice = Integer.parseInt(stdin.readLine());
         move = moves.get(choice-1);
-            if (memory.size() >= 2) { // when there are enough moves for an invalid move to be made
-                // Check if the X and Y coordinates for this move is the same for the move stored two moves back
-                if (memory.get(0).getX() == piece.getX() &&
-                        memory.get(0).getY() == piece.getY()) {
-                    if (memory.get(1).getX() == move.getX() &&
-                            memory.get(1).getY() == move.getY()) {
-                        valid = false;
-                        System.out.println("That choice is invalid, please choose a different piece or the same piece but a different move.");
-                        choice = Integer.parseInt(stdin.readLine());
-                        piece = options.get(choice-1);
-                    } else valid = true;
-                }
-            }
-        }
-        while(!valid); // End do while loop.
         if(move.getPiece() == null) {
             board[move.getY()][move.getX()] = piece.getPiece();
             shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
