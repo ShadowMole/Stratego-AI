@@ -23,7 +23,7 @@ public class Moves {
         return board[y][x];
     }
 
-    public ArrayList<Moves> generateMoves()
+    public ArrayList<Moves> generateMoves(ArrayList<Moves> past)
     {
         ArrayList<Moves> moves = new ArrayList();
         int count = 0; /* Variable coordinates to check board for acceptable moves; i is the offset.
@@ -35,7 +35,7 @@ public class Moves {
                     /*
                      * Searching for potential moves in the Right direction.
                      */
-                        while (((x+i) < 10) &&
+                        while (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y) == past.get(1).getY() && (x+i) == past.get(1).getX()) && ((x+i) < 10) &&
                                 (board[y][x+i] == null || (board[y][x+i].getOwner() != board[y][x].getOwner() && board[y][x+i].getOwner() != Players.LAKE)) &&
                                 guard == false) {
                             if(board[y][x+i] == null) { // Eager Advancing, space is unoccupied AND isn't a Lake.
@@ -57,7 +57,7 @@ public class Moves {
                     /*
                      * Searching for potential moves in the Left direction.
                      */
-                        while (((x-i) > -1) &&
+                        while (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y) == past.get(1).getY() && (x-i) == past.get(1).getX()) && ((x-i) > -1) &&
                                 (board[y][x-i] == null || (board[y][x-i].getOwner() != board[y][x].getOwner() && board[y][x-i].getOwner() != Players.LAKE)) &&
                                 guard == false) {
                             if (board[y][x-i] == null) { // Eager Advancing, space is unoccupied AND isn't a Lake.
@@ -79,7 +79,7 @@ public class Moves {
                     /*
                      * Searching for potential moves in the Up direction.
                      */
-                        while (((y+i) < 10) &&
+                        while (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y+i) == past.get(1).getY() && x == past.get(1).getX()) && ((y+i) < 10) &&
                                 (board[y+i][x] == null || (board[y+i][x].getOwner() != board[y][x].getOwner() && board[y+i][x].getOwner() != Players.LAKE)) &&
                                 guard == false) {
                             if (board[y+i][x] == null) { // Eager Advancing, space is unoccupied AND isn't a Lake.
@@ -101,7 +101,7 @@ public class Moves {
                     /*
                      * Searching for potential moves in the Down direction.
                      */
-                        while (((y-i) > -1) &&
+                        while (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y-i) == past.get(1).getY() && x == past.get(1).getX()) && ((y-i) > -1) &&
                                 (board[y-i][x] == null || (board[y-i][x].getOwner() != board[y][x].getOwner() && board[y-i][x].getOwner() != Players.LAKE)) &&
                                 guard == false) {
                             if (board[y-i][x] == null) { // Eager Advancing, space is unoccupied AND isn't a Lake.
@@ -119,25 +119,25 @@ public class Moves {
                         }
                 } else {
                     // Searching for a potential move in the Right direction.
-                    if (((x+1) < 10) &&
+                    if (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y) == past.get(1).getY() && (x+1) == past.get(1).getX()) && ((x+1) < 10) &&
                             (board[y][x+1] == null || (board[y][x+1].getOwner() != board[y][x].getOwner() && board[y][x+1].getOwner() != Players.LAKE))) {
                         moves.add(new Moves(board, y, x+1));
                         count++;
                     }
                     // Searching for a potential move in the Left direction.
-                    if (((x-1) > -1) &&
+                    if (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y) == past.get(1).getY() && (x-1) == past.get(1).getX()) && ((x-1) > -1) &&
                             (board[y][x-1] == null || (board[y][x-1].getOwner() != board[y][x].getOwner() && board[y][x-1].getOwner() != Players.LAKE))) {
                         moves.add(new Moves(board, y, x-1));
                         count++;
                     }
                     // Searching for a potential move in the Up direction.
-                    if (((y+1) < 10) &&
+                    if (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y+1) == past.get(1).getY() && x == past.get(1).getX()) && ((y+1) < 10) &&
                             (board[y+1][x] == null || (board[y+1][x].getOwner() != board[y][x].getOwner() && board[y+1][x].getOwner() != Players.LAKE))) {
                         moves.add(new Moves(board,y+1, x));
                         count++;
                     }
                     // Searching for a potential move in the Down direction.
-                    if (((y-1) > -1) &&
+                    if (!(past.size() > 1 && y == past.get(0).getY() && x == past.get(0).getX() && (y-1) == past.get(1).getY() && x == past.get(1).getX()) && ((y-1) > -1) &&
                             (board[y-1][x] == null || (board[y-1][x].getOwner() != board[y][x].getOwner() && board[y-1][x].getOwner() != Players.LAKE))) {
                         moves.add(new Moves(board,y-1, x));
                         count++;

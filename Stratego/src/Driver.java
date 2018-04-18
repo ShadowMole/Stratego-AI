@@ -124,7 +124,7 @@ public class Driver {
 
         boolean end = false;
         // Allows us to remember the last 3 moves to prevent switching between the same spaces each turn.
-        ArrayList<Moves> memoryAI = new ArrayList(3), memoryP = new ArrayList(3);
+        ArrayList<Moves> memoryAI = new ArrayList<>(), memoryP = new ArrayList<>(), shadowAI = new ArrayList<>(), shadowP = new ArrayList<>();
         boolean playerEnd = false;
         boolean aiEnd = false;
         while(!playerEnd && !aiEnd){
@@ -132,14 +132,14 @@ public class Driver {
                 case 0:     //Player's turn
                     System.out.println("Your turn:");
                     try {
-                        playerMove(board, armies, shadowBoard, shadowArmy, memoryP);
+                        playerEnd = playerMove(board, armies, shadowBoard, shadowArmy, memoryP, shadowP);
                     }catch (IOException ioe){}
                     System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
 
                 case 1:     //AI's turn
                     System.out.println("The computer's turn:");
-                    aiMove(board, armies, shadowBoard, shadowArmy, memoryAI);
+                    aiEnd = aiMove(board, armies, shadowBoard, shadowArmy, memoryAI, shadowAI, shadowP);
                     System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
             }   /*End switch statement*/
@@ -1869,8 +1869,8 @@ public class Driver {
      *               generateMoves method.
      * @return boolean Whether the game has ended or not
      */
-    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) throws IOException {
-        ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true);
+    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory, ArrayList<Moves> shadow) throws IOException {
+        ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true, memory);
         int choice = Integer.parseInt(stdin.readLine()); // User input
         Moves piece = options.get(choice-1);
         Moves move;
@@ -1878,8 +1878,7 @@ public class Driver {
         int x = piece.getX();
         int y = piece.getY();
         boolean valid = true;
-        do {
-        ArrayList<Moves> moves = piece.generateMoves();
+        ArrayList<Moves> moves = piece.generateMoves(memory);
         System.out.println("These are the moves you can make with your "+piece.getPiece().getName()+"("+(y+1)
                 +", "+(x+1)+")"+" :");
         for(int i=0; i < moves.size(); i++) {
@@ -1888,21 +1887,6 @@ public class Driver {
         }   //End for loop
         choice = Integer.parseInt(stdin.readLine());
         move = moves.get(choice-1);
-            if (memory.size() >= 2) { // when there are enough moves for an invalid move to be made
-                // Check if the X and Y coordinates for this move is the same for the move stored two moves back
-                if (memory.get(memory.size() - 2).getX() == piece.getX() &&
-                        memory.get(memory.size() - 2).getY() == piece.getY()) {
-                    if (memory.get(memory.size() - 1).getX() == move.getX() &&
-                            memory.get(memory.size() - 1).getY() == move.getY()) {
-                        valid = false;
-                        System.out.println("That choice is invalid, please choose a different piece or the same piece but a different move.");
-                        choice = Integer.parseInt(stdin.readLine());
-                        piece = options.get(choice-1);
-                    } else valid = true;
-                }
-            }
-        }
-        while(!valid); // End do while loop.
         if(move.getPiece() == null) {
             board[move.getY()][move.getX()] = piece.getPiece();
             shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
@@ -1955,7 +1939,14 @@ public class Driver {
         shadowBoard[y][x] = null;
 
         printBoard(board);
+        if(memory.size() > 1) {
+            memory.remove(0);
+        }
         memory.add(piece);
+        if(shadow.size() > 1){
+            shadow.remove(0);
+        }
+        shadow.add(new Moves(shadowBoard, piece.getY(), piece.getX()));
         return end;
     }   //End playerMove method
 
@@ -1965,8 +1956,8 @@ public class Driver {
      * @param Unit[][][] armies
      * @return boolean Whether the game has ended or not
      */
-    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) {
-        State root = new State(shadowBoard, 0, 6);
+    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory, ArrayList<Moves> shadowAI, ArrayList<Moves> shadowP) {
+        State root = new State(shadowBoard, 0, 6, shadowAI, shadowP);
         int best = (int) root.getBestMove();
         int a = root.getOrigial();
         Moves piece = new Moves(board, root.getMoveable().get(a).getY(), root.getMoveable().get(a).getX());
@@ -2014,10 +2005,14 @@ public class Driver {
         board[y][x] = null;
         shadowBoard[y][x] = null;
         printBoard(board);
+        if(shadowAI.size() > 1){
+            shadowAI.remove(0);
+        }
+        shadowAI.add(new Moves(shadowBoard, piece.getY(), piece.getX()));
         return end;
     }   //End aiMove method
 
-    public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print){
+    public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print, ArrayList<Moves> past){
         int index = 0;
         ArrayList<Moves> options = new ArrayList<>();
         if(print) {
@@ -2034,7 +2029,7 @@ public class Driver {
                     if((current.getType() == null && current.getScore() != 11)|| (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
                         // Checks for movement in the Down direction.
-                        if ( i < 9 && (board[i + 1][j] == null || (board[i + 1][j].getOwner() != player && board[i + 1][j].getOwner() != Players.LAKE))) {
+                        if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i+1) == past.get(1).getY() && j == past.get(1).getX()) && i < 9 && (board[i + 1][j] == null || (board[i + 1][j].getOwner() != player && board[i + 1][j].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER && current.getName() != null) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -2047,7 +2042,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Up direction.
-                        else if (i > 0 &&
+                        else if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i-1) == past.get(1).getY() && j == past.get(1).getX()) && i > 0 &&
                                 (board[i - 1][j] == null || (board[i - 1][j].getOwner() != player  && board[i - 1][j].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
@@ -2061,7 +2056,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Right direction.
-                        else if (j < 9 &&
+                        else if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i) == past.get(1).getY() && (j+1) == past.get(1).getX()) && j < 9 &&
                                 (board[i][j + 1] == null || (board[i][j + 1].getOwner() != player && board[i][j + 1].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
@@ -2075,7 +2070,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Left direction.
-                        else if (j > 0 && (board[i][j - 1] == null || (board[i][j - 1].getOwner() != player && board[i][j - 1].getOwner() != Players.LAKE))) {
+                        else if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i) == past.get(1).getY() && (j-1) == past.get(1).getX()) && j > 0 && (board[i][j - 1] == null || (board[i][j - 1].getOwner() != player && board[i][j - 1].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
