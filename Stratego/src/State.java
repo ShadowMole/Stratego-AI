@@ -11,10 +11,12 @@ public class State {
     private double score;
     private int maxLevel;
     private Moves move;
-    private Moves[][] moves;
-    private Moves[] moveable;
+    private ArrayList<ArrayList<Moves>> moves;
+    private ArrayList<Moves> moveable;
     private ArrayList<Double> parentScores;
-    double[] prune;
+    private double[] prune;
+    private ArrayList<Moves> allMoves;
+    private int origial;
 
     public State(Unit[][] b, int l, int m){
         board = new Unit[b.length][b[0].length];
@@ -26,7 +28,7 @@ public class State {
         level = l;
         score = 0;
         maxLevel = m;
-        prune = new double[maxLevel - 2];
+        prune = new double[maxLevel - 1];
         for(int i = 0; i < prune.length; i++){
             prune[i] = -1;
         }
@@ -51,7 +53,7 @@ public class State {
         if(knew.getPiece() == null) {
             board[knew.getY()][knew.getX()] = old.getPiece();
         } else {
-            Moves current = Driver.ruleBook(old, knew);
+            Moves current = Driver.ruleBook(old, knew, Players.AI, false);
             if(current == null) {
                 board[y][x] = null;
                 board[knew.getY()][knew.getX()] = null;
@@ -67,7 +69,7 @@ public class State {
         return move;
     }
 
-    public Moves[] getMoveable(){
+    public ArrayList<Moves> getMoveable(){
         return moveable;
     }
 
@@ -97,8 +99,16 @@ public class State {
         return score;
     }
 
-    public Moves[][] getMoves(){
+    public ArrayList<Moves> getAllMoves(){
+        return allMoves;
+    }
+
+    public ArrayList<ArrayList<Moves>> getMoves(){
         return moves;
+    }
+
+    public int getOrigial(){
+        return origial;
     }
 
     public double getBestMove(){
@@ -114,21 +124,30 @@ public class State {
             }
             double best = -1;
             double index = -1;
-            moveable = Driver.moveFilter(board, player);
-            moves = new Moves[moveable.length][];
-            for (int i = 0; i < moveable.length; i++) {
-                moves[i] = moveable[i].generateMoves();
+            moveable = Driver.moveFilter(board, player, false);
+            moves = new ArrayList<>();
+            for (int i = 0; i < moveable.size(); i++) {
+                moves.add(moveable.get(i).generateMoves());
             }
-            State[] states = new State[moves[0].length * moveable.length];
-            for (int i = 0, k = 0; i < moves.length; i++) {
-                for (int j = 0; j < moves[i].length; j++, k++) {
-                    states[k] = new State(board, level + 1, maxLevel, moveable[i], moves[i][j], prune);
-                    double s = states[k].getBestMove();
+            allMoves = new ArrayList<>();
+            for(int i = 0; i < moves.size(); i++){
+                for(int j = 0; j < moves.get(i).size(); j++){
+                    allMoves.add(moves.get(i).get(j));
+                }
+            }
+            ArrayList<State> states = new ArrayList<>();
+            for (int i = 0, k = 0; i < moves.size(); i++) {
+                for (int j = 0; j < moves.get(i).size(); j++, k++) {
+                    State st = new State(board, level + 1, maxLevel, moveable.get(i), moves.get(i).get(j), prune);
+                    states.add(st);
+                    double s = st.getBestMove();
                     if (best == -1) {
                         best = s;
                         if(level < maxLevel - 1){
                             prune[level] = best;
                         }
+                        index = k;
+                        origial = i;
                     } else {
                         if (player == Players.PLAYER && s < best) {
                             best = s;
@@ -136,12 +155,14 @@ public class State {
                                 prune[level] = best;
                             }
                             index = k;
+                            origial = i;
                         } else if (player == Players.AI && s > best) {
                             best = s;
                             if(level < maxLevel - 1){
                                 prune[level] = best;
                             }
                             index = k;
+                            origial = i;
                         }
                     }
                 }
@@ -155,33 +176,33 @@ public class State {
                 player = Players.PLAYER;
             }
             double best = -1;
-            moveable = Driver.moveFilter(board, player);
-            moves = new Moves[moveable.length][];
-            for (int i = 0; i < moveable.length; i++) {
-                moves[i] = moveable[i].generateMoves();
-            }
-            State[] states = new State[moves[0].length * moveable.length];
+            moveable = Driver.moveFilter(board, player, false);
+            moves = new ArrayList<>();
+            ArrayList<State> states = new ArrayList<>();
             boolean stop = false;
-            for (int i = 0, k = 0; !stop && i < moves.length; i++) {
-                for (int j = 0; !stop && j < moves[i].length; j++, k++) {
+            for (int i = 0, k = 0; !stop && i < moveable.size(); i++) {
+                moves.add(moveable.get(i).generateMoves());
+
+                for (int j = 0; !stop && j < moves.get(i).size(); j++, k++) {
                     if (j > 0 && level < maxLevel) {
                         if (player == Players.PLAYER) {
                             for (int m = 0; !stop && m < level; m += 2) {
-                                if (prune[m] != -1 && best < prune[m]) {
+                                if (prune[m] != -1 && best >= prune[m]) {
                                     stop = true;
                                 }
                             }
                         } else {
                             for (int m = 1; !stop && m < level; m += 2) {
-                                if (prune[m] != -1 && best > prune[m]) {
+                                if (prune[m] != -1 && best <= prune[m]) {
                                     stop = true;
                                 }
                             }
                         }
                     }
                     if (!stop) {
-                        states[k] = new State(board, level + 1, maxLevel, moveable[i], moves[i][j], prune);
-                        double s = states[k].getBestMove();
+                        State st = new State(board, level + 1, maxLevel, moveable.get(i), moves.get(i).get(j), prune);
+                        states.add(st);
+                        double s = st.getBestMove();
                         if (best == -1) {
                             best = s;
                             if (level < maxLevel - 1) {

@@ -28,6 +28,11 @@ public class Unit {
         owner = o;
         stats = s;
         hasMoved = false;
+        predictStrength();
+    }
+
+    public Unit(Players o){
+        owner = o;
     }
 
     public String getName(){
@@ -225,7 +230,9 @@ public class Unit {
     }
 
     public void predictStrength() {
-        if(score >= 95) { // MARSHALL Strength
+        if(!hasMoved && score >= 200){
+            strength = -1;
+        }else if(score >= 95) { // MARSHALL Strength
             strength = 10;
         }
         else if(score >= 80) { // GENERAL Strength
@@ -235,7 +242,14 @@ public class Unit {
             strength = 8;
         }
         else if(score >= 45) { // MAJOR Strength
-            strength = 7;
+            int rng = Randomizer.getRgen(12);
+            if(rng == 0) {
+                strength = 1;
+            }else if(rng > 0 && rng < 7){
+                strength = 3;
+            }else{
+                strength = 7;
+            }
         }
         else if(score >= 30) {
             if(hasMoved) { // CAPTAIN Strength
