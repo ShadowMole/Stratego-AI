@@ -125,8 +125,9 @@ public class Driver {
         boolean end = false;
         // Allows us to remember the last 3 moves to prevent switching between the same spaces each turn.
         ArrayList<Moves> memoryAI = new ArrayList(3), memoryP = new ArrayList(3);
-        boolean squatter = false;
-        while(!end){
+        boolean playerEnd = false;
+        boolean aiEnd = false;
+        while(!playerEnd && !aiEnd){
             switch (turn){
                 case 0:     //Player's turn
                     System.out.println("Your turn:");
@@ -144,6 +145,11 @@ public class Driver {
             }   /*End switch statement*/
             turn = (turn + 1) % 2;
         }   /*End for loop*/
+        if(playerEnd){
+            System.out.println("You have won the game!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }else{
+            System.out.println("The computer has won. Now go contemplate your life in the corner.");
+        }
     }   /*End playGame method*/
 
     /**
@@ -1863,11 +1869,12 @@ public class Driver {
      *               generateMoves method.
      * @return boolean Whether the game has ended or not
      */
-    public static void playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) throws IOException {
+    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) throws IOException {
         ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true);
         int choice = Integer.parseInt(stdin.readLine()); // User input
         Moves piece = options.get(choice-1);
         Moves move;
+        boolean end = false;
         int x = piece.getX();
         int y = piece.getY();
         boolean valid = true;
@@ -1929,6 +1936,11 @@ public class Driver {
             }   //End outer if statement
             //Finished updating the AI's knowledge
             Moves current = ruleBook(piece, move, Players.PLAYER, true);
+            if(move.getPiece().getType() == PieceType.FLAG){
+                end = true;
+            }else{
+                end = false;
+            }
             if(current == null) {
                 board[y][x] = null;
                 board[move.getY()][move.getX()] = null;
@@ -1944,6 +1956,7 @@ public class Driver {
 
         printBoard(board);
         memory.add(piece);
+        return end;
     }   //End playerMove method
 
     /**
@@ -1952,13 +1965,13 @@ public class Driver {
      * @param Unit[][][] armies
      * @return boolean Whether the game has ended or not
      */
-    public static void aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) {
-        State root = new State(shadowBoard, 0, 8);
+    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) {
+        State root = new State(shadowBoard, 0, 6);
         int best = (int) root.getBestMove();
         int a = root.getOrigial();
-        Moves piece = root.getMoveable().get(a);
-        Moves move = root.getAllMoves().get(best);
-
+        Moves piece = new Moves(board, root.getMoveable().get(a).getY(), root.getMoveable().get(a).getX());
+        Moves move = new Moves(board, root.getAllMoves().get(best).getY(), root.getAllMoves().get(best).getX());
+        boolean end = false;
         int x = piece.getX();
         int y = piece.getY();
         if(move.getPiece() == null) {
@@ -1983,6 +1996,11 @@ public class Driver {
             //Finished updating the AI's knowledge
 
             Moves current = ruleBook(piece, move, Players.AI, true);
+            if(move.getPiece().getType() == PieceType.FLAG){
+                end = true;
+            }else{
+                end = false;
+            }
             if(current == null) {
                 board[y][x] = null;
                 board[move.getY()][move.getX()] = null;
@@ -1996,6 +2014,7 @@ public class Driver {
         board[y][x] = null;
         shadowBoard[y][x] = null;
         printBoard(board);
+        return end;
     }   //End aiMove method
 
     public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print){
@@ -2105,7 +2124,7 @@ public class Driver {
             }else if(offense.getPiece().getType() == null && offense.getPiece().getStrength() == 1 && defense.getPiece().getType() == PieceType.MARSHALL){
                 winner = offense;
             }else if (defense.getPiece().getType() == null && defense.getPiece().getStrength() == 10 && offense.getPiece().getType() == PieceType.SPY){
-
+                winner = offense;
             }else if (defense.getPiece().getStrength() == offense.getPiece().getStrength()) {
                 winner = null;
             } else if (defense.getPiece().getStrength() < offense.getPiece().getStrength()) {
