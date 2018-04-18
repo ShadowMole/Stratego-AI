@@ -122,22 +122,24 @@ public class Driver {
             System.out.println(shadowArmy[i].getScore());
         }   /*End for loop*/
 
+        boolean end = false;
+        // Allows us to remember the last 3 moves to prevent switching between the same spaces each turn.
+        ArrayList<Moves> memoryAI = new ArrayList(3), memoryP = new ArrayList(3);
         boolean playerEnd = false;
         boolean aiEnd = false;
-
         while(!playerEnd && !aiEnd){
             switch (turn){
                 case 0:     //Player's turn
                     System.out.println("Your turn:");
                     try {
-                        playerEnd = playerMove(board, armies, shadowBoard, shadowArmy);
+                        playerMove(board, armies, shadowBoard, shadowArmy, memoryP);
                     }catch (IOException ioe){}
                     System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
 
                 case 1:     //AI's turn
                     System.out.println("The computer's turn:");
-                    aiEnd = aiMove(board, armies, shadowBoard, shadowArmy);
+                    aiMove(board, armies, shadowBoard, shadowArmy, memoryAI);
                     System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
             }   /*End switch statement*/
@@ -1862,17 +1864,22 @@ public class Driver {
     /**
      * Lets the player make a move.
      * @param board 2 dimensional Unit object, The current state of the board.
-     * @param armies 3 dimensional Unit object, [owner][y][x]
+     * @param armies 3 dimensional Unit object, [owner][y][x].
+     * @param memory ArrayList of Moves which stores pieces to retain pieceTypes rather than Moves from the
+     *               generateMoves method.
      * @return boolean Whether the game has ended or not
      */
-    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) throws IOException {
+    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) throws IOException {
         ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true);
-        int choice = Integer.parseInt(stdin.readLine());
+        int choice = Integer.parseInt(stdin.readLine()); // User input
         Moves piece = options.get(choice-1);
-        ArrayList<Moves> moves = piece.generateMoves();
+        Moves move;
         boolean end = false;
         int x = piece.getX();
         int y = piece.getY();
+        boolean valid = true;
+        do {
+        ArrayList<Moves> moves = piece.generateMoves();
         System.out.println("These are the moves you can make with your "+piece.getPiece().getName()+"("+(y+1)
                 +", "+(x+1)+")"+" :");
         for(int i=0; i < moves.size(); i++) {
@@ -1880,7 +1887,22 @@ public class Driver {
             System.out.println(i+1+". ("+(current.getY()+1)+", "+(current.getX()+1)+")");
         }   //End for loop
         choice = Integer.parseInt(stdin.readLine());
-        Moves move = moves.get(choice-1);
+        move = moves.get(choice-1);
+            if (memory.size() >= 2) { // when there are enough moves for an invalid move to be made
+                // Check if the X and Y coordinates for this move is the same for the move stored two moves back
+                if (memory.get(memory.size() - 2).getX() == piece.getX() &&
+                        memory.get(memory.size() - 2).getY() == piece.getY()) {
+                    if (memory.get(memory.size() - 1).getX() == move.getX() &&
+                            memory.get(memory.size() - 1).getY() == move.getY()) {
+                        valid = false;
+                        System.out.println("That choice is invalid, please choose a different piece or the same piece but a different move.");
+                        choice = Integer.parseInt(stdin.readLine());
+                        piece = options.get(choice-1);
+                    } else valid = true;
+                }
+            }
+        }
+        while(!valid); // End do while loop.
         if(move.getPiece() == null) {
             board[move.getY()][move.getX()] = piece.getPiece();
             shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
@@ -1933,6 +1955,7 @@ public class Driver {
         shadowBoard[y][x] = null;
 
         printBoard(board);
+        memory.add(piece);
         return end;
     }   //End playerMove method
 
@@ -1942,7 +1965,7 @@ public class Driver {
      * @param Unit[][][] armies
      * @return boolean Whether the game has ended or not
      */
-    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy) {
+    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) {
         State root = new State(shadowBoard, 0, 6);
         int best = (int) root.getBestMove();
         int a = root.getOrigial();
