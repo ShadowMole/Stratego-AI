@@ -1,0 +1,738 @@
+Hello and welcome to Bill's and Steven's game of Stratego.
+Here you will be playing against an AI that we have created.
+Please try and record wins and losses as well as anything strange 
+or unique that the AI does.
+Have fun and good luck!
+1. Play game.
+2. Rules.
+3. Exit.
+1
+1
+	1	2	3	4	5	6	7	8	9	10		
+
+1											1	
+
+2											2	
+
+3											3	
+
+4											4	
+
+5			L	L			L	L			5	
+
+6			L	L			L	L			6	
+
+7											7	
+
+8											8	
+
+9											9	
+
+10											10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+	1	2	3	4	5	6	7	8	9	10		
+
+1											1	
+
+2											2	
+
+3											3	
+
+4											4	
+
+5			L	L			L	L			5	
+
+6			L	L			L	L			6	
+
+7											7	
+
+8											8	
+
+9											9	
+
+10											10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+You have have the following units left to place:
+
+1. Marshall
+2. General
+3. Colonel
+4. Colonel
+5. Major
+6. Major
+7. Major
+8. Captain
+9. Captain
+10. Captain
+11. Captain
+12. Lieutenant
+13. Lieutenant
+14. Lieutenant
+15. Lieutenant
+16. Serjeant
+17. Serjeant
+18. Serjeant
+19. Serjeant
+20. Miner
+21. Miner
+22. Miner
+23. Miner
+24. Miner
+25. Scout
+26. Scout
+27. Scout
+28. Scout
+29. Scout
+30. Scout
+31. Scout
+32. Scout
+33. Spy
+34. Bomb
+35. Bomb
+36. Bomb
+37. Bomb
+38. Bomb
+39. Bomb
+40. Flag
+40
+	1	2	3	4	5	6	7	8	9	10		
+
+1											1	
+
+2											2	
+
+3											3	
+
+4											4	
+
+5			L	L			L	L			5	
+
+6			L	L			L	L			6	
+
+7											7	
+
+8											8	
+
+9											9	
+
+10											10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+The following spaces are where you can place the Flag:
+1. (7,1)
+2. (7,2)
+3. (7,3)
+4. (7,4)
+5. (7,5)
+6. (7,6)
+7. (7,7)
+8. (7,8)
+9. (7,9)
+10. (7,10)
+11. (8,1)
+12. (8,2)
+13. (8,3)
+14. (8,4)
+15. (8,5)
+16. (8,6)
+17. (8,7)
+18. (8,8)
+19. (8,9)
+20. (8,10)
+21. (9,1)
+22. (9,2)
+23. (9,3)
+24. (9,4)
+25. (9,5)
+26. (9,6)
+27. (9,7)
+28. (9,8)
+29. (9,9)
+30. (9,10)
+31. (10,1)
+32. (10,2)
+33. (10,3)
+34. (10,4)
+35. (10,5)
+36. (10,6)
+37. (10,7)
+38. (10,8)
+39. (10,9)
+40. (10,10)
+35
+	1	2	3	4	5	6	7	8	9	10		
+
+1											1	
+
+2											2	
+
+3											3	
+
+4											4	
+
+5			L	L			L	L			5	
+
+6			L	L			L	L			6	
+
+7											7	
+
+8											8	
+
+9											9	
+
+10					F						10	
+
+	1	2	3	4	5	6	7	8	9	10
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	A	A	A	A	A	A	A	A	A	A	4	
+
+5			L	L			L	L			5	
+
+6			L	L			L	L			6	
+
+7	2	7	4	2	4	2	2	6	5	2	7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10	
+
+The Player goes first.
+Your turn:
+Pieces you can move : 
+1. Scout(7, 1)
+2. Major(7, 2)
+3. Serjeant(7, 5)
+4. Scout(7, 6)
+5. Lieutenant(7, 9)
+6. Scout(7, 10)
+6
+These are the moves you can make with your Scout(7, 10) :
+1. (6, 10)
+2. (5, 10)
+2
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	A	A	A	A	A	A	A	A	A	A	4	
+
+5			L	L			L	L		2	5	
+
+6			L	L			L	L			6	
+
+7	2	7	4	2	4	2	2	6	5		7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+The computer's turn:
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	A		A	A	A	A	A	A	A	A	4	
+
+5		A	L	L			L	L		2	5	
+
+6			L	L			L	L			6	
+
+7	2	7	4	2	4	2	2	6	5		7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10
+
+Your turn:
+Pieces you can move : 
+1. Scout(5, 6)
+2. Scout(5, 10)
+3. Major(6, 2)
+4. Lieutenant(6, 9)
+5. Scout(7, 1)
+6. Serjeant(7, 3)
+7. Serjeant(7, 5)
+8. Scout(7, 7)
+9. Captain(7, 8)
+10. Captain(8, 2)
+11. Captain(8, 6)
+12. Miner(8, 9)
+5
+These are the moves you can make with your Scout(7, 1) :
+1. (7, 2)
+2. (6, 1)
+3. (5, 1)
+4. (4, 1)
+4
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	2	A	A	A		A	A	A	A	A	4	
+
+5		A	L	L		2	L	L		2	5	
+
+6		7	L	L	A		L	L	5		6	
+
+7			4	2	4		2	6			7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+The computer's turn:
+The AI's Serjeant attacks your Scout and wins!
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	A		A	A		A	A	A	A	A	4	
+
+5		A	L	L		2	L	L		2	5	
+
+6		7	L	L	A		L	L	5		6	
+
+7			4	2	4		2	6			7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+Your Major attacks the AI's Serjeant and wins!
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A		A	A	A	A	A	A	A	A	3	
+
+4		A	A	A		A	A	A	A	A	4	
+
+5			L	L		2	L	L		2	5	
+
+6	7	A	L	L	A		L	L	5		6	
+
+7			4	2	4		2	6			7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+The computer's turn:
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A		A	A	A	A	A	A	A	A	3	
+
+4		A	A	A		A	A	A	A	A	4	
+
+5			L	L		2	L	L		2	5	
+
+6	7		L	L	A		L	L	5		6	
+
+7		A	4	2	4		2	6			7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+Your turn:
+Pieces you can move : 
+1. Scout(5, 6)
+2. Scout(5, 10)
+3. Major(6, 1)
+4. Lieutenant(6, 9)
+5. Serjeant(7, 3)
+6. Serjeant(7, 5)
+7. Scout(7, 7)
+8. Captain(7, 8)
+9. Miner(8, 1)
+10. Captain(8, 2)
+11. Captain(8, 6)
+12. Miner(8, 9)
+2
+These are the moves you can make with your Scout(5, 10) :
+1. (5, 9)
+2. (6, 10)
+3. (7, 10)
+4. (4, 10)
+4
+Your Scout attacks the AI's Lieutenant and loses.
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A	A	A	A	A	A	A	A	A	A	1	
+
+2	A	A	A	A	A	A	A	A	A	A	2	
+
+3	A		A	A	A	A	A	A	A	A	3	
+
+4		A	A	A		A	A	A	A	A	4	
+
+5			L	L		2	L	L			5	
+
+6	7		L	L	A		L	L	5		6	
+
+7		A	4	2	4		2	6			7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+Your turn:
+Pieces you can move : 
+1. Scout(5, 6)
+2. Captain(5, 10)
+3. Lieutenant(6, 9)
+4. Major(7, 1)
+5. Serjeant(7, 3)
+6. Serjeant(7, 5)
+7. Scout(7, 7)
+8. Captain(8, 2)
+9. Captain(8, 6)
+10. General(8, 8)
+11. Miner(8, 9)
+2
+These are the moves you can make with your Captain(5, 10) :
+1. (5, 9)
+2. (6, 10)
+3. (4, 10)
+3
+Your Captain attacks the AI's Lieutenant and wins!
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A		A	A	A	A	A	A	A	A	1	
+
+2		A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	A	A	A	A		A	A	A	A	6	4	
+
+5			L	L		2	L	L			5	
+
+6			L	L	A		L	L	5		6	
+
+7	7	A	4	2	4		2				7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+The computer's turn:
+	1	2	3	4	5	6	7	8	9	10		
+
+1	A		A	A	A	A	A	A	A	A	1	
+
+2		A	A	A	A	A	A	A	A	A	2	
+
+3	A	A	A	A	A	A	A	A	A	A	3	
+
+4	A	A	A	A		A	A	A		6	4	
+
+5			L	L		2	L	L	A		5	
+
+6			L	L	A		L	L	5		6	
+
+7	7	A	4	2	4		2				7	
+
+8	3	6	2	3	7	6	5	9	3	B	8	
+
+9	10	5	5	7	B	8	B	S	6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+The computer's turn:
+	1	2	3	4	5	6	7	8	9	10		
+
+1			A	A	A	A	A	A			1	
+
+2	A	A	A	A	A	A	A	A	A	9	2	
+
+3	A	A	A	A	A	A	A	A		A	3	
+
+4	A	A	A	A		A	A	A	A	S	4	
+
+5			L	L			L	L	5		5	
+
+6			L	L	A		L	L			6	
+
+7	7	A	4	2	4						7	
+
+8	3	6	2	3	7	6	5		3	B	8	
+
+9	10	5	5	7	B	8	B		6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+Your turn:
+Pieces you can move : 
+1. General(2, 10)
+2. Spy(4, 10)
+3. Lieutenant(5, 9)
+4. Major(7, 1)
+5. Serjeant(7, 3)
+6. Serjeant(7, 5)
+7. Captain(8, 2)
+8. Captain(8, 6)
+9. Lieutenant(8, 7)
+10. Miner(8, 9)
+11. Captain(9, 9)
+12. Serjeant(10, 8)
+1
+These are the moves you can make with your General(2, 10) :
+1. (2, 9)
+2. (3, 10)
+3. (1, 10)
+2
+Your General attacks the AI's Colonel and wins!
+	1	2	3	4	5	6	7	8	9	10		
+
+1			A	A	A	A	A	A			1	
+
+2	A	A	A	A	A	A	A	A	A		2	
+
+3	A	A	A	A	A	A	A	A		9	3	
+
+4	A	A	A	A		A	A	A	A	S	4	
+
+5			L	L			L	L	5		5	
+
+6			L	L	A		L	L			6	
+
+7	7	A	4	2	4						7	
+
+8	3	6	2	3	7	6	5		3	B	8	
+
+9	10	5	5	7	B	8	B		6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+Your turn:
+Pieces you can move : 
+1. General(2, 10)
+2. Spy(3, 10)
+3. Lieutenant(5, 9)
+4. Major(7, 1)
+5. Serjeant(7, 3)
+6. Serjeant(7, 5)
+7. Captain(8, 2)
+8. Captain(8, 6)
+9. Lieutenant(8, 7)
+10. Miner(8, 9)
+11. Captain(9, 9)
+12. Serjeant(10, 8)
+1
+These are the moves you can make with your General(2, 10) :
+1. (2, 9)
+2. (1, 10)
+2
+	1	2	3	4	5	6	7	8	9	10		
+
+1			A	A	A	A	A		A	9	1	
+
+2	A	A	A	A	A	A	A	A	A		2	
+
+3	A	A	A	A	A	A	A	A		S	3	
+
+4	A	A	A	A		A	A	A	A		4	
+
+5			L	L			L	L	5		5	
+
+6			L	L	A		L	L			6	
+
+7	7	A	4	2	4						7	
+
+8	3	6	2	3	7	6	5		3	B	8	
+
+9	10	5	5	7	B	8	B		6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+The computer's turn:
+The AI's Captain attacks your General and loses.
+	1	2	3	4	5	6	7	8	9	10		
+
+1			A	A	A	A	A			9	1	
+
+2	A	A	A	A	A	A	A	A	A		2	
+
+3	A	A	A	A	A	A	A	A		S	3	
+
+4	A	A	A	A		A	A	A	A		4	
+
+5			L	L			L	L	5		5	
+
+6			L	L	A		L	L			6	
+
+7	7	A	4	2	4						7	
+
+8	3	6	2	3	7	6	5		3	B	8	
+
+9	10	5	5	7	B	8	B		6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+Your turn:
+Pieces you can move : 
+1. General(1, 8)
+2. Spy(1, 10)
+3. Lieutenant(5, 9)
+4. Major(7, 1)
+5. Serjeant(7, 3)
+6. Serjeant(7, 5)
+7. Captain(8, 2)
+8. Captain(8, 6)
+9. Lieutenant(8, 7)
+10. Miner(8, 9)
+11. Captain(9, 9)
+12. Serjeant(10, 8)
+1
+These are the moves you can make with your General(1, 8) :
+1. (1, 9)
+2. (1, 7)
+3. (2, 8)
+2
+Your General attacks the AI's Flag and wins!
+	1	2	3	4	5	6	7	8	9	10		
+
+1			A	A	A	A	9			S	1	
+
+2	A	A	A	A	A	A	A		A		2	
+
+3	A	A	A	A	A	A	A	A	A		3	
+
+4	A	A	A	A		A	A	A	A		4	
+
+5			L	L			L	L	5		5	
+
+6			L	L	A		L	L			6	
+
+7	7	A	4	2	4						7	
+
+8	3	6	2	3	7	6	5		3	B	8	
+
+9	10	5	5	7	B	8	B		6	3	9	
+
+10	3	B	4	B	F	B	8	4	2	2	10	
+
+	1	2	3	4	5	6	7	8	9	10		
+
+
+
+
+You have won the game!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Hello and welcome to Bill's and Steven's game of Stratego.
+Here you will be playing against an AI that we have created.
+Please try and record wins and losses as well as anything strange 
+or unique that the AI does.
+Have fun and good luck!
+1. Play game.
+2. Rules.
+3. Exit.
+3
