@@ -70,17 +70,17 @@ public class Driver {
      */
     public static void showRules(){
         System.out.println("You have a board that is 10X10, " +
-                "there are two 4 space square lakes evenly spread in the center of the board which neither player can cross into, " +
-                "there are two players you and the computer, each player starts with 40 pieces: " +
-                "1 Flag, 6 Bombs, 8 Scouts, 5 Miners, 4 Sergeants, 4 Lieutenants, 4 Captains, 3 Majors, 2 Colonels, 1 General, and 1 Marshall; " +
-                "a flag is your most important piece, the goal of the game is to catch your opponents flag, " +
-                "bombs will destroy any piece that attacks it except a miner which is only stronger than a scout, " +
-                "bombs and flags are stationary while every other piece can move one space at a time except for a scout " +
-                "which can move as far as it would like in any direction but only being able to attack another piece if it is directly in front of it, " +
-                "your opponents pieces are a complete mystery to you until you attack, " +
-                "then both you and your opponents pieces are reveled and a winner is selected based off of the piece hierarchy, " +
-                "pieces listed above are in order of weakest to strongest starting with the scouts. " +
-                "A piece cannot travel between two spaces for more than 2 consecutive turns meaning " +
+                "there are two 4 space square lakes evenly spread in the center of the board which neither player can cross into, \n" +
+                "there are two players you and the computer, each player starts with 40 pieces: \n" +
+                "1 Flag, 6 Bombs, 8 Scouts, 5 Miners, 4 Sergeants, 4 Lieutenants, 4 Captains, 3 Majors, 2 Colonels, 1 General, and 1 Marshall; \n" +
+                "a flag is your most important piece, the goal of the game is to catch your opponents flag, \n" +
+                "bombs will destroy any piece that attacks it except a miner which is only stronger than a scout, \n" +
+                "bombs and flags are stationary while every other piece can move one space at a time except for a scout \n" +
+                "which can move as far as it would like in any direction but only being able to attack another piece if it is directly in front of it, \n" +
+                "your opponents pieces are a complete mystery to you until you attack, \n" +
+                "then both you and your opponents pieces are reveled and a winner is selected based off of the piece hierarchy, \n" +
+                "pieces listed above are in order of weakest to strongest starting with the scouts. \n" +
+                "A piece cannot travel between two spaces for more than 2 consecutive turns meaning \n" +
                 "if you move a piece forward and then back you cannot move it forward again you must move in a different direction or move a different piece all together.");
     }   /*End showRules method*/
 
