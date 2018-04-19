@@ -1,11 +1,11 @@
-import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
- * Created by Mole on 1/24/2018.
+ * This class contains the main method and runs the entire program.
+ * Created by Steven Bruman on 1/24/2018.
+ * Edited by Steven Bruman and William Jacobs
+ * Version 4/18/2018
  */
 public class Driver {
 
@@ -69,7 +69,19 @@ public class Driver {
      * game so that a player can understand how to play.
      */
     public static void showRules(){
-        
+        System.out.println("You have a board that is 10X10, " +
+                "there are two 4 space square lakes evenly spread in the center of the board which neither player can cross into, " +
+                "there are two players you and the computer, each player starts with 40 pieces: " +
+                "1 Flag, 6 Bombs, 8 Scouts, 5 Miners, 4 Sergeants, 4 Lieutenants, 4 Captains, 3 Majors, 2 Colonels, 1 General, and 1 Marshall; " +
+                "a flag is your most important piece, the goal of the game is to catch your opponents flag, " +
+                "bombs will destroy any piece that attacks it except a miner which is only stronger than a scout, " +
+                "bombs and flags are stationary while every other piece can move one space at a time except for a scout " +
+                "which can move as far as it would like in any direction but only being able to attack another piece if it is directly in front of it, " +
+                "your opponents pieces are a complete mystery to you until you attack, " +
+                "then both you and your opponents pieces are reveled and a winner is selected based off of the piece hierarchy, " +
+                "pieces listed above are in order of weakest to strongest starting with the scouts. " +
+                "A piece cannot travel between two spaces for more than 2 consecutive turns meaning " +
+                "if you move a piece forward and then back you cannot move it forward again you must move in a different direction or move a different piece all together.");
     }   /*End showRules method*/
 
     /**
@@ -124,7 +136,7 @@ public class Driver {
 
         boolean end = false;
         // Allows us to remember the last 3 moves to prevent switching between the same spaces each turn.
-        ArrayList<Moves> memoryAI = new ArrayList(3), memoryP = new ArrayList(3);
+        ArrayList<Moves> memoryAI = new ArrayList<>(), memoryP = new ArrayList<>(), shadowAI = new ArrayList<>(), shadowP = new ArrayList<>();
         boolean playerEnd = false;
         boolean aiEnd = false;
         while(!playerEnd && !aiEnd){
@@ -132,14 +144,14 @@ public class Driver {
                 case 0:     //Player's turn
                     System.out.println("Your turn:");
                     try {
-                        playerMove(board, armies, shadowBoard, shadowArmy, memoryP);
+                        playerEnd = playerMove(board, armies, shadowBoard, shadowArmy, memoryP, shadowP);
                     }catch (IOException ioe){}
                     System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
 
                 case 1:     //AI's turn
                     System.out.println("The computer's turn:");
-                    aiMove(board, armies, shadowBoard, shadowArmy, memoryAI);
+                    aiEnd = aiMove(board, armies, shadowBoard, shadowArmy, memoryAI, shadowAI, shadowP);
                     System.out.print("\n\n\n");     //Just some spacing
                     break;  //Stops the switch statement
             }   /*End switch statement*/
@@ -448,6 +460,7 @@ public class Driver {
      * @param unit The index in army of the Unit that the player selected.
      * @param board The 2D Unit array that represents (X,Y) locations on the board.
      * @param army The array of Units that represents the pieces of the user.
+     * @return boolean True if the Unit could be placed, otherwise false.
      * @exception IOException On input error.
      * @see IOException
      */
@@ -1082,9 +1095,16 @@ public class Driver {
                     String[] tokenize = s.split(",");
 
                     switch(tokenize[4]){
+                        /*
+                         * Y means the Marshall is in the front of the board for that setup
+                         */
                         case "Y":
                             switch (tokenize[6]){
                                 case "Left":
+                                    /*
+                                     * This means the Marshall is in the front left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][39] += 1;
                                     values[0][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1100,6 +1120,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                     /*
+                                     * This means the Marshall is in the front right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][32] += 1;
                                     values[0][31]+= (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1115,6 +1139,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                     /*
+                                     * This means the Marshall is in the front center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][36] += 1;
                                     values[0][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1136,8 +1164,16 @@ public class Driver {
                             break;  //Stops the switch statement
 
                         default:
+                            /*
+                             * This means the value was N which means the
+                             * Marshall is in the back of the board for the setup
+                             */
                             switch (tokenize[6]){
                                 case "Left":
+                                     /*
+                                     * This means the Marshall is in the back left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][19] += 1;
                                     values[0][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1153,6 +1189,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                     /*
+                                     * This means the Marshall is in the back right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][12] += 1;
                                     values[0][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1168,6 +1208,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                     /*
+                                     * This means the Marshall is in the back center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][16] += 1;
                                     values[0][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1191,8 +1235,16 @@ public class Driver {
 
                     switch(tokenize[5]){
                         case "Y":
+                            /*
+                             * Y means the General is in the front of the board
+                             * for the setup
+                             */
                             switch (tokenize[7]){
                                 case "Left":
+                                    /*
+                                     * This means the General is in the front left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][39] += 1;
                                     values[1][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1208,6 +1260,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                    /*
+                                     * This means the General is in the front right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][32] += 1;
                                     values[1][31] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1223,6 +1279,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                    /*
+                                     * This means the General is in the front center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][36] += 1;
                                     values[1][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1244,8 +1304,16 @@ public class Driver {
                             break;  //Stops the switch statement
 
                         default:
+                            /*
+                             * This means the value was N and that the
+                             * General is in the back of the board for the setup
+                             */
                             switch (tokenize[7]){
                                 case "Left":
+                                    /*
+                                     * This means the General is in the back left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][19] += 1;
                                     values[1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1261,6 +1329,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                    /*
+                                     * This means the General is in the back right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][12] += 1;
                                     values[1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1276,6 +1348,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                    /*
+                                     * This means the General is in the back center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][16] += 1;
                                     values[1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1302,6 +1378,9 @@ public class Driver {
                     boolean found = false;
                     for(int i = 0; !found && i < 4; i++) {
                         for (int j = 0; !found && j < 10; j++) {
+                            /*
+                             * Have to find the correct space on the board because
+                             */
                             if (k == flagSpace) {
                                 values[11][k] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                 modified[11][k] += 1;
@@ -1346,6 +1425,12 @@ public class Driver {
         }   /*End outer try-catch block*/
     }   //End aiConfig method
 
+    /**
+     * This method will modify the values in the values array based on the
+     * slightly randomized win rates of different starting configurations.
+     * @param values The 2D array that the AI will use to store the win rates of every piece in every starting spot
+     * @param modified The 2D array that counts the number of times each value in the values array was modified
+     */
     public static void aiTeam(double[][] values, double[][] modified){
         BufferedReader[] readers = new BufferedReader[9];
         try{
@@ -1770,6 +1855,13 @@ public class Driver {
         }   //End outer try-catch block
     }   //End aiTeam method
 
+    /**
+     * This method places the AI's pieces on the board by selecting the
+     * highest values that it finds.
+     * @param values The 2D array that the AI will use to store the win rates of every piece in every starting spot
+     * @param board The 2D Unit array that represents (X,Y) locations on the board.
+     * @param army The array of Units that represents the AI's pieces.
+     */
     public static void aiPlaceUnits(double[][] values, Unit[][] board, Unit[] army){
         int placed = 0;
         while(placed != 40) {
@@ -1865,12 +1957,17 @@ public class Driver {
      * Lets the player make a move.
      * @param board 2 dimensional Unit object, The current state of the board.
      * @param armies 3 dimensional Unit object, [owner][y][x].
+     * @param shadowBoard The 2D array of Units that represents AI's view of the board.
+     * @param shadowArmy The array of Units that represents the AI's view of the user's initial set up.
      * @param memory ArrayList of Moves which stores pieces to retain pieceTypes rather than Moves from the
      *               generateMoves method.
+     * @param shadow The ArrayList containing the last 2 moves of the player on the shadowboard
      * @return boolean Whether the game has ended or not
+     * @exception IOException On input error.
+     * @see IOException
      */
-    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) throws IOException {
-        ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true);
+    public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory, ArrayList<Moves> shadow) throws IOException {
+        ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true, memory);
         int choice = Integer.parseInt(stdin.readLine()); // User input
         Moves piece = options.get(choice-1);
         Moves move;
@@ -1878,8 +1975,7 @@ public class Driver {
         int x = piece.getX();
         int y = piece.getY();
         boolean valid = true;
-        do {
-        ArrayList<Moves> moves = piece.generateMoves();
+        ArrayList<Moves> moves = piece.generateMoves(memory);
         System.out.println("These are the moves you can make with your "+piece.getPiece().getName()+"("+(y+1)
                 +", "+(x+1)+")"+" :");
         for(int i=0; i < moves.size(); i++) {
@@ -1888,21 +1984,6 @@ public class Driver {
         }   //End for loop
         choice = Integer.parseInt(stdin.readLine());
         move = moves.get(choice-1);
-            if (memory.size() >= 2) { // when there are enough moves for an invalid move to be made
-                // Check if the X and Y coordinates for this move is the same for the move stored two moves back
-                if (memory.get(memory.size() - 2).getX() == piece.getX() &&
-                        memory.get(memory.size() - 2).getY() == piece.getY()) {
-                    if (memory.get(memory.size() - 1).getX() == move.getX() &&
-                            memory.get(memory.size() - 1).getY() == move.getY()) {
-                        valid = false;
-                        System.out.println("That choice is invalid, please choose a different piece or the same piece but a different move.");
-                        choice = Integer.parseInt(stdin.readLine());
-                        piece = options.get(choice-1);
-                    } else valid = true;
-                }
-            }
-        }
-        while(!valid); // End do while loop.
         if(move.getPiece() == null) {
             board[move.getY()][move.getX()] = piece.getPiece();
             shadowBoard[move.getY()][move.getX()] = shadowBoard[piece.getY()][piece.getX()];
@@ -1955,18 +2036,33 @@ public class Driver {
         shadowBoard[y][x] = null;
 
         printBoard(board);
+        if(memory.size() > 1) {
+            memory.remove(0);
+        }
         memory.add(piece);
+        if(shadow.size() > 1){
+            shadow.remove(0);
+        }
+        shadow.add(new Moves(shadowBoard, piece.getY(), piece.getX()));
         return end;
     }   //End playerMove method
 
     /**
-     * Lets the AI make a move.
-     * @param Unit[][] board The current state of the board.
-     * @param Unit[][][] armies
-     * @return boolean Whether the game has ended or not
+     * This method allows the AI to make a move. This happens by creating a State
+     * to represent the current State of the board. This is then run a Minimax
+     * algorithm utilizing alpha-beta pruning to select the best move for the AI
+     * on its turn.
+     * @param board The 2D Unit array that represents (X,Y) locations on the board.
+     * @param armies The 3D array of Units that is divided (Player, AI), (Alive, Dead), actual pieces.
+     * @param shadowBoard The 2D array of Units that represents AI's view of the board.
+     * @param shadowArmy The array of Units that represents the AI's view of the user's initial set up.
+     * @param memory The ArrayList containing the last 2 moves of the AI.
+     * @param shadowAI The ArrayList containing the last 2 moves of the AI on the shadowboard.
+     * @param shadowP The ArrayList containing the last 2 moves of the player on the shadowboard.
+     * @return boolean Whether or not the game has ended.
      */
-    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory) {
-        State root = new State(shadowBoard, 0, 6);
+    public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory, ArrayList<Moves> shadowAI, ArrayList<Moves> shadowP) {
+        State root = new State(shadowBoard, 0, 6, shadowAI, shadowP);
         int best = (int) root.getBestMove();
         int a = root.getOrigial();
         Moves piece = new Moves(board, root.getMoveable().get(a).getY(), root.getMoveable().get(a).getX());
@@ -2014,10 +2110,14 @@ public class Driver {
         board[y][x] = null;
         shadowBoard[y][x] = null;
         printBoard(board);
+        if(shadowAI.size() > 1){
+            shadowAI.remove(0);
+        }
+        shadowAI.add(new Moves(shadowBoard, piece.getY(), piece.getX()));
         return end;
     }   //End aiMove method
 
-    public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print){
+    public static ArrayList<Moves> moveFilter(Unit[][] board, Players player, boolean print, ArrayList<Moves> past){
         int index = 0;
         ArrayList<Moves> options = new ArrayList<>();
         if(print) {
@@ -2034,7 +2134,7 @@ public class Driver {
                     if((current.getType() == null && current.getScore() != 11)|| (current.getType() != PieceType.FLAG && current.getType() != PieceType.BOMB)) {
                         // Can this piece move/fight? If so add piece to options and print to user.
                         // Checks for movement in the Down direction.
-                        if ( i < 9 && (board[i + 1][j] == null || (board[i + 1][j].getOwner() != player && board[i + 1][j].getOwner() != Players.LAKE))) {
+                        if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i+1) == past.get(1).getY() && j == past.get(1).getX()) && i < 9 && (board[i + 1][j] == null || (board[i + 1][j].getOwner() != player && board[i + 1][j].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER && current.getName() != null) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -2047,7 +2147,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Up direction.
-                        else if (i > 0 &&
+                        else if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i-1) == past.get(1).getY() && j == past.get(1).getX()) && i > 0 &&
                                 (board[i - 1][j] == null || (board[i - 1][j].getOwner() != player  && board[i - 1][j].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
@@ -2061,7 +2161,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Right direction.
-                        else if (j < 9 &&
+                        else if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i) == past.get(1).getY() && (j+1) == past.get(1).getX()) && j < 9 &&
                                 (board[i][j + 1] == null || (board[i][j + 1].getOwner() != player && board[i][j + 1].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
@@ -2075,7 +2175,7 @@ public class Driver {
                             }   //End inner if-else statement
                         }
                         // Checks for movement in the Left direction.
-                        else if (j > 0 && (board[i][j - 1] == null || (board[i][j - 1].getOwner() != player && board[i][j - 1].getOwner() != Players.LAKE))) {
+                        else if (!(past.size() > 1 && i == past.get(0).getY() && j == past.get(0).getX() && (i) == past.get(1).getY() && (j-1) == past.get(1).getX()) && j > 0 && (board[i][j - 1] == null || (board[i][j - 1].getOwner() != player && board[i][j - 1].getOwner() != Players.LAKE))) {
                             if (player == Players.PLAYER) { // If it's players turn print message.
                                 options.add(new Moves(board, i, j));// Count incremented below
                                 if(print) {
@@ -2099,6 +2199,8 @@ public class Driver {
      *
      * @param offense - a Moves object wishing to dominate defense for a space on the board.
      * @param defense - a Moves object which offense wishes to overtake on the board.
+     * @param p - The player who owns the attacking piece.
+     * @param print - Whether or not the results should be printed to the screen.
      * @return winner - the Moves object which dominates, null if both pieces strength's match.
      */
     public static Moves ruleBook(Moves offense, Moves defense, Players p, boolean print) {
