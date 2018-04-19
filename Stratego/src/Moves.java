@@ -53,7 +53,7 @@ public class Moves {
     /**
      * Generates an ArrayList of valid Moves for the current piece.
      * @param past An ArrayList containing the past 2 Moves of the owner of the piece.
-     * @return ArrayList All valid Moves that the current piece can make.
+     * @return ArrayList<Moves> All valid Moves that the current piece can make.
      */
     public ArrayList<Moves> generateMoves(ArrayList<Moves> past)
     {

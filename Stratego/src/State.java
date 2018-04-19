@@ -125,7 +125,7 @@ public class State {
 
     /**
      * Returns the moveable pieces of the State.
-     * @return ArrayList The moveable pieces of the State.
+     * @return ArrayList<Moves> The moveable pieces of the State.
      */
     public ArrayList<Moves> getMoveable(){
         return moveable;
@@ -174,7 +174,7 @@ public class State {
     /**
      * Returns all possible moves that could be made
      * from the State.
-     * @return ArrayList All possible moves.
+     * @return ArrayList<Moves> All possible moves.
      */
     public ArrayList<Moves> getAllMoves(){
         return allMoves;
@@ -183,7 +183,7 @@ public class State {
     /**
      * Return a 2D ArrayList that keeps all possible Moves
      * by the same piece together.
-     * @return ArrayList
+     * @return ArrayList<ArrayList<Moves>>
      */
     public ArrayList<ArrayList<Moves>> getMoves(){
         return moves;
