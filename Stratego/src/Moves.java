@@ -1,28 +1,60 @@
 import java.util.ArrayList;
+
+/**
+ * This class technically represents a piece on the
+ * board. It allows us to figure out which pieces can
+ * move as well as where they can move to.
+ * Created by William Jacobs on 3/2018
+ * Edited by William Jacobs and Steven Bruman
+ * Version 4/18/2018
+ */
 public class Moves {
     private int x;
     private int y;
     private Unit[][] board;
 
+    /**
+     *
+     * @param board The 2D Unit array that represents (X,Y) locations on the board.
+     * @param y The y-coordinate of the piece.
+     * @param x The x-coordinate of the piece.
+     */
     public Moves(Unit[][] board, int y, int x) {
         this.board = board;
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Returns the x-coordinate of the piece.
+     * @return int The x-coordinate of the piece.
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Returns the y-coordinate of the piece.
+     * @return int The y-coordinate of the piece.
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Returns the actual Unit on the board.
+     * @return Unit The Unit at the (y,x) position on the board.
+     */
     public Unit getPiece()
     {
         return board[y][x];
     }
 
+    /**
+     * Generates an ArrayList of valid Moves for the current piece.
+     * @param past An ArrayList containing the past 2 Moves of the owner of the piece.
+     * @return ArrayList All valid Moves that the current piece can make.
+     */
     public ArrayList<Moves> generateMoves(ArrayList<Moves> past)
     {
         ArrayList<Moves> moves = new ArrayList();

@@ -1,11 +1,11 @@
-import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
- * Created by Mole on 1/24/2018.
+ * This class contains the main method and runs the entire program.
+ * Created by Steven Bruman on 1/24/2018.
+ * Edited by Steven Bruman and William Jacobs
+ * Version 4/18/2018
  */
 public class Driver {
 
@@ -448,6 +448,7 @@ public class Driver {
      * @param unit The index in army of the Unit that the player selected.
      * @param board The 2D Unit array that represents (X,Y) locations on the board.
      * @param army The array of Units that represents the pieces of the user.
+     * @return boolean True if the Unit could be placed, otherwise false.
      * @exception IOException On input error.
      * @see IOException
      */
@@ -1082,9 +1083,16 @@ public class Driver {
                     String[] tokenize = s.split(",");
 
                     switch(tokenize[4]){
+                        /*
+                         * Y means the Marshall is in the front of the board for that setup
+                         */
                         case "Y":
                             switch (tokenize[6]){
                                 case "Left":
+                                    /*
+                                     * This means the Marshall is in the front left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][39] += 1;
                                     values[0][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1100,6 +1108,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                     /*
+                                     * This means the Marshall is in the front right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][32] += 1;
                                     values[0][31]+= (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1115,6 +1127,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                     /*
+                                     * This means the Marshall is in the front center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][36] += 1;
                                     values[0][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1136,8 +1152,16 @@ public class Driver {
                             break;  //Stops the switch statement
 
                         default:
+                            /*
+                             * This means the value was N which means the
+                             * Marshall is in the back of the board for the setup
+                             */
                             switch (tokenize[6]){
                                 case "Left":
+                                     /*
+                                     * This means the Marshall is in the back left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][19] += 1;
                                     values[0][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1153,6 +1177,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                     /*
+                                     * This means the Marshall is in the back right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][12] += 1;
                                     values[0][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1168,6 +1196,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                     /*
+                                     * This means the Marshall is in the back center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[0][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[0][16] += 1;
                                     values[0][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1191,8 +1223,16 @@ public class Driver {
 
                     switch(tokenize[5]){
                         case "Y":
+                            /*
+                             * Y means the General is in the front of the board
+                             * for the setup
+                             */
                             switch (tokenize[7]){
                                 case "Left":
+                                    /*
+                                     * This means the General is in the front left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][39] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][39] += 1;
                                     values[1][38] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1208,6 +1248,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                    /*
+                                     * This means the General is in the front right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][32] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][32] += 1;
                                     values[1][31] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1223,6 +1267,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                    /*
+                                     * This means the General is in the front center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][36] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][36] += 1;
                                     values[1][35] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1244,8 +1292,16 @@ public class Driver {
                             break;  //Stops the switch statement
 
                         default:
+                            /*
+                             * This means the value was N and that the
+                             * General is in the back of the board for the setup
+                             */
                             switch (tokenize[7]){
                                 case "Left":
+                                    /*
+                                     * This means the General is in the back left of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][19] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][19] += 1;
                                     values[1][18] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1261,6 +1317,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 case "Right":
+                                    /*
+                                     * This means the General is in the back right of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][12] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][12] += 1;
                                     values[1][11] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1276,6 +1336,10 @@ public class Driver {
                                     break;  //Stops the switch statement
 
                                 default:
+                                    /*
+                                     * This means the General is in the back center of the board,
+                                     * so the program modifies all of those values.
+                                     */
                                     values[1][16] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                     modified[1][16] += 1;
                                     values[1][15] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
@@ -1302,6 +1366,9 @@ public class Driver {
                     boolean found = false;
                     for(int i = 0; !found && i < 4; i++) {
                         for (int j = 0; !found && j < 10; j++) {
+                            /*
+                             * Have to find the correct space on the board because
+                             */
                             if (k == flagSpace) {
                                 values[11][k] += (Double.parseDouble(tokenize[0]) * ((Math.random() * 1.5) + 0.5));
                                 modified[11][k] += 1;
@@ -1346,6 +1413,12 @@ public class Driver {
         }   /*End outer try-catch block*/
     }   //End aiConfig method
 
+    /**
+     * This method will modify the values in the values array based on the
+     * slightly randomized win rates of different starting configurations.
+     * @param values The 2D array that the AI will use to store the win rates of every piece in every starting spot
+     * @param modified The 2D array that counts the number of times each value in the values array was modified
+     */
     public static void aiTeam(double[][] values, double[][] modified){
         BufferedReader[] readers = new BufferedReader[9];
         try{
@@ -1770,6 +1843,13 @@ public class Driver {
         }   //End outer try-catch block
     }   //End aiTeam method
 
+    /**
+     * This method places the AI's pieces on the board by selecting the
+     * highest values that it finds.
+     * @param values The 2D array that the AI will use to store the win rates of every piece in every starting spot
+     * @param board The 2D Unit array that represents (X,Y) locations on the board.
+     * @param army The array of Units that represents the AI's pieces.
+     */
     public static void aiPlaceUnits(double[][] values, Unit[][] board, Unit[] army){
         int placed = 0;
         while(placed != 40) {
@@ -1865,9 +1945,14 @@ public class Driver {
      * Lets the player make a move.
      * @param board 2 dimensional Unit object, The current state of the board.
      * @param armies 3 dimensional Unit object, [owner][y][x].
+     * @param shadowBoard The 2D array of Units that represents AI's view of the board.
+     * @param shadowArmy The array of Units that represents the AI's view of the user's initial set up.
      * @param memory ArrayList of Moves which stores pieces to retain pieceTypes rather than Moves from the
      *               generateMoves method.
+     * @param shadow The ArrayList containing the last 2 moves of the player on the shadowboard
      * @return boolean Whether the game has ended or not
+     * @exception IOException On input error.
+     * @see IOException
      */
     public static boolean playerMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory, ArrayList<Moves> shadow) throws IOException {
         ArrayList<Moves> options = moveFilter(board, Players.PLAYER, true, memory);
@@ -1951,10 +2036,18 @@ public class Driver {
     }   //End playerMove method
 
     /**
-     * Lets the AI make a move.
-     * @param Unit[][] board The current state of the board.
-     * @param Unit[][][] armies
-     * @return boolean Whether the game has ended or not
+     * This method allows the AI to make a move. This happens by creating a State
+     * to represent the current State of the board. This is then run a Minimax
+     * algorithm utilizing alpha-beta pruning to select the best move for the AI
+     * on its turn.
+     * @param board The 2D Unit array that represents (X,Y) locations on the board.
+     * @param armies The 3D array of Units that is divided (Player, AI), (Alive, Dead), actual pieces.
+     * @param shadowBoard The 2D array of Units that represents AI's view of the board.
+     * @param shadowArmy The array of Units that represents the AI's view of the user's initial set up.
+     * @param memory The ArrayList containing the last 2 moves of the AI.
+     * @param shadowAI The ArrayList containing the last 2 moves of the AI on the shadowboard.
+     * @param shadowP The ArrayList containing the last 2 moves of the player on the shadowboard.
+     * @return boolean Whether or not the game has ended.
      */
     public static boolean aiMove(Unit[][] board, Unit[][][] armies, Unit[][] shadowBoard, Unit[] shadowArmy, ArrayList<Moves> memory, ArrayList<Moves> shadowAI, ArrayList<Moves> shadowP) {
         State root = new State(shadowBoard, 0, 6, shadowAI, shadowP);
@@ -2094,6 +2187,8 @@ public class Driver {
      *
      * @param offense - a Moves object wishing to dominate defense for a space on the board.
      * @param defense - a Moves object which offense wishes to overtake on the board.
+     * @param p - The player who owns the attacking piece.
+     * @param print - Whether or not the results should be printed to the screen.
      * @return winner - the Moves object which dominates, null if both pieces strength's match.
      */
     public static Moves ruleBook(Moves offense, Moves defense, Players p, boolean print) {

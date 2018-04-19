@@ -1,5 +1,10 @@
 /**
- * Created by Mole on 1/30/2018.
+ * This class represents a piece on the board. This piece could be known,
+ * theoretical, or even owned by a Lake. (Not Joking, lakes actually own
+ * pieces)
+ * Created by Steven Bruman on 1/30/2018.
+ * Edited by Steven Bruman and William Jacobs
+ * Version 4/18/2018
  */
 public class Unit {
 
@@ -13,6 +18,16 @@ public class Unit {
     private int[][] stats;
     private boolean hasMoved;
 
+    /**
+     * This is for pieces that are known and are owned by either the Player
+     * or the AI.
+     * @param s The strength of the Unit.
+     * @param n The name of the Unit.
+     * @param c The character that will be printed on the board.
+     * @param o The owner of the Unit.
+     * @param sc The score of the Unit.
+     * @param t The type of the Unit.
+     */
     public Unit(int s, String n, String c, Players o, double sc, PieceType t) {
         strength = s;
         name = n;
@@ -23,6 +38,12 @@ public class Unit {
         type = t;
     }
 
+    /**
+     * This is for pieces that are unknown to the AI.
+     * @param sc The score of the Unit
+     * @param o The owner of the Unit
+     * @param s A 2D array containing various statistics used to predict what the Unit is.
+     */
     public Unit(double sc, Players o, int[][] s){
         score = sc;
         owner = o;
@@ -31,38 +52,78 @@ public class Unit {
         predictStrength();
     }
 
+    /**
+     * This is for pieces owned by the Lake. This was done in order to assure
+     * that other pieces do not enter lake spaces. We promise that we tried other
+     * solutions first, but this was the first solution that worked entirely.
+     * @param o The owner of the Unit
+     */
     public Unit(Players o){
         owner = o;
     }
 
+    /**
+     * Returns the name of the Unit.
+     * @return String The name of the Unit.
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Returns the strength of the Unit.
+     * @return int The strength of the Unit.
+     */
     public int getStrength(){
         return strength;
     }
 
+    /**
+     * Returns the owner of the Unit.
+     * @return Players The owner of the Unit.
+     */
     public Players getOwner() {
         return owner;
     }
 
+    /**
+     * Returns the character of the Unit that will be printed on the board.
+     * @return String The character of the Unit.
+     */
     public String getCharacter(){
         return character;
     }
 
+    /**
+     * Returns whether or not the Unit was placed.
+     * @return boolean Whether or not the Unit was placed.
+     */
     public boolean getPlaced(){
         return placed;
     }
 
+    /**
+     * Sets placed.
+     * @param p True, the Unit was placed, otherwise false.
+     */
     public void setPlaced(boolean p){
         placed = p;
     }
 
+    /**
+     * Sets the score of the Unit.
+     * @param s The score of the Unit.
+     */
     public void setScore(double s){
         score = s;
     }
-    
+
+    /**
+     * Modifies the score statistic for all the values of the given type.
+     * It the recalculates the total score of the Unit.
+     * @param s The score of the Type.
+     * @param p The type to be changed.
+     */
     public void setScore(int s, PieceType p) {
         if (stats != null) {
             switch(p){
@@ -118,6 +179,12 @@ public class Unit {
         }
     }
 
+    /**
+     * Modifies the amount statistic for all the values of the given type.
+     * It the recalculates the total score of the Unit.
+     * @param s The amount of the Type.
+     * @param p The type to be changed.
+     */
     public void setAmount(int s, PieceType p) {
         if (stats != null) {
             switch(p){
@@ -173,6 +240,11 @@ public class Unit {
         }
     }
 
+    /**
+     * Returns the amount used to calculate the score of a certain type.
+     * @param p The type in question.
+     * @return int The amount of that type.
+     */
     public int getAmount(PieceType p){
         if (stats != null) {
             switch (p) {
@@ -215,7 +287,10 @@ public class Unit {
         }
         return 0;
     }
-    
+
+    /**
+     * Recalculates the theoretical score of the Unit based on statistics.
+     */
     public void reCalculateScore(){
         if(stats != null){
             score = 0;
@@ -229,6 +304,10 @@ public class Unit {
         }
     }
 
+    /**
+     * Predicts the strength of the Unit based on where its
+     * theoretical score falls.
+     */
     public void predictStrength() {
         if(!hasMoved && score >= 200){
             strength = -1;
@@ -267,10 +346,19 @@ public class Unit {
 
     }
 
+    /**
+     * Returns the score of the Unit.
+     * @return double The score of the Unit.
+     */
     public double getScore() {
         return score;
     }
 
+    /**
+     * Returns the score of a certain type.
+     * @param p The given type.
+     * @return int The score of that type.
+     */
     public int getScore(PieceType p){
         if (stats != null) {
             switch (p) {
@@ -314,14 +402,26 @@ public class Unit {
         return 0;
     }
 
+    /**
+     * Returns the type of the Unit.
+     * @return PieceType The type of the Unit.
+     */
     public PieceType getType(){
         return type;
     }
 
+    /**
+     * Returns whether or not the Unit has moved.
+     * @return boolean True, the Unit has moved, other false.
+     */
     public boolean getHasMoved(){
         return hasMoved;
     }
 
+    /**
+     * Sets hasMoved to true, then lets the AI know that the
+     * Unit is not a bomb or a flag.
+     */
     public void moved(){
         hasMoved = true;
         setAmount(0,PieceType.FLAG);
