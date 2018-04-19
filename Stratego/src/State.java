@@ -193,7 +193,7 @@ public class State {
      * Returns an int representing the index in the
      * moveable ArrayList that corresponds to the piece
      * chosen to move.
-     * @return
+     * @return int
      */
     public int getOrigial(){
         return origial;
